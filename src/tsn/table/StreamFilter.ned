@@ -15,9 +15,8 @@
 
 package ieee_802_1_qci.tsn.table;
 
-//
-// TODO auto-generated module
-//
 simple StreamFilter
 {
+    parameters:
+        @display("i=block/table2");
 }

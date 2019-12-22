@@ -13,10 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+#include "FilteringDatabase.h"
 
-simple FlowMeter
+namespace ieee_802_1_qci {
+
+Define_Module(FilteringDatabase);
+
+void FilteringDatabase::initialize()
 {
-    parameters:
-        @display("i=block/table2");
+    // TODO - Generated method body
 }
+
+void FilteringDatabase::handleMessage(cMessage *msg)
+{
+    // TODO - Generated method body
+}
+
+} //namespace

@@ -15,14 +15,40 @@
 
 package ieee_802_1_qci.tsn;
 
-simple Forwarder
+import ieee_802_1_qci.tsn.Forwarder;
+import ieee_802_1_qci.tsn.StreamIdentifier;
+import ieee_802_1_qci.tsn.FilteringUnit;
+
+module Relay
 {
     parameters:
-        @display("i=block/routing");
-        
+        @display("i=block/dispatch;bgb=240,220,white");
+
         int portCount;
-    
+
     gates:
         input in[portCount];
         output out[portCount];
+
+    submodules:
+        forwarder: Forwarder {
+            @display("p=70,150");
+            portCount = sizeof(port);
+        }
+        identifier: StreamIdentifier {
+            @display("p=120,50");
+            portCount = sizeof(port);
+        }
+        filtering: FilteringUnit {
+            @display("p=170,150");
+            portCount = sizeof(port);
+        }
+
+    connections:
+        for i=0..sizeof(port) {
+            in[i] --> forwarder.in[i];
+            forwarder.out[i] --> identifier.in[i];
+            identifier.out[i] --> filtering.in[i];
+            filtering.out[i] --> out[i];
+        }
 }

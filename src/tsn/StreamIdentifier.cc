@@ -13,10 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+#include "StreamIdentifier.h"
 
-simple FlowMeter
+namespace ieee_802_1_qci {
+
+Define_Module(StreamIdentifier);
+
+void StreamIdentifier::initialize()
 {
-    parameters:
-        @display("i=block/table2");
+    // TODO - Generated method body
 }
+
+void StreamIdentifier::handleMessage(cMessage *msg)
+{
+    // TODO - Generated method body
+}
+
+} //namespace

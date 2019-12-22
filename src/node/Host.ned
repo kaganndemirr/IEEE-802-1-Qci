@@ -21,15 +21,20 @@ import ieee_802_1_qci.link.NetworkController;
 module Host
 {
     parameters:
-        @display("i=device/pc3");
-    
+        @display("i=device/pc3;bgb=300,100,white");
+
     gates:
         inout port;
-    
+
     submodules:
-        app: TrafficGenerator;
-        nc: NetworkController;
-    
+        nc: NetworkController {
+
+            @display("p=100,50");
+        }
+        app: TrafficGenerator {
+            @display("p=200,50");
+        }
+
     connections:
         nc.upperOut --> app.in;
         nc.upperIn <-- app.out;

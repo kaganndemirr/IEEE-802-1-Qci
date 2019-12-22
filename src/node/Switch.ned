@@ -15,29 +15,55 @@
 
 package ieee_802_1_qci.node;
 
+import ieee_802_1_qci.tsn.Clock;
+
+import ieee_802_1_qci.tsn.FilteringDatabase;
+import ieee_802_1_qci.tsn.table.StreamFilter;
+import ieee_802_1_qci.tsn.table.StreamGate;
+import ieee_802_1_qci.tsn.table.FlowMeter;
+
 import ieee_802_1_qci.link.NetworkController;
-import ieee_802_1_qci.tsn.Forwarder;
+import ieee_802_1_qci.tsn.Relay;
 
 module Switch
 {
     parameters:
-        @display("i=device/switch");
-    
+        @display("i=device/switch;bgb=200,200,white");
+
     gates:
         inout port[];
-    
+
+    types:
     submodules:
-        nc[sizeof(port)]: NetworkController;
-        fwd: Forwarder {
-        	portCount = sizeof(port);
-        };
-        // TODO add clock
-        // TODO add forwarding database
-    
+        clk: Clock {
+            @display("p=175,25");
+        }
+
+        fdb: FilteringDatabase {
+            @display("p=35,25");
+        }
+        streamfilter: StreamFilter {
+            @display("p=100,25");
+        }
+        streamgate: StreamGate {
+            @display("p=35,75");
+        }
+        flowmeter: FlowMeter {
+            @display("p=100,75");
+        }
+
+        nc[sizeof(port)]: NetworkController {
+            @display("p=60,150");
+        }
+        relay: Relay {
+            @display("p=150,150");
+            portCount = sizeof(port);
+        }
+
     connections:
         for i=0..sizeof(port) {
             port[i] <--> nc[i].phys;
-            nc[i].upperIn <-- fwd.out[i];
-            nc[i].upperOut --> fwd.in[i];
+            nc[i].upperOut --> relay.in[i];
+            relay.out[i] --> nc[i].upperIn;
         }
 }

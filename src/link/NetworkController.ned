@@ -15,8 +15,6 @@
 
 package ieee_802_1_qci.link;
 
-// TODO add queuing for switch
-
 simple NetworkController
 {
     parameters:

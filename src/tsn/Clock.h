@@ -13,10 +13,25 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+#ifndef __IEEE_802_1_QCÝ_CLOCK_H_
+#define __IEEE_802_1_QCÝ_CLOCK_H_
 
-simple FlowMeter
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+/**
+ * TODO - Generated class
+ */
+class Clock : public cSimpleModule
 {
-    parameters:
-        @display("i=block/table2");
-}
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
+
+} //namespace
+
+#endif

@@ -13,10 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+package ieee_802_1_qci.tsn;
 
-simple FlowMeter
+simple FilteringUnit
 {
-    parameters:
-        @display("i=block/table2");
+	parameters:
+        @display("i=block/filter");
+        
+        int portCount;
+    
+    gates:
+        input in[portCount];
+        output out[portCount];
 }

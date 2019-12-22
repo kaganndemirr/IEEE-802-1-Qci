@@ -13,10 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+package ieee_802_1_qci.tsn;
 
-simple FlowMeter
+simple StreamIdentifier
 {
-    parameters:
-        @display("i=block/table2");
+	parameters:
+        @display("i=block/classifier"); //routing
+        
+        int portCount;
+    
+    gates:
+        input in[portCount];
+        output out[portCount];
 }

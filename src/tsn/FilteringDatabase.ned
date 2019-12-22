@@ -13,9 +13,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+package ieee_802_1_qci.tsn;
 
-simple FlowMeter
+simple FilteringDatabase
 {
     parameters:
         @display("i=block/table2");

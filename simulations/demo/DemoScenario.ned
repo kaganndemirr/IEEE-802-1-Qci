@@ -21,17 +21,26 @@ import ieee_802_1_qci.node.Switch;
 
 network DemoScenario
 {
+    parameters:
+        @display("bgb=600,200,white");
+
     types:
         channel C extends DelayChannel
         {
             delay = 10ms;
         }
-    
+
     submodules:
-        hostA: Host;
-        switch: Switch;
-        hostB: Host;
-    
+        hostA: Host {
+            @display("p=100,50");
+        }
+        switch: Switch {
+            @display("p=300,150");
+        }
+        hostB: Host {
+            @display("p=500,50");
+        }
+
     connections:
         hostA.port <--> C <--> switch.port++;
         hostB.port <--> C <--> switch.port++;

@@ -26,9 +26,7 @@ void Forwarder::initialize()
 
 void Forwarder::handleMessage(cMessage *msg)
 {
-    // TODO query forwarding database
-    // TODO add stream identification
-    // TODO apply stream filters
+    // TODO - Generated method body
 }
 
 } //namespace
