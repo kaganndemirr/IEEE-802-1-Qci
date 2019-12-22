@@ -13,8 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCÝ_FÝLTERÝNGDATABASE_H_
-#define __IEEE_802_1_QCÝ_FÝLTERÝNGDATABASE_H_
+#ifndef __IEEE_802_1_QCI_FILTERINGDATABASE_H_
+#define __IEEE_802_1_QCI_FILTERINGDATABASE_H_
 
 #include <omnetpp.h>
 

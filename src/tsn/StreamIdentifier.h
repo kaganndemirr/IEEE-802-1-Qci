@@ -13,8 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCÝ_STREAMIDENTÝFÝER_H_
-#define __IEEE_802_1_QCÝ_STREAMIDENTÝFÝER_H_
+#ifndef __IEEE_802_1_QCI_STREAMIDENTIFIER_H_
+#define __IEEE_802_1_QCI_STREAMIDENTIFIER_H_
 
 #include <omnetpp.h>
 
