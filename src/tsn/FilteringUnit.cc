@@ -14,6 +14,7 @@
 // 
 
 #include "FilteringUnit.h"
+#include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -26,7 +27,14 @@ void FilteringUnit::initialize()
 
 void FilteringUnit::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    if (pkt) {
+        int streamHandle = pkt->getStreamHandle();
+
+        // TODO query stream filter table
+    }
+
+    send(msg, "out", msg->getArrivalGateId());
 }
 
 } //namespace
