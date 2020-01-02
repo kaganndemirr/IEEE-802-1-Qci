@@ -17,6 +17,7 @@
 #define __IEEE_802_1_QCI_FORWARDER_H_
 
 #include <omnetpp.h>
+#include "FilteringDatabase.h"
 
 using namespace omnetpp;
 
@@ -27,6 +28,9 @@ namespace ieee_802_1_qci {
  */
 class Forwarder : public cSimpleModule
 {
+  private:
+    FilteringDatabase* m_fdb;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

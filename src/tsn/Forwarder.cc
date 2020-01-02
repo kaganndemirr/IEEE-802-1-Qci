@@ -14,6 +14,7 @@
 // 
 
 #include "Forwarder.h"
+#include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -21,12 +22,27 @@ Define_Module(Forwarder);
 
 void Forwarder::initialize()
 {
-    // TODO - Generated method body
+    m_fdb = check_and_cast<FilteringDatabase*> (getParentModule()->getSubmodule("FilteringDatabase"));
 }
 
 void Forwarder::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    if (pkt) {
+        // Forward packet to matching port
+        const char* dst = pkt->getDst();
+        int port = m_fdb->getPort(std::string(dst));
+
+        if (port != -1) {
+            send(msg, "out", port);
+        } else {
+            EV_WARN << "No matching entry found: " << msg->getDisplayString();
+            delete msg;
+        }
+    } else {
+        EV_WARN << "Unknown message received: " << msg->getDisplayString();
+        delete msg;
+    }
 }
 
 } //namespace
