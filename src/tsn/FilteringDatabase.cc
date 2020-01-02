@@ -21,12 +21,47 @@ Define_Module(FilteringDatabase);
 
 void FilteringDatabase::initialize()
 {
-    // TODO - Generated method body
+    cXMLElement* db = par("db");
+
+    // Read static entries
+    if (db->hasChildren()) {
+        const char* mac;
+        const char* attr_port;
+        int port;
+
+        for (cXMLElement* elm : db->getChildrenByTagName("entry")) {
+            // Skip invalid entry
+            if (!elm->hasAttributes())
+                continue;
+
+            mac = elm->getAttribute("mac");
+            attr_port = elm->getAttribute("port");
+            port = atoi(attr_port);
+
+            // Skip invalid entry
+            if (!mac || !attr_port || port < 0)
+                continue;
+
+            add(std::string(mac), port);
+        }
+    }
 }
 
 void FilteringDatabase::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
+}
+
+// Returns matching port number if MAC is on db, otherwise -1
+int FilteringDatabase::getPort(std::string mac) {
+    auto it = m_db.find(mac);
+    if (it == m_db.end())
+        return -1;
+    return it->second;
+}
+
+void FilteringDatabase::add(std::string mac, int port) {
+    m_db[mac] = port;
 }
 
 } //namespace

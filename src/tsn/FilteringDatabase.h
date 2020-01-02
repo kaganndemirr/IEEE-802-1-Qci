@@ -17,19 +17,24 @@
 #define __IEEE_802_1_QCI_FILTERINGDATABASE_H_
 
 #include <omnetpp.h>
+#include <unordered_map>
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
 class FilteringDatabase : public cSimpleModule
 {
+  private:
+    std::unordered_map<std::string, int> m_db;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+
+  public:
+    int getPort(std::string mac);
+    void add(std::string mac, int port);
 };
 
 } //namespace

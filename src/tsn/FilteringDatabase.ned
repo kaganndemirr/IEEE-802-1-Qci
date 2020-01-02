@@ -19,4 +19,6 @@ simple FilteringDatabase
 {
     parameters:
         @display("i=block/table2");
+        xml db = default(xml("<DB/>"));
 }
+ 
