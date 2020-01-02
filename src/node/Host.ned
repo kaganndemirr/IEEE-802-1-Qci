@@ -28,7 +28,6 @@ module Host
 
     submodules:
         nc: NetworkController {
-
             @display("p=100,50");
         }
         app: TrafficGenerator {

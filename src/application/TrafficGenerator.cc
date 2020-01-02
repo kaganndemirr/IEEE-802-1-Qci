@@ -25,8 +25,6 @@ void TrafficGenerator::initialize()
     const char* target = par("target").stringValue();
 
     EthernetFrame* msg = new EthernetFrame();
-    // TODO get mac addr from nc
-    // TODO set src mac addr for msg
     msg->setDst(target);
     msg->setPayload("demo message");
     send(msg, "out");

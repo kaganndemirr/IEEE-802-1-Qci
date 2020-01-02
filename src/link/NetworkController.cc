@@ -28,6 +28,15 @@ void NetworkController::initialize()
 void NetworkController::handleMessage(cMessage *msg)
 {
     if (msg->arrivedOn("upperIn")) {
+        // Set source MAC address if null
+        EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+        if (pkt) {
+            const char* src = pkt->getSrc();
+            if (!src || !strcmp(src, "")) {
+                pkt->setSrc(addr);
+            }
+        }
+
         send(msg, "phys");
     } else if (msg->arrivedOn("phys")) {
         send(msg, "upperOut");

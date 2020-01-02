@@ -33,7 +33,11 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 OBJS = \
     $O/application/TrafficGenerator.o \
     $O/link/NetworkController.o \
+    $O/tsn/Clock.o \
+    $O/tsn/FilteringDatabase.o \
+    $O/tsn/FilteringUnit.o \
     $O/tsn/Forwarder.o \
+    $O/tsn/StreamIdentifier.o \
     $O/tsn/table/FlowMeter.o \
     $O/tsn/table/StreamFilter.o \
     $O/tsn/table/StreamGate.o \
