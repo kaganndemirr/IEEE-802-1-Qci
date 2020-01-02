@@ -23,8 +23,10 @@ Define_Module(TrafficGenerator);
 void TrafficGenerator::initialize()
 {
     const char* target = par("target").stringValue();
+    int streamId = par("streamId").intValue();
 
     EthernetFrame* msg = new EthernetFrame();
+    msg->setStreamId(streamId);
     msg->setDst(target);
     msg->setPayload("demo message");
     send(msg, "out");

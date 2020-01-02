@@ -19,6 +19,7 @@ simple TrafficGenerator
 {
     parameters:
         @display("i=block/app");
+        int streamId;
         string target;
         // TODO add pktsPerBurst, pktSize, interval;
     

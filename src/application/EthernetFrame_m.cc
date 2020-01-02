@@ -182,6 +182,8 @@ Register_Class(EthernetFrame)
 
 EthernetFrame::EthernetFrame(const char *name, short kind) : ::omnetpp::cPacket(name,kind)
 {
+    this->streamId = 0;
+    this->streamHandle = 0;
 }
 
 EthernetFrame::EthernetFrame(const EthernetFrame& other) : ::omnetpp::cPacket(other)
@@ -205,6 +207,8 @@ void EthernetFrame::copy(const EthernetFrame& other)
 {
     this->src = other.src;
     this->dst = other.dst;
+    this->streamId = other.streamId;
+    this->streamHandle = other.streamHandle;
     this->payload = other.payload;
 }
 
@@ -213,6 +217,8 @@ void EthernetFrame::parsimPack(omnetpp::cCommBuffer *b) const
     ::omnetpp::cPacket::parsimPack(b);
     doParsimPacking(b,this->src);
     doParsimPacking(b,this->dst);
+    doParsimPacking(b,this->streamId);
+    doParsimPacking(b,this->streamHandle);
     doParsimPacking(b,this->payload);
 }
 
@@ -221,6 +227,8 @@ void EthernetFrame::parsimUnpack(omnetpp::cCommBuffer *b)
     ::omnetpp::cPacket::parsimUnpack(b);
     doParsimUnpacking(b,this->src);
     doParsimUnpacking(b,this->dst);
+    doParsimUnpacking(b,this->streamId);
+    doParsimUnpacking(b,this->streamHandle);
     doParsimUnpacking(b,this->payload);
 }
 
@@ -242,6 +250,26 @@ const char * EthernetFrame::getDst() const
 void EthernetFrame::setDst(const char * dst)
 {
     this->dst = dst;
+}
+
+int EthernetFrame::getStreamId() const
+{
+    return this->streamId;
+}
+
+void EthernetFrame::setStreamId(int streamId)
+{
+    this->streamId = streamId;
+}
+
+int EthernetFrame::getStreamHandle() const
+{
+    return this->streamHandle;
+}
+
+void EthernetFrame::setStreamHandle(int streamHandle)
+{
+    this->streamHandle = streamHandle;
 }
 
 const char * EthernetFrame::getPayload() const
@@ -319,7 +347,7 @@ const char *EthernetFrameDescriptor::getProperty(const char *propertyname) const
 int EthernetFrameDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 3+basedesc->getFieldCount() : 3;
+    return basedesc ? 5+basedesc->getFieldCount() : 5;
 }
 
 unsigned int EthernetFrameDescriptor::getFieldTypeFlags(int field) const
@@ -334,8 +362,10 @@ unsigned int EthernetFrameDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EthernetFrameDescriptor::getFieldName(int field) const
@@ -349,9 +379,11 @@ const char *EthernetFrameDescriptor::getFieldName(int field) const
     static const char *fieldNames[] = {
         "src",
         "dst",
+        "streamId",
+        "streamHandle",
         "payload",
     };
-    return (field>=0 && field<3) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<5) ? fieldNames[field] : nullptr;
 }
 
 int EthernetFrameDescriptor::findField(const char *fieldName) const
@@ -360,7 +392,9 @@ int EthernetFrameDescriptor::findField(const char *fieldName) const
     int base = basedesc ? basedesc->getFieldCount() : 0;
     if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+0;
     if (fieldName[0]=='d' && strcmp(fieldName, "dst")==0) return base+1;
-    if (fieldName[0]=='p' && strcmp(fieldName, "payload")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "streamId")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "streamHandle")==0) return base+3;
+    if (fieldName[0]=='p' && strcmp(fieldName, "payload")==0) return base+4;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -375,9 +409,11 @@ const char *EthernetFrameDescriptor::getFieldTypeString(int field) const
     static const char *fieldTypeStrings[] = {
         "string",
         "string",
+        "int",
+        "int",
         "string",
     };
-    return (field>=0 && field<3) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **EthernetFrameDescriptor::getFieldPropertyNames(int field) const
@@ -446,7 +482,9 @@ std::string EthernetFrameDescriptor::getFieldValueAsString(void *object, int fie
     switch (field) {
         case 0: return oppstring2string(pp->getSrc());
         case 1: return oppstring2string(pp->getDst());
-        case 2: return oppstring2string(pp->getPayload());
+        case 2: return long2string(pp->getStreamId());
+        case 3: return long2string(pp->getStreamHandle());
+        case 4: return oppstring2string(pp->getPayload());
         default: return "";
     }
 }
@@ -463,7 +501,9 @@ bool EthernetFrameDescriptor::setFieldValueAsString(void *object, int field, int
     switch (field) {
         case 0: pp->setSrc((value)); return true;
         case 1: pp->setDst((value)); return true;
-        case 2: pp->setPayload((value)); return true;
+        case 2: pp->setStreamId(string2long(value)); return true;
+        case 3: pp->setStreamHandle(string2long(value)); return true;
+        case 4: pp->setPayload((value)); return true;
         default: return false;
     }
 }

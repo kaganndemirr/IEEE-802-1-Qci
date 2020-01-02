@@ -17,6 +17,7 @@
 #define __IEEE_802_1_QCI_STREAMIDENTIFIER_H_
 
 #include <omnetpp.h>
+#include <unordered_map>
 
 using namespace omnetpp;
 

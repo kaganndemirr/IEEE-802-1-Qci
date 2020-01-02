@@ -14,6 +14,7 @@
 // 
 
 #include "StreamIdentifier.h"
+#include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -26,7 +27,17 @@ void StreamIdentifier::initialize()
 
 void StreamIdentifier::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    if (pkt) {
+        const char* src = pkt->getSrc();
+        const char* dst = pkt->getDst();
+        int streamId = pkt->getStreamId();
+
+        // TODO set streamHandle using dst,streamId or src,streamId (see 802.1CB Table-6.1)
+        pkt->setStreamHandle(streamId);
+    }
+
+    send(msg, "out", msg->getArrivalGateId());
 }
 
 } //namespace

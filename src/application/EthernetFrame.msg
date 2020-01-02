@@ -18,7 +18,8 @@ namespace ieee_802_1_qci;
 packet EthernetFrame {
     string src; // source mac addr
     string dst; // destination mac addr
-//    int stream_handle;
+    int streamId;
+    int streamHandle;
 //    uint8_t priority; // 3 bits
 //    uint8_t color; // 8 bits
     string payload;
