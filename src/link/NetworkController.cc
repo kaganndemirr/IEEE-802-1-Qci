@@ -37,8 +37,8 @@ void NetworkController::handleMessage(cMessage *msg)
             }
         }
 
-        send(msg, "phys");
-    } else if (msg->arrivedOn("phys")) {
+        send(msg, "phys$o");
+    } else if (msg->arrivedOn("phys$i")) {
         send(msg, "upperOut");
     }
 }

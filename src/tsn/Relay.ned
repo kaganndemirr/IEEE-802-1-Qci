@@ -33,19 +33,19 @@ module Relay
     submodules:
         forwarder: Forwarder {
             @display("p=70,150");
-            portCount = sizeof(port);
+            portCount = sizeof(in);
         }
         identifier: StreamIdentifier {
             @display("p=120,50");
-            portCount = sizeof(port);
+            portCount = sizeof(in);
         }
         filtering: FilteringUnit {
             @display("p=170,150");
-            portCount = sizeof(port);
+            portCount = sizeof(in);
         }
 
     connections:
-        for i=0..sizeof(port) {
+        for i=0..portCount-1 {
             in[i] --> forwarder.in[i];
             forwarder.out[i] --> identifier.in[i];
             identifier.out[i] --> filtering.in[i];

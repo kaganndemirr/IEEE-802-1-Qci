@@ -61,7 +61,7 @@ module Switch
         }
 
     connections:
-        for i=0..sizeof(port) {
+        for i=0..sizeof(port)-1 {
             port[i] <--> nc[i].phys;
             nc[i].upperOut --> relay.in[i];
             relay.out[i] --> nc[i].upperIn;

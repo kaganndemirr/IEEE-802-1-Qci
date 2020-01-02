@@ -37,7 +37,7 @@ void StreamIdentifier::handleMessage(cMessage *msg)
         pkt->setStreamHandle(streamId);
     }
 
-    send(msg, "out", msg->getArrivalGateId());
+    send(msg, "out", msg->getArrivalGate()->getIndex());
 }
 
 } //namespace

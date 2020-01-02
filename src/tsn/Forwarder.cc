@@ -22,7 +22,7 @@ Define_Module(Forwarder);
 
 void Forwarder::initialize()
 {
-    m_fdb = check_and_cast<FilteringDatabase*> (getParentModule()->getSubmodule("FilteringDatabase"));
+    m_fdb = check_and_cast<FilteringDatabase*> (getParentModule()->getParentModule()->getSubmodule("fdb"));
 }
 
 void Forwarder::handleMessage(cMessage *msg)

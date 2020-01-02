@@ -34,7 +34,7 @@ void FilteringUnit::handleMessage(cMessage *msg)
         // TODO query stream filter table
     }
 
-    send(msg, "out", msg->getArrivalGateId());
+    send(msg, "out", msg->getArrivalGate()->getIndex());
 }
 
 } //namespace
