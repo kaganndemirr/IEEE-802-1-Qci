@@ -24,11 +24,13 @@ void TrafficGenerator::initialize()
 {
     const char* target = par("target").stringValue();
     int streamId = par("streamId").intValue();
+    int priority = par("priority").intValue();
 
     EthernetFrame* msg = new EthernetFrame();
     msg->setStreamId(streamId);
     msg->setDst(target);
     msg->setPayload("demo message");
+    msg->setPriority(priority);
     send(msg, "out");
 
     // TODO implement repeating packet generation (with self-messages?)

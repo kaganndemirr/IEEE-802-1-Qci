@@ -38,9 +38,9 @@ OBJS = \
     $O/tsn/FilteringUnit.o \
     $O/tsn/Forwarder.o \
     $O/tsn/StreamIdentifier.o \
-    $O/tsn/table/FlowMeter.o \
-    $O/tsn/table/StreamFilter.o \
-    $O/tsn/table/StreamGate.o \
+    $O/tsn/table/FlowMeterTable.o \
+    $O/tsn/table/StreamFilterTable.o \
+    $O/tsn/table/StreamGateTable.o \
     $O/application/EthernetFrame_m.o
 
 # Message files

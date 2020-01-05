@@ -13,18 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "FlowMeter.h"
+#include "StreamGateTable.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(FlowMeter);
+Define_Module(StreamGateTable);
 
-void FlowMeter::initialize()
+void StreamGateTable::initialize()
 {
     // TODO - Generated method body
 }
 
-void FlowMeter::handleMessage(cMessage *msg)
+void StreamGateTable::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
 }

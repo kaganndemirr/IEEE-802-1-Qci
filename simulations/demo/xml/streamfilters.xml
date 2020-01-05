@@ -1,0 +1,12 @@
+<StreamFilters>
+	<StreamFilter>
+		<InstanceId>1</InstanceId>
+		<StreamHandle>*</StreamHandle>
+		<Priority>*</Priority>
+		<StreamGateId>1</StreamGateId>
+		<FilterList>
+			<Filter maxSDUSize="500" />
+			<Filter flowMeterId="1" />
+		</FilterList>
+	</StreamFilter>
+</StreamFilters>

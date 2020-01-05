@@ -15,8 +15,9 @@
 
 package ieee_802_1_qci.tsn.table;
 
-simple FlowMeter
+simple FlowMeterTable
 {
     parameters:
         @display("i=block/table2");
+        xml table = default(xml("<FlowMeters/>"));
 }

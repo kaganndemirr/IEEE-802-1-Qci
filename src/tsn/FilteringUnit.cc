@@ -22,7 +22,9 @@ Define_Module(FilteringUnit);
 
 void FilteringUnit::initialize()
 {
-    // TODO - Generated method body
+    mStreamFilterTable = check_and_cast<StreamFilterTable*> (getParentModule()->getParentModule()->getSubmodule("streamfilters"));
+    mStreamGateTable = check_and_cast<StreamGateTable*> (getParentModule()->getParentModule()->getSubmodule("streamgates"));
+    mFlowMeterTable = check_and_cast<FlowMeterTable*> (getParentModule()->getParentModule()->getSubmodule("flowmeters"));
 }
 
 void FilteringUnit::handleMessage(cMessage *msg)
@@ -30,8 +32,12 @@ void FilteringUnit::handleMessage(cMessage *msg)
     EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
     if (pkt) {
         int streamHandle = pkt->getStreamHandle();
+        int priority = pkt->getPriority();
 
-        // TODO query stream filter table
+        StreamFilter* sf = mStreamFilterTable->getStreamFilter(streamHandle, priority);
+        if (sf) {
+            // TODO query stream gate table
+        }
     }
 
     send(msg, "out", msg->getArrivalGate()->getIndex());

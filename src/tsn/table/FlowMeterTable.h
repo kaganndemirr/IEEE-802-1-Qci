@@ -13,8 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMGATE_H_
-#define __IEEE_802_1_QCI_STREAMGATE_H_
+#ifndef __IEEE_802_1_QCI_FLOWMETERTABLE_H_
+#define __IEEE_802_1_QCI_FLOWMETERTABLE_H_
 
 #include <omnetpp.h>
 
@@ -25,7 +25,7 @@ namespace ieee_802_1_qci {
 /**
  * TODO - Generated class
  */
-class StreamGate : public cSimpleModule
+class FlowMeterTable : public cSimpleModule
 {
   protected:
     virtual void initialize();

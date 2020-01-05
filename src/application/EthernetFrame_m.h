@@ -28,7 +28,7 @@ namespace ieee_802_1_qci {
  *     string dst; // destination mac addr
  *     int streamId;
  *     int streamHandle;
- *     //    uint8_t priority; // 3 bits
+ *     uint8_t priority; // 3 bits
  *     //    uint8_t color; // 8 bits
  *     string payload;
  * }
@@ -41,6 +41,7 @@ class EthernetFrame : public ::omnetpp::cPacket
     ::omnetpp::opp_string dst;
     int streamId;
     int streamHandle;
+    uint8_t priority;
     ::omnetpp::opp_string payload;
 
   private:
@@ -68,6 +69,8 @@ class EthernetFrame : public ::omnetpp::cPacket
     virtual void setStreamId(int streamId);
     virtual int getStreamHandle() const;
     virtual void setStreamHandle(int streamHandle);
+    virtual uint8_t getPriority() const;
+    virtual void setPriority(uint8_t priority);
     virtual const char * getPayload() const;
     virtual void setPayload(const char * payload);
 };

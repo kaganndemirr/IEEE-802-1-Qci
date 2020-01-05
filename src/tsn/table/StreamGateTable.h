@@ -13,20 +13,45 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMFILTER_H_
-#define __IEEE_802_1_QCI_STREAMFILTER_H_
+#ifndef __IEEE_802_1_QCI_STREAMGATETABLE_H_
+#define __IEEE_802_1_QCI_STREAMGATETABLE_H_
 
 #include <omnetpp.h>
+#include <vector>
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
-class StreamFilter : public cSimpleModule
+struct IPVSpec {
+    int value;
+    bool isNull;
+};
+
+// TODO rename
+struct StreamGateControlOperation {
+    bool StreamGateState;
+    int IPV;
+    int TimeInterval;
+    int IntervalOctetMax;
+};
+
+// TODO rename vars
+struct StreamGate {
+    int instanceId;
+    bool state;
+    IPVSpec ipv;
+    bool GateClosedDueToInvalidRxEnable;
+    bool GateClosedDueToInvalidRx;
+    bool GateClosedDueToOctetsExceededEnable;
+    bool GateClosedDueToOctetsExceeded;
+    std::vector<StreamGateControlOperation> gateControlList;
+};
+
+class StreamGateTable : public cSimpleModule
 {
+private:
+    std::vector<StreamGate> mList;
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

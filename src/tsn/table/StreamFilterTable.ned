@@ -13,20 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "StreamFilter.h"
+package ieee_802_1_qci.tsn.table;
 
-namespace ieee_802_1_qci {
-
-Define_Module(StreamFilter);
-
-void StreamFilter::initialize()
+simple StreamFilterTable
 {
-    // TODO - Generated method body
+    parameters:
+        @display("i=block/table2");
+        xml table = default(xml("<StreamFilters/>"));
 }
-
-void StreamFilter::handleMessage(cMessage *msg)
-{
-    // TODO - Generated method body
-}
-
-} //namespace

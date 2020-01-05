@@ -21,6 +21,7 @@ simple TrafficGenerator
         @display("i=block/app");
         int streamId;
         string target;
+        int priority;
         // TODO add pktsPerBurst, pktSize, interval;
     
     gates:

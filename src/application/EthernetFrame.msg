@@ -20,7 +20,7 @@ packet EthernetFrame {
     string dst; // destination mac addr
     int streamId;
     int streamHandle;
-//    uint8_t priority; // 3 bits
+    uint8_t priority; // 3 bits
 //    uint8_t color; // 8 bits
     string payload;
 }
