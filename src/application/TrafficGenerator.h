@@ -37,7 +37,7 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
     virtual void handleMessage(cMessage *msg);
 
   public:
-    void tick();
+    simtime_t tick(int param);
 };
 
 } //namespace

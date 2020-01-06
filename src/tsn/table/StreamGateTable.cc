@@ -21,6 +21,8 @@ Define_Module(StreamGateTable);
 
 void StreamGateTable::initialize()
 {
+    mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
+
     StreamGate gate;
     IPVSpec ipvS;
     std::vector<StreamGateControlOperation> gclOps;
@@ -28,10 +30,11 @@ void StreamGateTable::initialize()
     cXMLElement* table = par("table");
     cXMLElement* gcl;
 
-    gate.intervalOctetLeft = -1;
-    gate.opIndex = -1;
+    gate.intervalOctetLeft = IntervalOctetSpec{0, true};
+    gate.opIndex = 0;
 
-    IntervalOctetMaxSpec octetMax;
+    IntervalOctetSpec octetMax;
+    simtime_t interval;
 
     if (table->hasChildren()) {
         for (cXMLElement* elm : table->getChildrenByTagName("StreamGate")) {
@@ -52,14 +55,28 @@ void StreamGateTable::initialize()
             if (gcl && gcl->hasChildren()) {
                 for (cXMLElement* op : gcl->getChildrenByTagName("Operation")) {
                     ipvS.value = readXMLUIntStr(op->getFirstChildWithTag("IPV"), "IPV", "null", &ipvS.isNull);
-                    octetMax.value = readXMLUIntStr(op->getFirstChildWithTag("IntervalOctetMax"), "IntervalOctetMax", "", &octetMax.isOmitted);
+                    octetMax.value = readXMLUIntStr(op->getFirstChildWithTag("IntervalOctetMax"), "IntervalOctetMax", "", &octetMax.isNull);
+
+                    interval = simTime().parse(op->getFirstChildWithTag("TimeInterval")->getNodeValue());
 
                     gclOps.push_back(StreamGateControlOperation {
                         readXMLBool(op->getFirstChildWithTag("State"), "State"),
                         ipvS,
-                        simTime().parse(op->getFirstChildWithTag("TimeInterval")->getNodeValue()),
+                        interval,
                         octetMax
                     });
+                }
+
+                if (gclOps.size() > 0)
+                {
+                    StreamGateControlOperation& gclOp = gclOps[0];
+
+                    gate.opIndex = 0;
+                    gate.ipv = gclOp.ipv;
+                    gate.state = gclOp.state;
+                    gate.intervalOctetLeft = gclOp.intervalOctetMax;
+
+                    mClock->scheduleCall(this, gclOp.timeInterval, gate.instanceId);
                 }
             }
 
@@ -75,6 +92,35 @@ void StreamGateTable::initialize()
 void StreamGateTable::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
+}
+
+simtime_t StreamGateTable::tick(int gateId)
+{
+    Enter_Method("tick()");
+
+    StreamGate* gate = NULL;
+
+    for (int i=0, listSize = mList.size(); i<listSize; i++) {
+        if (mList[i].instanceId == gateId) {
+            gate = &mList[i];
+            break;
+        }
+    }
+
+    if (!gate)
+        return simTime().ZERO;
+
+    gate->opIndex ++;
+    if (gate->opIndex >= gate->gateControlList.size())
+        gate->opIndex = 0;
+
+    StreamGateControlOperation& gclOp = gate->gateControlList[gate->opIndex];
+
+    gate->ipv = gclOp.ipv;
+    gate->state = gclOp.state;
+    gate->intervalOctetLeft = gclOp.intervalOctetMax;
+
+    return gclOp.timeInterval;
 }
 
 StreamGate* StreamGateTable::getStreamGate(int gateId) {

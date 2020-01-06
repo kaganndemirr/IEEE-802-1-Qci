@@ -26,13 +26,13 @@ namespace ieee_802_1_qci {
 
 class IScheduled {
 public:
-    virtual void tick() = 0;
+    virtual simtime_t tick(int param) = 0;
 };
 
 struct ScheduledCall {
-    IScheduled* callback;
-    simtime_t interval;
+    IScheduled* listener;
     simtime_t nextTime;
+    int param;
 };
 
 class Clock : public cSimpleModule
@@ -47,10 +47,11 @@ class Clock : public cSimpleModule
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
 
-    void callScheduled();
+    void tick();
+    void scheduleTick(simtime_t tick);
 
   public:
-    void scheduleCall(IScheduled* callback, simtime_t interval);
+    void scheduleCall(IScheduled* listener, simtime_t interval, int param);
 };
 
 } //namespace

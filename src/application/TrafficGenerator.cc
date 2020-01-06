@@ -23,14 +23,13 @@ Define_Module(TrafficGenerator);
 void TrafficGenerator::initialize()
 {
     mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
+
     mTarget = par("target").stringValue();
     mStreamId = par("streamId").intValue();
     mPriority = par("priority").intValue();
     mInterval = simTime().parse(par("sendInterval").stringValue());
 
-    //tick();
-
-    mClock->scheduleCall(this, mInterval);
+    mClock->scheduleCall(this, mInterval, 0);
 }
 
 void TrafficGenerator::handleMessage(cMessage *msg)
@@ -42,7 +41,7 @@ void TrafficGenerator::handleMessage(cMessage *msg)
     delete msg;
 }
 
-void TrafficGenerator::tick()
+simtime_t TrafficGenerator::tick(int param)
 {
     Enter_Method("tick()");
 
@@ -52,6 +51,8 @@ void TrafficGenerator::tick()
     msg->setPayload("demo message");
     msg->setPriority(mPriority);
     send(msg, "out");
+
+    return mInterval;
 }
 
 } //namespace

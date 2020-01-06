@@ -27,7 +27,7 @@ void Clock::initialize()
 void Clock::handleMessage(cMessage *msg)
 {
     if (msg->isSelfMessage()) {
-        callScheduled();
+        tick();
         delete msg;
         return;
     }
@@ -35,40 +35,46 @@ void Clock::handleMessage(cMessage *msg)
     throw omnetpp::cRuntimeError("Invalid packet received!");
 }
 
-void Clock::callScheduled() {
+void Clock::tick() {
     simtime_t currentTick = (simTime() / mTickInterval) * mTickInterval;
+    simtime_t interval = simTime().ZERO;
 
     mIsTickScheduled.erase(currentTick.str());
 
     for (ScheduledCall& sc : mScheduleList) {
         if (currentTick == sc.nextTime) {
-            sc.callback->tick();
-            sc.nextTime += sc.interval;
-
-            if (mIsTickScheduled.find(sc.nextTime.str()) == mIsTickScheduled.end()) {
-                mIsTickScheduled[sc.nextTime.str()] = true;
-                scheduleAt(sc.nextTime, new cMessage("tick"));
+            interval = sc.listener->tick(sc.param);
+            if (interval.isZero()) {
+                // TODO remove from list
+                continue;
             }
+
+            sc.nextTime += interval;
+            scheduleTick(sc.nextTime);
         }
     }
 }
 
-void Clock::scheduleCall(IScheduled* callback, simtime_t interval) {
-    simtime_t currentTick = (simTime() / mTickInterval) * mTickInterval;
-    simtime_t intervalTick = (interval / mTickInterval) * mTickInterval;
-    simtime_t nextTime = currentTick + intervalTick;
+void Clock::scheduleTick(simtime_t tick)
+{
+    std::string tickStr = tick.str();
+    if (mIsTickScheduled.find(tickStr) == mIsTickScheduled.end()) {
+        mIsTickScheduled[tickStr] = true;
+        scheduleAt(tick, new cMessage("tick"));
+    }
+}
+
+void Clock::scheduleCall(IScheduled* listener, simtime_t interval, int param) {
+    simtime_t currentTime = (simTime() / mTickInterval) * mTickInterval;
+    simtime_t intervalTime = (interval / mTickInterval) * mTickInterval;
+    simtime_t nextTime = currentTime + intervalTime;
 
     Enter_Method_Silent();
-
-    if (mIsTickScheduled.find(nextTime.str()) == mIsTickScheduled.end()) {
-        mIsTickScheduled[nextTime.str()] = true;
-        scheduleAt(nextTime, new cMessage("tick"));
-    }
-
+    scheduleTick(nextTime);
     mScheduleList.push_back(ScheduledCall {
-        callback,
-        intervalTick,
-        nextTime
+        listener,
+        nextTime,
+        param
     });
 }
 

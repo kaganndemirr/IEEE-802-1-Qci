@@ -21,6 +21,7 @@
 #include <bits/stdc++.h>
 
 #include "TableUtils.h"
+#include "../Clock.h"
 
 using namespace omnetpp;
 
@@ -31,16 +32,16 @@ struct IPVSpec {
     bool isNull;
 };
 
-struct IntervalOctetMaxSpec {
+struct IntervalOctetSpec {
     int value;
-    bool isOmitted;
+    bool isNull;
 };
 
 struct StreamGateControlOperation {
     bool state;
     IPVSpec ipv;
     simtime_t timeInterval;
-    IntervalOctetMaxSpec intervalOctetMax;
+    IntervalOctetSpec intervalOctetMax;
 };
 
 struct StreamGate {
@@ -55,18 +56,22 @@ struct StreamGate {
 
     std::vector<StreamGateControlOperation> gateControlList;
 
-    int intervalOctetLeft;
-    int opIndex;
+    IntervalOctetSpec intervalOctetLeft;
+    unsigned int opIndex;
 };
 
-class StreamGateTable : public cSimpleModule
+class StreamGateTable : public cSimpleModule, public IScheduled
 {
 private:
+    Clock* mClock;
     std::vector<StreamGate> mList;
-  protected:
+
+protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
-  public:
+
+public:
+    simtime_t tick(int gateId);
     StreamGate* getStreamGate(int gateId);
 };
 

@@ -22,7 +22,7 @@ simple TrafficGenerator
         int streamId;
         string target;
         int priority;
-        string sendInterval = default("5s");
+        string sendInterval = default("1s");
         // TODO add pktsPerBurst, pktSize, interval;
     
     gates:
