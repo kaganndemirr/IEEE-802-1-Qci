@@ -18,6 +18,9 @@
 
 #include <omnetpp.h>
 #include <vector>
+#include <bits/stdc++.h>
+
+#include "TableUtils.h"
 
 using namespace omnetpp;
 
@@ -28,24 +31,32 @@ struct IPVSpec {
     bool isNull;
 };
 
-// TODO rename
-struct StreamGateControlOperation {
-    bool StreamGateState;
-    int IPV;
-    int TimeInterval;
-    int IntervalOctetMax;
+struct IntervalOctetMaxSpec {
+    int value;
+    bool isOmitted;
 };
 
-// TODO rename vars
+struct StreamGateControlOperation {
+    bool state;
+    IPVSpec ipv;
+    int timeInterval;
+    IntervalOctetMaxSpec intervalOctetMax;
+};
+
 struct StreamGate {
     int instanceId;
     bool state;
     IPVSpec ipv;
-    bool GateClosedDueToInvalidRxEnable;
-    bool GateClosedDueToInvalidRx;
-    bool GateClosedDueToOctetsExceededEnable;
-    bool GateClosedDueToOctetsExceeded;
+
+    bool closedDueToInvalidRxEnable;
+    bool closedDueToInvalidRx;
+    bool closedDueToOctetsExceededEnable;
+    bool closedDueToOctetsExceeded;
+
     std::vector<StreamGateControlOperation> gateControlList;
+
+    int intervalOctetLeft;
+    int opIndex;
 };
 
 class StreamGateTable : public cSimpleModule
@@ -55,7 +66,11 @@ private:
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+  public:
+    StreamGate* getStreamGate(int gateId);
 };
+
+bool compareStreamGate(StreamGate g1, StreamGate g2);
 
 } //namespace
 

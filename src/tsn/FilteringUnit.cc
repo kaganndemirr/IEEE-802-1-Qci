@@ -36,7 +36,32 @@ void FilteringUnit::handleMessage(cMessage *msg)
 
         StreamFilter* sf = mStreamFilterTable->getStreamFilter(streamHandle, priority);
         if (sf) {
-            // TODO query stream gate table
+            // Drop packets > maxSDUSize
+            if (sf->maxSDUSize.isActive) {
+                unsigned int pktSize = strlen(pkt->getPayload());
+                if (pktSize > sf->maxSDUSize.value) {
+                    EV_WARN << "Packet dropped due to exceed of MaxSDUSize (" << sf->maxSDUSize.value << "): "
+                            << pkt->getName() << " (len: " << pktSize <<  ")";
+                    delete msg;
+                    return;
+                }
+            }
+
+            StreamGate* gate = mStreamGateTable->getStreamGate(sf->streamGateId);
+            if (gate) {
+                // Drop if gate is closed
+                if (!gate->state) {
+                    EV_WARN << "Packet dropped due to arrival at a closed gate (" << gate->instanceId << "): "
+                            << pkt->getName();
+                    delete msg;
+                    return;
+                }
+
+                // TODO set ipv
+                // TODO subtract interval octets etc.
+            } else {
+                // TODO action to take when the gate doesn't exist
+            }
         }
     }
 
