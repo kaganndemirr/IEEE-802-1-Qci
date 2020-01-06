@@ -27,9 +27,13 @@ void TrafficGenerator::initialize()
     mTarget = par("target").stringValue();
     mStreamId = par("streamId").intValue();
     mPriority = par("priority").intValue();
-    mInterval = simTime().parse(par("sendInterval").stringValue());
+    mDelay = par("startDelay");
+    mInterval = par("sendInterval");
 
-    mClock->scheduleCall(this, mInterval, 0);
+    if (mDelay.isZero())
+        mClock->scheduleCall(this, mInterval, 0);
+    else
+        mClock->scheduleCall(this, mDelay, 1);
 }
 
 void TrafficGenerator::handleMessage(cMessage *msg)
@@ -44,6 +48,12 @@ void TrafficGenerator::handleMessage(cMessage *msg)
 simtime_t TrafficGenerator::tick(int param)
 {
     Enter_Method("tick()");
+
+    if (param == 1)
+    {
+        mClock->scheduleCall(this, mInterval, 0);
+        return 0;
+    }
 
     EthernetFrame* msg = new EthernetFrame();
     msg->setStreamId(mStreamId);
