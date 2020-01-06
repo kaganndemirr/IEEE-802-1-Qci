@@ -17,19 +17,40 @@
 #define __IEEE_802_1_QCI_CLOCK_H_
 
 #include <omnetpp.h>
+#include <vector>
+#include <unordered_map>
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
+class IScheduled {
+public:
+    virtual void tick() = 0;
+};
+
+struct ScheduledCall {
+    IScheduled* callback;
+    simtime_t interval;
+    simtime_t nextTime;
+};
+
 class Clock : public cSimpleModule
 {
+  private:
+    simtime_t mTickInterval;
+
+    std::unordered_map<std::string, bool> mIsTickScheduled;
+    std::vector<ScheduledCall> mScheduleList;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+
+    void callScheduled();
+
+  public:
+    void scheduleCall(IScheduled* callback, simtime_t interval);
 };
 
 } //namespace

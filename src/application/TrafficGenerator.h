@@ -17,19 +17,27 @@
 #define __IEEE_802_1_QCI_TRAFFICGENERATOR_H_
 
 #include <omnetpp.h>
+#include "../tsn/Clock.h"
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
-class TrafficGenerator : public cSimpleModule
+class TrafficGenerator : public cSimpleModule, public IScheduled
 {
+  private:
+    Clock* mClock;
+    const char* mTarget;
+    int mStreamId;
+    int mPriority;
+    simtime_t mInterval;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+
+  public:
+    void tick();
 };
 
 } //namespace

@@ -39,7 +39,7 @@ struct IntervalOctetMaxSpec {
 struct StreamGateControlOperation {
     bool state;
     IPVSpec ipv;
-    int timeInterval;
+    simtime_t timeInterval;
     IntervalOctetMaxSpec intervalOctetMax;
 };
 

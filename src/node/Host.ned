@@ -15,23 +15,28 @@
 
 package ieee_802_1_qci.node;
 
+import ieee_802_1_qci.tsn.Clock;
+
 import ieee_802_1_qci.application.TrafficGenerator;
 import ieee_802_1_qci.link.NetworkController;
 
 module Host
 {
     parameters:
-        @display("i=device/pc3;bgb=300,100,white");
+        @display("i=device/pc3;bgb=200,100,white");
 
     gates:
         inout port;
 
     submodules:
+        clk: Clock {
+            @display("p=150,15");
+        }
         nc: NetworkController {
-            @display("p=100,50");
+            @display("p=50,50");
         }
         app: TrafficGenerator {
-            @display("p=200,50");
+            @display("p=150,50");
         }
 
     connections:

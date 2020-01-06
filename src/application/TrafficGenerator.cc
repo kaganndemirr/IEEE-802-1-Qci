@@ -22,18 +22,15 @@ Define_Module(TrafficGenerator);
 
 void TrafficGenerator::initialize()
 {
-    const char* target = par("target").stringValue();
-    int streamId = par("streamId").intValue();
-    int priority = par("priority").intValue();
+    mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
+    mTarget = par("target").stringValue();
+    mStreamId = par("streamId").intValue();
+    mPriority = par("priority").intValue();
+    mInterval = simTime().parse(par("sendInterval").stringValue());
 
-    EthernetFrame* msg = new EthernetFrame();
-    msg->setStreamId(streamId);
-    msg->setDst(target);
-    msg->setPayload("demo message");
-    msg->setPriority(priority);
-    send(msg, "out");
+    //tick();
 
-    // TODO implement repeating packet generation (with self-messages?)
+    mClock->scheduleCall(this, mInterval);
 }
 
 void TrafficGenerator::handleMessage(cMessage *msg)
@@ -43,6 +40,18 @@ void TrafficGenerator::handleMessage(cMessage *msg)
             << " length=" << pkt->getByteLength()
             << " payload=" << pkt->getPayload();
     delete msg;
+}
+
+void TrafficGenerator::tick()
+{
+    Enter_Method("tick()");
+
+    EthernetFrame* msg = new EthernetFrame();
+    msg->setStreamId(mStreamId);
+    msg->setDst(mTarget);
+    msg->setPayload("demo message");
+    msg->setPriority(mPriority);
+    send(msg, "out");
 }
 
 } //namespace

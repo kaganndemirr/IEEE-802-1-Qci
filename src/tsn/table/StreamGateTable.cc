@@ -57,7 +57,7 @@ void StreamGateTable::initialize()
                     gclOps.push_back(StreamGateControlOperation {
                         readXMLBool(op->getFirstChildWithTag("State"), "State"),
                         ipvS,
-                        readXMLUInt(op->getFirstChildWithTag("TimeInterval"), "TimeInterval"),
+                        simTime().parse(op->getFirstChildWithTag("TimeInterval")->getNodeValue()),
                         octetMax
                     });
                 }

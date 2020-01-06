@@ -13,13 +13,13 @@
 			<Operation>
 				<State>false</State>
 				<IPV>null</IPV>
-				<TimeInterval>5000</TimeInterval>
+				<TimeInterval>5s</TimeInterval>
 				<IntervalOctetMax></IntervalOctetMax>
 			</Operation>
 			<Operation>
 				<State>true</State>
 				<IPV>null</IPV>
-				<TimeInterval>5000</TimeInterval>
+				<TimeInterval>5s</TimeInterval>
 				<IntervalOctetMax></IntervalOctetMax>
 			</Operation>
 		</GateControlList>
