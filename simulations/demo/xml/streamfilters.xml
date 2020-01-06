@@ -5,8 +5,8 @@
 		<Priority>*</Priority>
 		<StreamGateId>1</StreamGateId>
 		<FilterList>
-			<Filter maxSDUSize="500" />
-			<Filter flowMeterId="1" />
+			<MaxSDUSize>500</MaxSDUSize>
+			<FlowMeter>1</FlowMeter>
 		</FilterList>
 	</StreamFilter>
 </StreamFilters>

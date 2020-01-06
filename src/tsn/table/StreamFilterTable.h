@@ -20,23 +20,25 @@
 #include <vector>
 #include <bits/stdc++.h>
 
+#include "TableUtils.h"
+
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
 struct StreamHandleSpec {
     int value;
-    char wildcard;
+    bool isWildcard;
 };
 
 struct PrioritySpec {
     int value;
-    char wildcard;
+    bool isWildcard;
 };
 
-struct FilterSpecification {
-    int maxSDUSize;
-    int flowMeterId;
+struct MaxSDUSizeSpec {
+    size_t value;
+    bool isActive;
 };
 
 struct StreamFilter {
@@ -44,7 +46,8 @@ struct StreamFilter {
     StreamHandleSpec streamHandle;
     PrioritySpec priority;
     int streamGateId;
-    std::vector<FilterSpecification> filters;
+    MaxSDUSizeSpec maxSDUSize;
+    std::vector<int> flowMeters;
 };
 
 class StreamFilterTable : public cSimpleModule

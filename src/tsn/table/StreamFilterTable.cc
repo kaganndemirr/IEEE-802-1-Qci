@@ -24,96 +24,52 @@ void StreamFilterTable::initialize()
     StreamFilter sf;
     StreamHandleSpec sh;
     PrioritySpec ps;
-    std::vector<FilterSpecification> filters;
+    MaxSDUSizeSpec maxSDUSize;
+    std::vector<int> flowMeters;
 
     cXMLElement* table = par("table");
     cXMLElement* filterList;
+    cXMLElement* maxSDUSizeTag;
 
     // Read stream filters
     if (table->hasChildren()) {
         for (cXMLElement* elm : table->getChildrenByTagName("StreamFilter")) {
-            int instanceId = atoi(elm->getFirstChildWithTag("InstanceId")->getNodeValue());
-            if (instanceId < 0)
-                throw omnetpp::cRuntimeError("InstanceId cannot be negative, given: %d", instanceId);
+            sf.instanceId = readXMLUInt(elm->getFirstChildWithTag("InstanceId"), "InstanceId");
 
-            sf.instanceId = instanceId;
-
-            const char* streamHandle = elm->getFirstChildWithTag("StreamHandle")->getNodeValue();
-            int streamHandleN;
-            if (strcmp(streamHandle, "*") == 0) {
-                streamHandleN = atoi(streamHandle);
-                if (streamHandleN < 0)
-                    throw omnetpp::cRuntimeError("StreamHandle cannot be negative, given: %d", streamHandleN);
-
-                sh.value = streamHandleN;
-                sh.wildcard = 0;
-            } else {
-                sh.wildcard = '*';
-            }
-
+            sh.value = readXMLUIntStr(elm->getFirstChildWithTag("StreamHandle"), "StreamHandle", "*", &sh.isWildcard);
             sf.streamHandle = sh;
 
-            const char* priority = elm->getFirstChildWithTag("Priority")->getNodeValue();
-            int priorityN;
-            if (strcmp(priority, "*") == 0) {
-                priorityN = atoi(priority);
-                if (priorityN < 0)
-                    throw omnetpp::cRuntimeError("Priority cannot be negative, given: %d", priorityN);
-
-                ps.value = priorityN;
-                ps.wildcard = 0;
-            } else {
-                ps.wildcard = '*';
-            }
-
+            ps.value = readXMLUIntStr(elm->getFirstChildWithTag("Priority"), "Priority", "*", &ps.isWildcard);
             sf.priority = ps;
 
-            int streamGateId = atoi(elm->getFirstChildWithTag("StreamGateId")->getNodeValue());
-            if (streamGateId < 0)
-                throw omnetpp::cRuntimeError("StreamGateId cannot be negative, given: %d", streamGateId);
+            sf.streamGateId = readXMLUInt(elm->getFirstChildWithTag("StreamGateId"), "StreamGateId");
 
-            sf.streamGateId = streamGateId;
-
-            filters = std::vector<FilterSpecification>();
+            flowMeters = std::vector<int>();
 
             filterList = elm->getFirstChildWithTag("FilterList");
             if (filterList && filterList->hasChildren()) {
-                for (cXMLElement* filter : filterList->getChildrenByTagName("Filter")) {
-                    if (!filter->hasAttributes())
-                        continue;
+                maxSDUSizeTag = filterList->getFirstChildWithTag("MaxSDUSize");
+                if (maxSDUSizeTag) {
+                    maxSDUSize.value = readXMLUInt(maxSDUSizeTag, "MaxSDUSize");
+                    maxSDUSize.isActive = true;
+                } else {
+                    maxSDUSize.value = 0;
+                    maxSDUSize.isActive = false;
+                }
 
-                    const char* maxSDUSize = filter->getAttribute("maxSDUSize");
-                    if (maxSDUSize) {
-                        int maxSDUSizeN = atoi(maxSDUSize);
-                        if (maxSDUSizeN < 0)
-                            throw omnetpp::cRuntimeError("maxSDUSize cannot be negative, given: %d", maxSDUSizeN);
-
-                        filters.push_back(FilterSpecification{
-                            maxSDUSizeN, -1
-                        });
-                    } else {
-                        const char* flowMeterId = filter->getAttribute("flowMeterId");
-                        if (flowMeterId) {
-                            int flowMeterIdN = atoi(flowMeterId);
-                            if (flowMeterIdN < 0)
-                                throw omnetpp::cRuntimeError("flowMeterId cannot be negative, given: %d", flowMeterIdN);
-
-                            filters.push_back(FilterSpecification{
-                                -1, flowMeterIdN
-                            });
-                        }
-
-                    }
+                for (cXMLElement* filter : filterList->getChildrenByTagName("FlowMeter")) {
+                    flowMeters.push_back(readXMLUInt(filter, "FlowMeter id"));
                 }
             }
 
-            sf.filters = filters;
+            sf.maxSDUSize = maxSDUSize;
+            sf.flowMeters = flowMeters;
 
             mList.push_back(sf);
         }
-    }
 
-    std::sort(mList.begin(), mList.end(), compareStreamFilter);
+        std::sort(mList.begin(), mList.end(), compareStreamFilter);
+    }
 }
 
 void StreamFilterTable::handleMessage(cMessage *msg)
@@ -125,8 +81,8 @@ StreamFilter* StreamFilterTable::getStreamFilter(int streamId, int priority) {
     StreamFilter* f;
     for (int i=0, listSize = mList.size(); i<listSize; i++) {
         f = &mList[i];
-        if (f->streamHandle.wildcard == '*' || f->streamHandle.value == streamId) {
-            if (f->priority.wildcard == '*' || f->priority.value == priority) {
+        if (f->streamHandle.isWildcard || f->streamHandle.value == streamId) {
+            if (f->priority.isWildcard || f->priority.value == priority) {
                 return f;
             }
         }
