@@ -11,13 +11,13 @@
 
 		<GateControlList>
 			<Operation>
-				<State>false</State>
+				<State>true</State>
 				<IPV>null</IPV>
 				<TimeInterval>5s</TimeInterval>
 				<IntervalOctetMax></IntervalOctetMax>
 			</Operation>
 			<Operation>
-				<State>true</State>
+				<State>false</State>
 				<IPV>null</IPV>
 				<TimeInterval>5s</TimeInterval>
 				<IntervalOctetMax></IntervalOctetMax>

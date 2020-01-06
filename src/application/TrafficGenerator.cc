@@ -36,7 +36,7 @@ void TrafficGenerator::handleMessage(cMessage *msg)
 {
     EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
     EV_INFO << "Packet received src=" << pkt->getSrc()
-            << " length=" << pkt->getByteLength()
+            << " length=" << strlen(pkt->getPayload())
             << " payload=" << pkt->getPayload();
     delete msg;
 }

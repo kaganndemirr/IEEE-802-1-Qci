@@ -34,14 +34,32 @@ void FilteringUnit::handleMessage(cMessage *msg)
         int streamHandle = pkt->getStreamHandle();
         int priority = pkt->getPriority();
 
+        std::ostringstream bubbleText;
+        std::string bubbleTextStr;
+
         StreamFilter* sf = mStreamFilterTable->getStreamFilter(streamHandle, priority);
         if (sf) {
+            bubbleText << "StreamFilter: " << sf->instanceId << ", Priority: ";
+            if (sf->priority.isWildcard)
+                bubbleText << "*";
+            else
+                bubbleText << sf->priority.value;
+            bubbleTextStr = bubbleText.str();
+            bubble(bubbleTextStr.c_str());
+            bubbleText.str("");
+
             // Drop packets > maxSDUSize
             if (sf->maxSDUSize.isActive) {
                 unsigned int pktSize = strlen(pkt->getPayload());
                 if (pktSize > sf->maxSDUSize.value) {
                     EV_WARN << "Packet dropped due to exceed of MaxSDUSize (" << sf->maxSDUSize.value << "): "
-                            << pkt->getName() << " (len: " << pktSize <<  ")";
+                            << pkt->getName() << " (Len: " << pktSize <<  ")";
+
+                    bubbleText << "Failed MaxSDUSize: " << sf->maxSDUSize.value
+                            << ", PktSize: " << pktSize
+                            << ", " << bubbleTextStr;
+                    bubble(bubbleText.str().c_str());
+
                     delete msg;
                     return;
                 }
@@ -53,12 +71,24 @@ void FilteringUnit::handleMessage(cMessage *msg)
                 if (!gate->state) {
                     EV_WARN << "Packet dropped due to arrival at a closed gate (" << gate->instanceId << "): "
                             << pkt->getName();
+
+                    bubbleText << "Failed StreamGate: " << gate->instanceId
+                            << ", GCL: " << gate->opIndex
+                            << ", " << bubbleTextStr;
+                    bubble(bubbleText.str().c_str());
+
                     delete msg;
                     return;
                 }
 
                 // TODO set ipv
                 // TODO subtract interval octets etc.
+
+                bubbleText << "Passed StreamGate: " << gate->instanceId;
+                if (!gate->ipv.isNull)
+                    bubbleText << ", IPV: " << gate->ipv.value;
+                bubbleText << ", " << bubbleTextStr;
+                bubble(bubbleText.str().c_str());
             } else {
                 // TODO action to take when the gate doesn't exist
             }
