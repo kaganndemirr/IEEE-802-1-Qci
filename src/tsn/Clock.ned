@@ -19,5 +19,5 @@ simple Clock
 {
     parameters:
         @display("i=device/clock");
-        string tickInterval = default("1us"); // precision
+        double tickInterval @unit(s) = default(1us); // precision
 }

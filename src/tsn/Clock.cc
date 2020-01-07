@@ -21,7 +21,7 @@ Define_Module(Clock);
 
 void Clock::initialize()
 {
-    mTickInterval = simTime().parse(par("tickInterval").stringValue());
+    mTickInterval = par("tickInterval");
 }
 
 void Clock::handleMessage(cMessage *msg)
