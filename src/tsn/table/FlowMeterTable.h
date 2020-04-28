@@ -18,13 +18,45 @@
 
 #include <omnetpp.h>
 
+#include "TableUtils.h"
+
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
+struct CommittedInformationRate{
+    int value;
+    bool isNull;
+};
+
+struct CommittedBurstSize{
+    int value;
+    bool isNull;
+};
+
+struct ExcessInformationRate{
+    int value;
+    bool isNull;
+};
+
+struct ExcessBurstSize{
+    int value;
+    bool isNull;
+};
+
+struct FlowMeter{
+    unsigned int id;
+    CommittedInformationRate cir;
+    CommittedBurstSize cbs;
+    ExcessInformationRate eir;
+    ExcessBurstSize ebs;
+
+    bool couplingFlag;
+    bool colorMode; // ?
+    bool dropOnYellow;
+    bool markAllFramesRedEnable;
+};
+
 class FlowMeterTable : public cSimpleModule
 {
   protected:

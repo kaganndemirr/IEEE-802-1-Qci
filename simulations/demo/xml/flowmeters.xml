@@ -1,1 +1,12 @@
-<FlowMeters></FlowMeters>
+<FlowMeters>
+	<FlowMeter>
+		<InstanceId></InstanceId>
+		<CommittedInformationRate></CommittedInformationRate>
+		<CommittedBurstSize></CommittedBurstRate>
+		<ExcessBurstSize></ExcessBurstSize>
+		<CouplingFlag></CouplingFlag>
+		<ColorMode></ColorMode>
+		<DropOnYellow></DropOnYellow>
+		<MarkAllFramesRedEnable>false</MarkAllFramesRedEnable>
+	</FlowMeter>
+</FlowMeters>
