@@ -3,6 +3,7 @@
 		<InstanceId></InstanceId>
 		<CommittedInformationRate></CommittedInformationRate>
 		<CommittedBurstSize></CommittedBurstRate>
+		<ExcessInformationRate></ExcessInformationRate>
 		<ExcessBurstSize></ExcessBurstSize>
 		<CouplingFlag></CouplingFlag>
 		<ColorMode></ColorMode>

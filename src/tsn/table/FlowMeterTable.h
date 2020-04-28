@@ -18,38 +18,16 @@
 
 #include <omnetpp.h>
 
-#include "TableUtils.h"
-
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-struct CommittedInformationRate{
-    int value;
-    bool isNull;
-};
-
-struct CommittedBurstSize{
-    int value;
-    bool isNull;
-};
-
-struct ExcessInformationRate{
-    int value;
-    bool isNull;
-};
-
-struct ExcessBurstSize{
-    int value;
-    bool isNull;
-};
-
 struct FlowMeter{
-    unsigned int id;
-    CommittedInformationRate cir;
-    CommittedBurstSize cbs;
-    ExcessInformationRate eir;
-    ExcessBurstSize ebs;
+    unsigned int instanceId;
+    int committedInformationRate;
+    int committedBurstSize;
+    int excessInformationRate;
+    int excessBurstSize;
 
     bool couplingFlag;
     bool colorMode; // ?
