@@ -17,20 +17,41 @@
 #define __IEEE_802_1_QCI_FLOWMETERTABLE_H_
 
 #include <omnetpp.h>
+#include <vector>
+#include <bits/stdc++.h>
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
+struct FlowMeter {
+    int instanceId;
+
+    int committedInformationRate; // green tokens (octets) per second
+    int committedBurstSize; // green bucket size
+    int excessInformationRate; // yellow tokens (octets) per second
+    int excessBurstSize; // yellow bucket size
+
+    bool couplingFlag; // true: use overflowing green tokens as yellow tokens
+    bool colorMode; // true: color aware, false: color blind
+    bool dropOnYellow;
+    bool markAllFramesRedEnable;
+};
+
 class FlowMeterTable : public cSimpleModule
 {
-  protected:
+private:
+    std::vector<FlowMeter> mList;
+
+protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+
+public:
+    FlowMeter* getFlowMeter(int fmId);
 };
+
+bool compareFlowMeter(FlowMeter fm1, FlowMeter fm2);
 
 } //namespace
 
