@@ -27,9 +27,10 @@ void FlowMeterTable::initialize()
 
     cXMLElement* table = par("table");
 
-    if(table->hasChildren()){
+    if(table->hasChildren()) {
         for (cXMLElement* elm : table->getChildrenByTagName("FlowMeter")){
             flowMeter.instanceId = readXMLUInt(elm->getFirstChildWithTag("InstanceId"), "InstanceId");
+
             flowMeter.committedInformationRate = readXMLUInt(elm->getFirstChildWithTag("CommittedInformationRate"), "CommittedInformationRate");
             flowMeter.committedBurstSize = readXMLUInt(elm->getFirstChildWithTag("CommittedBurstSize"), "CommittedBurstSize");
             flowMeter.excessInformationRate = readXMLUInt(elm->getFirstChildWithTag("ExcessInformationRate"), "ExcessInformationRate");
@@ -39,13 +40,30 @@ void FlowMeterTable::initialize()
             flowMeter.colorMode = readXMLBool(elm->getFirstChildWithTag("ColorMode"), "ColorMode");
             flowMeter.dropOnYellow = readXMLBool(elm->getFirstChildWithTag("DropOnYellow"), "DropOnYellow");
             flowMeter.markAllFramesRedEnable = readXMLBool(elm->getFirstChildWithTag("MarkAllFramesRedEnable"), "MarkAllFramesRedEnable");
+
+            mList.push_back(flowMeter);
         }
+
+        std::sort(mList.begin(), mList.end(), compareFlowMeter);
     }
 }
 
 void FlowMeterTable::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
+}
+
+FlowMeter* FlowMeterTable::getFlowMeter(int fmId) {
+    for (int i=0, listSize = mList.size(); i<listSize; i++) {
+        if (mList[i].instanceId == fmId) {
+            return &mList[i];
+        }
+    }
+    return NULL;
+}
+
+bool compareFlowMeter(FlowMeter fm1, FlowMeter fm2) {
+    return (fm1.instanceId < fm2.instanceId);
 }
 
 } //namespace
