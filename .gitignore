@@ -2,4 +2,7 @@
 **/*.exe
 src/IEEE-802-1-Qci
 src/IEEE-802-1-Qci_dbg
+src/application/EthernetFrame_m.cc
+src/application/EthernetFrame_m.h
+.settings/
 
