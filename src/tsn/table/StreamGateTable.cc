@@ -45,9 +45,9 @@ void StreamGateTable::initialize()
             gate.ipv = ipvS;
 
             gate.closedDueToInvalidRxEnable = readXMLBool(elm->getFirstChildWithTag("ClosedDueToInvalidRxEnable"), "ClosedDueToInvalidRxEnable");
-            gate.closedDueToInvalidRx = readXMLBool(elm->getFirstChildWithTag("ClosedDueToInvalidRx"), "ClosedDueToInvalidRx");
+            gate.closedDueToInvalidRx = false;
             gate.closedDueToOctetsExceededEnable = readXMLBool(elm->getFirstChildWithTag("ClosedDueToOctetsExceededEnable"), "ClosedDueToOctetsExceededEnable");
-            gate.closedDueToOctetsExceeded = readXMLBool(elm->getFirstChildWithTag("ClosedDueToOctetsExceeded"), "ClosedDueToOctetsExceeded");
+            gate.closedDueToOctetsExceeded = false;
 
             gclOps = std::vector<StreamGateControlOperation>();
 

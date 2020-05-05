@@ -63,6 +63,9 @@ void StreamFilterTable::initialize()
                 }
             }
 
+            sf.streamBlockedDueToOversizeFrameEnable = readXMLBool(elm->getFirstChildWithTag("StreamBlockedDueToOversizeFrameEnable"), "StreamBlockedDueToOversizeFrameEnable");
+            sf.streamBlockedDueToOversizeFrame = false;
+
             sf.maxSDUSize = maxSDUSize;
             sf.flowMeters = flowMeters;
 

@@ -7,5 +7,6 @@
 		<FilterList>
 			<MaxSDUSize>500</MaxSDUSize>
 		</FilterList>
+		<StreamBlockedDueToOversizeFrameEnable>false</StreamBlockedDueToOversizeFrameEnable>
 	</StreamFilter>
 </StreamFilters>
