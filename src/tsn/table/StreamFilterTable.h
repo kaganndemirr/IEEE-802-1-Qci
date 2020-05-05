@@ -48,6 +48,9 @@ struct StreamFilter {
     int streamGateId;
     MaxSDUSizeSpec maxSDUSize;
     std::vector<int> flowMeters;
+
+    bool streamBlockedDueToOversizeFrameEnable;
+    bool streamBlockedDueToOversizeFrame;
 };
 
 class StreamFilterTable : public cSimpleModule

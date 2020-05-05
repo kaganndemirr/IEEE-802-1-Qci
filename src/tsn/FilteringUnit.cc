@@ -50,6 +50,89 @@ void FilteringUnit::handleMessage(cMessage *msg)
             bubble(bubbleTextStr.c_str());
             bubbleText.str("");
 
+            StreamGate* gate = mStreamGateTable->getStreamGate(sf->streamGateId);
+            if (gate) {
+                if (gate->closedDueToInvalidRx) {
+                    EV_WARN << "Packet dropped due to arrival at a closed gate (InvalidRx) (" << gate->instanceId << "): "
+                            << pkt->getName();
+
+                    bubbleText << "Failed StreamGate (InvalidRx): " << gate->instanceId
+                            << ", GCL: " << gate->opIndex
+                            << ", " << bubbleTextStr;
+                    bubble(bubbleText.str().c_str());
+
+                    delete msg;
+
+                    return;
+                }
+
+                if (gate->closedDueToOctetsExceeded) {
+                    EV_WARN << "Packet dropped due to arrival at a closed gate (OctetsExceeded) (" << gate->instanceId << "): "
+                            << pkt->getName();
+
+                    bubbleText << "Failed StreamGate (OctetsExceeded): " << gate->instanceId
+                            << ", GCL: " << gate->opIndex
+                            << ", " << bubbleTextStr;
+                    bubble(bubbleText.str().c_str());
+
+                    delete msg;
+
+                    return;
+                }
+
+                // Drop if gate is closed
+                if (!gate->state) {
+                    EV_WARN << "Packet dropped due to arrival at a closed gate (" << gate->instanceId << "): "
+                            << pkt->getName();
+
+                    bubbleText << "Failed StreamGate: " << gate->instanceId
+                            << ", GCL: " << gate->opIndex
+                            << ", " << bubbleTextStr;
+                    bubble(bubbleText.str().c_str());
+
+                    delete msg;
+
+                    if (gate->closedDueToInvalidRxEnable) {
+                        gate->closedDueToInvalidRx = true;
+                    }
+
+                    return;
+                }
+
+                if (!gate->intervalOctetLeft.isNull) {
+                    if (pkt->getPayloadSize() > gate->intervalOctetLeft.value) {
+                        EV_WARN << "Packet dropped due to arrival at a gate has not enough octet left (" << gate->instanceId << "): "
+                                << pkt->getName();
+
+                        bubbleText << "Failed StreamGate (Octet): " << gate->instanceId
+                                << ", GCL: " << gate->opIndex
+                                << ", " << bubbleTextStr;
+                        bubble(bubbleText.str().c_str());
+
+                        delete msg;
+
+                        if (gate->closedDueToOctetsExceededEnable) {
+                            gate->closedDueToOctetsExceeded = true;
+                        }
+
+                        return;
+                    }
+
+                    gate->intervalOctetLeft.value -= pkt->getPayloadSize();
+                }
+
+                // TODO set ipv
+                // TODO subtract interval octets etc.
+
+                bubbleText << "Passed StreamGate: " << gate->instanceId;
+                if (!gate->ipv.isNull)
+                    bubbleText << ", IPV: " << gate->ipv.value;
+                bubbleText << ", " << bubbleTextStr;
+                bubble(bubbleText.str().c_str());
+            } else {
+                throw cRuntimeError("StreamGate not found!");
+            }
+
             // Drop packets > maxSDUSize
             if (sf->maxSDUSize.isActive) {
                 unsigned int pktSize = pkt->getPayloadSize();
@@ -65,34 +148,6 @@ void FilteringUnit::handleMessage(cMessage *msg)
                     delete msg;
                     return;
                 }
-            }
-
-            StreamGate* gate = mStreamGateTable->getStreamGate(sf->streamGateId);
-            if (gate) {
-                // Drop if gate is closed
-                if (!gate->state) {
-                    EV_WARN << "Packet dropped due to arrival at a closed gate (" << gate->instanceId << "): "
-                            << pkt->getName();
-
-                    bubbleText << "Failed StreamGate: " << gate->instanceId
-                            << ", GCL: " << gate->opIndex
-                            << ", " << bubbleTextStr;
-                    bubble(bubbleText.str().c_str());
-
-                    delete msg;
-                    return;
-                }
-
-                // TODO set ipv
-                // TODO subtract interval octets etc.
-
-                bubbleText << "Passed StreamGate: " << gate->instanceId;
-                if (!gate->ipv.isNull)
-                    bubbleText << ", IPV: " << gate->ipv.value;
-                bubbleText << ", " << bubbleTextStr;
-                bubble(bubbleText.str().c_str());
-            } else {
-                throw cRuntimeError("StreamGate not found!");
             }
 
             if (sf->flowMeters.size() > 0) {
