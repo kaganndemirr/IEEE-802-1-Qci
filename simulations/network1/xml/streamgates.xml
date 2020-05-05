@@ -1,0 +1,14 @@
+<StreamGates>
+	<StreamGate>
+		<InstanceId>1</InstanceId>
+		<State>true</State>
+		<IPV>null</IPV>
+
+		<ClosedDueToInvalidRxEnable>false</ClosedDueToInvalidRxEnable>
+		<ClosedDueToInvalidRx>false</ClosedDueToInvalidRx>
+		<ClosedDueToOctetsExceededEnable>false</ClosedDueToOctetsExceededEnable>
+		<ClosedDueToOctetsExceeded>false</ClosedDueToOctetsExceeded>
+
+		<GateControlList />
+	</StreamGate>
+</StreamGates>

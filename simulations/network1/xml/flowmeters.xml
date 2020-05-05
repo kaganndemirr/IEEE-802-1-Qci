@@ -1,0 +1,13 @@
+<FlowMeters>
+	<FlowMeter>
+		<InstanceId>1</InstanceId>
+		<CommittedInformationRate>1000</CommittedInformationRate>
+		<CommittedBurstSize>5000000</CommittedBurstSize>
+		<ExcessInformationRate>200000</ExcessInformationRate>
+		<ExcessBurstSize>10000000</ExcessBurstSize>
+		<CouplingFlag>true</CouplingFlag>
+		<ColorMode>true</ColorMode>
+		<DropOnYellow>false</DropOnYellow>
+		<MarkAllFramesRedEnable>true</MarkAllFramesRedEnable>
+	</FlowMeter>
+</FlowMeters>
