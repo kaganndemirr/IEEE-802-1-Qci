@@ -39,18 +39,49 @@ void FlowMeterTable::initialize()
             flowMeter.couplingFlag = readXMLBool(elm->getFirstChildWithTag("CouplingFlag"), "CouplingFlag");
             flowMeter.colorMode = readXMLBool(elm->getFirstChildWithTag("ColorMode"), "ColorMode");
             flowMeter.dropOnYellow = readXMLBool(elm->getFirstChildWithTag("DropOnYellow"), "DropOnYellow");
+            flowMeter.markAllFramesRed = false;
             flowMeter.markAllFramesRedEnable = readXMLBool(elm->getFirstChildWithTag("MarkAllFramesRedEnable"), "MarkAllFramesRedEnable");
+
+            greenBuckets[flowMeter.instanceId] = new TokenBucket(flowMeter.committedBurstSize, 0);
+            yellowBuckets[flowMeter.instanceId] = new TokenBucket(flowMeter.excessBurstSize, 0);
 
             mList.push_back(flowMeter);
         }
 
         std::sort(mList.begin(), mList.end(), compareFlowMeter);
     }
+
+    mLastUpdate = simTime();
 }
 
 void FlowMeterTable::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
+}
+
+
+void FlowMeterTable::updateBuckets()
+{
+    if (mLastUpdate == simTime()) {
+        return;
+    }
+
+    double delta = (simTime() - mLastUpdate).dbl();
+    mLastUpdate = simTime();
+
+    for (FlowMeter meter : mList) {
+        TokenBucket* greenBucket = greenBuckets.at(meter.instanceId);
+        TokenBucket* yellowBucket = yellowBuckets.at(meter.instanceId);
+
+        double overflow = greenBucket->add(meter.committedInformationRate * delta);
+
+        if (meter.couplingFlag) {
+            yellowBucket->add(meter.excessInformationRate * delta + overflow);
+        }
+        else {
+            yellowBucket->add(meter.excessInformationRate * delta);
+        }
+    }
 }
 
 FlowMeter* FlowMeterTable::getFlowMeter(int fmId) {
@@ -60,6 +91,22 @@ FlowMeter* FlowMeterTable::getFlowMeter(int fmId) {
         }
     }
     return NULL;
+}
+
+bool FlowMeterTable::tryGreenBucket(int fmId, int tokens) {
+    TokenBucket* bucket = greenBuckets.at(fmId);
+
+    updateBuckets();
+
+    return bucket->remove(tokens) == 0;
+}
+
+bool FlowMeterTable::tryYellowBucket(int fmId, int tokens) {
+    TokenBucket* bucket = yellowBuckets.at(fmId);
+
+    updateBuckets();
+
+    return bucket->remove(tokens) == 0;
 }
 
 bool compareFlowMeter(FlowMeter fm1, FlowMeter fm2) {

@@ -37,6 +37,8 @@ void FilteringUnit::handleMessage(cMessage *msg)
         std::ostringstream bubbleText;
         std::string bubbleTextStr;
 
+        // TODO Separate StreamGate handling & FlowMeter handling from FilteringUnit to their own nodes
+
         StreamFilter* sf = mStreamFilterTable->getStreamFilter(streamHandle, priority);
         if (sf) {
             bubbleText << "StreamFilter: " << sf->instanceId << ", Priority: ";
@@ -50,7 +52,7 @@ void FilteringUnit::handleMessage(cMessage *msg)
 
             // Drop packets > maxSDUSize
             if (sf->maxSDUSize.isActive) {
-                unsigned int pktSize = strlen(pkt->getPayload());
+                unsigned int pktSize = pkt->getPayloadSize();
                 if (pktSize > sf->maxSDUSize.value) {
                     EV_WARN << "Packet dropped due to exceed of MaxSDUSize (" << sf->maxSDUSize.value << "): "
                             << pkt->getName() << " (Len: " << pktSize <<  ")";
@@ -90,7 +92,70 @@ void FilteringUnit::handleMessage(cMessage *msg)
                 bubbleText << ", " << bubbleTextStr;
                 bubble(bubbleText.str().c_str());
             } else {
-                // TODO action to take when the gate doesn't exist
+                throw cRuntimeError("StreamGate not found!");
+            }
+
+            if (sf->flowMeters.size() > 0) {
+                FlowMeter* meter;
+                for (auto meterId : sf->flowMeters) {
+                    meter = mFlowMeterTable->getFlowMeter(meterId);
+
+                    if (meter != NULL) {
+                        if (meter->markAllFramesRed) {
+                            EV_WARN << "Packet dropped due to arrival at a meter that marks all frames red (" << meterId << "): "
+                                    << pkt->getName();
+
+                            bubbleText << "Failed FlowMeter (Red Mark): " << meterId
+                                    << ", " << bubbleTextStr;
+                            bubble(bubbleText.str().c_str());
+
+                            delete msg;
+                            return;
+                        }
+
+                        unsigned int packetSize = pkt->getPayloadSize();
+
+                        if (mFlowMeterTable->tryGreenBucket(meterId, packetSize) &&
+                                (pkt->getColor() == 0
+                                || pkt->getColor() == 1
+                                || !meter->colorMode)) { // color-blind
+                            pkt->setColor(1);
+                        }
+                        else if (mFlowMeterTable->tryYellowBucket(meterId, packetSize)) {
+                            pkt->setColor(2);
+                            bubble("Excess Packet");
+
+                            if (meter->dropOnYellow) {
+                                EV_WARN << "Packet dropped due to arrival at a meter that drops yellow marked frames (" << meterId << "): "
+                                        << pkt->getName();
+
+                                bubbleText << "Failed FlowMeter (Drop Yellow Mark): " << meterId
+                                        << ", " << bubbleTextStr;
+                                bubble(bubbleText.str().c_str());
+
+                                delete msg;
+                                return;
+                            }
+                        }
+                        else {
+                            EV_WARN << "Packet dropped due to arrival at a meter that has not enough tokens (" << meterId << "): "
+                                    << pkt->getName();
+
+                            bubbleText << "Failed FlowMeter (Packet Size): " << meterId
+                                    << ", " << bubbleTextStr;
+                            bubble(bubbleText.str().c_str());
+
+                            if (meter->markAllFramesRedEnable) {
+                                meter->markAllFramesRed = true;
+                            }
+
+                            delete msg;
+                            return;
+                        }
+                    } else {
+                        throw cRuntimeError("FlowMeter not found!");
+                    }
+                }
             }
         }
     }

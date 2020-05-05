@@ -5,7 +5,7 @@
 		<Priority>*</Priority>
 		<StreamGateId>1</StreamGateId>
 		<FilterList>
-			<MaxSDUSize>500</MaxSDUSize>
+			<FlowMeter>1</FlowMeter>
 		</FilterList>
 	</StreamFilter>
 </StreamFilters>

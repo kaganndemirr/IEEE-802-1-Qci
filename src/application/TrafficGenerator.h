@@ -30,6 +30,7 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
     const char* mTarget;
     int mStreamId;
     int mPriority;
+    unsigned int mPayloadSize;
     simtime_t mDelay;
     simtime_t mInterval;
 

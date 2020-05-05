@@ -42,6 +42,7 @@ OBJS = \
     $O/tsn/table/StreamFilterTable.o \
     $O/tsn/table/StreamGateTable.o \
     $O/tsn/table/TableUtils.o \
+    $O/utils/TokenBucket.o \
     $O/application/EthernetFrame_m.o
 
 # Message files
