@@ -121,7 +121,9 @@ void FilteringUnit::handleMessage(cMessage *msg)
                     gate->intervalOctetLeft.value -= pkt->getPayloadSize();
                 }
 
-                // TODO set ipv
+                if (!gate->ipv.isNull) {
+                    pkt->setIpv(gate->ipv.value);
+                }
                 // TODO subtract interval octets etc.
 
                 bubbleText << "Passed StreamGate: " << gate->instanceId;
