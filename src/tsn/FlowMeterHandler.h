@@ -13,18 +13,26 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+#ifndef __IEEE_802_1_QCI_FLOWMETERHANDLER_H_
+#define __IEEE_802_1_QCI_FLOWMETERHANDLER_H_
 
-simple Decapsulator
+#include <omnetpp.h>
+#include "table/FlowMeterTable.h"
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class FlowMeterHandler : public cSimpleModule
 {
-	parameters:
-        @display("i=block/triangle");
-        
-        int portCount;
-    
-    gates:
-        input filterIn[portCount];
-        input gateIn[portCount];
-        input meterIn[portCount];
-        output out[portCount];
-}
+private:
+    FlowMeterTable* mFlowMeterTable;
+
+protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
+
+} //namespace
+
+#endif

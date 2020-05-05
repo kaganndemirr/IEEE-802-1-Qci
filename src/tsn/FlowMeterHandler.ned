@@ -15,16 +15,14 @@
 
 package ieee_802_1_qci.tsn;
 
-simple Decapsulator
+simple FlowMeterHandler
 {
 	parameters:
-        @display("i=block/triangle");
+        @display("i=block/bucket");
         
         int portCount;
     
     gates:
-        input filterIn[portCount];
-        input gateIn[portCount];
-        input meterIn[portCount];
+        input in[portCount];
         output out[portCount];
 }

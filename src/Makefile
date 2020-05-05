@@ -36,8 +36,10 @@ OBJS = \
     $O/tsn/Clock.o \
     $O/tsn/Decapsulator.o \
     $O/tsn/FilteringDatabase.o \
-    $O/tsn/FilteringUnit.o \
+    $O/tsn/FlowMeterHandler.o \
     $O/tsn/Forwarder.o \
+    $O/tsn/StreamFilterHandler.o \
+    $O/tsn/StreamGateHandler.o \
     $O/tsn/StreamIdentifier.o \
     $O/tsn/table/FlowMeterTable.o \
     $O/tsn/table/StreamFilterTable.o \

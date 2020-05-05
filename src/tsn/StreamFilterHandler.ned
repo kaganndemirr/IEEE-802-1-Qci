@@ -13,30 +13,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_FILTERINGUNIT_H_
-#define __IEEE_802_1_QCI_FILTERINGUNIT_H_
+package ieee_802_1_qci.tsn;
 
-#include <omnetpp.h>
-#include "table/StreamFilterTable.h"
-#include "table/StreamGateTable.h"
-#include "table/FlowMeterTable.h"
-
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class FilteringUnit : public cSimpleModule
+simple StreamFilterHandler
 {
-  private:
-    StreamFilterTable* mStreamFilterTable;
-    StreamGateTable* mStreamGateTable;
-    FlowMeterTable* mFlowMeterTable;
-
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
-
-} //namespace
-
-#endif
+	parameters:
+        @display("i=block/filter");
+        
+        int portCount;
+    
+    gates:
+        input in[portCount];
+        output next[portCount];
+        output out[portCount];
+}

@@ -25,4 +25,6 @@ packet ControlPacket extends EthernetFrame {
     int streamHandle;
     uint8_t ipv;
     uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
+    int streamGateId;
+    int flowMeterIds[];
 }

@@ -15,16 +15,15 @@
 
 package ieee_802_1_qci.tsn;
 
-simple Decapsulator
+simple StreamGateHandler
 {
 	parameters:
-        @display("i=block/triangle");
+        @display("i=block/layer");
         
         int portCount;
     
     gates:
-        input filterIn[portCount];
-        input gateIn[portCount];
-        input meterIn[portCount];
+        input in[portCount];
+        output next[portCount];
         output out[portCount];
 }
