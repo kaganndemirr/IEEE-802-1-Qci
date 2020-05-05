@@ -41,17 +41,21 @@ void Clock::tick() {
 
     mIsTickScheduled.erase(currentTick.str());
 
-    for (ScheduledCall& sc : mScheduleList) {
+    auto it = mScheduleList.begin();
+    while (it != mScheduleList.end()) {
+        ScheduledCall& sc = *it;
         if (currentTick == sc.nextTime) {
             interval = sc.listener->tick(sc.param);
             if (interval.isZero()) {
-                // TODO remove from list
+                it = mScheduleList.erase(it);
                 continue;
             }
 
             sc.nextTime += interval;
             scheduleTick(sc.nextTime);
         }
+
+        it++;
     }
 }
 
