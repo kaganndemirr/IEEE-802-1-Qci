@@ -5,7 +5,7 @@
 
 #include "TokenBucket.h"
 
-TokenBucket::TokenBucket(double capacity = 0, double tokens = 0) : pCapacity(capacity), pTokens(tokens) {
+TokenBucket::TokenBucket(double capacity, double tokens) : pCapacity(capacity), pTokens(tokens) {
 }
 
 TokenBucket::~TokenBucket() {
