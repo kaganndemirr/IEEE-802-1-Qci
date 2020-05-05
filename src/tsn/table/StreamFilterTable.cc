@@ -78,7 +78,6 @@ void StreamFilterTable::initialize()
 
 void StreamFilterTable::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 StreamFilter* StreamFilterTable::getStreamFilter(int streamId, int priority) {

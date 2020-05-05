@@ -9,7 +9,6 @@ TokenBucket::TokenBucket(double capacity = 0, double tokens = 0) : pCapacity(cap
 }
 
 TokenBucket::~TokenBucket() {
-    // TODO Auto-generated destructor stub
 }
 
 void TokenBucket::setCapacity(double capacity) {

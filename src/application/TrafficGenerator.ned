@@ -25,7 +25,6 @@ simple TrafficGenerator
         int payloadSize;
         double startDelay @unit(s) = default(0);
         double sendInterval @unit(s) = default(1s);
-        // TODO add pktSize
 
     gates:
         input in;

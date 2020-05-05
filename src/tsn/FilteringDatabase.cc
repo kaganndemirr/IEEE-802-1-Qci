@@ -49,7 +49,6 @@ void FilteringDatabase::initialize()
 
 void FilteringDatabase::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 // Returns matching port number if MAC is on db, otherwise -1

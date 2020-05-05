@@ -23,9 +23,6 @@ using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
 class StreamIdentifier : public cSimpleModule
 {
   protected:

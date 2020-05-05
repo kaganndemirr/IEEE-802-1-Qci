@@ -91,7 +91,6 @@ void StreamGateTable::initialize()
 
 void StreamGateTable::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 simtime_t StreamGateTable::tick(int gateId)

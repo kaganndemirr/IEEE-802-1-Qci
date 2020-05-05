@@ -124,7 +124,6 @@ void FilteringUnit::handleMessage(cMessage *msg)
                 if (!gate->ipv.isNull) {
                     pkt->setIpv(gate->ipv.value);
                 }
-                // TODO subtract interval octets etc.
 
                 bubbleText << "Passed StreamGate: " << gate->instanceId;
                 if (!gate->ipv.isNull)

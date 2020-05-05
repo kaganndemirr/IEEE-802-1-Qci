@@ -22,9 +22,6 @@ using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-/**
- * TODO - Generated class
- */
 class NetworkController : public cSimpleModule
 {
   private:

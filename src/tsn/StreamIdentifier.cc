@@ -22,7 +22,6 @@ Define_Module(StreamIdentifier);
 
 void StreamIdentifier::initialize()
 {
-    // TODO - Generated method body
 }
 
 void StreamIdentifier::handleMessage(cMessage *msg)

@@ -56,7 +56,6 @@ void FlowMeterTable::initialize()
 
 void FlowMeterTable::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 
