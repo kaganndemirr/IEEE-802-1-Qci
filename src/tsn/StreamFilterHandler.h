@@ -13,12 +13,26 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-namespace ieee_802_1_qci;
+#ifndef __IEEE_802_1_QCI_STREAMFILTERHANDLER_H_
+#define __IEEE_802_1_QCI_STREAMFILTERHANDLER_H_
 
-packet EthernetFrame {
-    string src; // source mac addr
-    string dst; // destination mac addr
-    int streamId; // instead of vid
-    uint8_t priority; // 3 bits
-    unsigned int payloadSize;
-}
+#include <omnetpp.h>
+#include "table/StreamFilterTable.h"
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class StreamFilterHandler : public cSimpleModule
+{
+    private:
+        StreamFilterTable* mStreamFilterTable;
+
+    protected:
+        virtual void initialize();
+        virtual void handleMessage(cMessage *msg);
+};
+
+} //namespace
+
+#endif

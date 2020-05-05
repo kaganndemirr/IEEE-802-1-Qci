@@ -13,12 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
+cplusplus {{
+#include "../application/EthernetFrame_m.h"
+}}
+
+class ieee_802_1_qci::EthernetFrame;
+
 namespace ieee_802_1_qci;
 
-packet EthernetFrame {
-    string src; // source mac addr
-    string dst; // destination mac addr
-    int streamId; // instead of vid
-    uint8_t priority; // 3 bits
-    unsigned int payloadSize;
+packet ControlPacket extends EthernetFrame {
+    int streamHandle;
+    uint8_t ipv;
+    uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
+    int streamGateId;
+    int flowMeterIds[];
 }

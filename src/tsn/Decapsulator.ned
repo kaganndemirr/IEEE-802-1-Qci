@@ -13,12 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-namespace ieee_802_1_qci;
+package ieee_802_1_qci.tsn;
 
-packet EthernetFrame {
-    string src; // source mac addr
-    string dst; // destination mac addr
-    int streamId; // instead of vid
-    uint8_t priority; // 3 bits
-    unsigned int payloadSize;
+simple Decapsulator
+{
+	parameters:
+        @display("i=block/triangle");
+        
+        int portCount;
+    
+    gates:
+        input filterIn[portCount];
+        input gateIn[portCount];
+        input meterIn[portCount];
+        output out[portCount];
 }

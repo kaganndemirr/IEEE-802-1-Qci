@@ -14,7 +14,7 @@
 // 
 
 #include "StreamIdentifier.h"
-#include "../application/EthernetFrame_m.h"
+#include "ControlPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -26,7 +26,7 @@ void StreamIdentifier::initialize()
 
 void StreamIdentifier::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    ControlPacket* pkt = check_and_cast<ControlPacket *>(msg);
     if (pkt) {
         const char* src = pkt->getSrc();
         const char* dst = pkt->getDst();

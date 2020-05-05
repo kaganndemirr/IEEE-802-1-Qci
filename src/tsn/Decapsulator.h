@@ -13,16 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+#ifndef __IEEE_802_1_QCI_DECAPSULATOR_H_
+#define __IEEE_802_1_QCI_DECAPSULATOR_H_
 
-simple FilteringUnit
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class Decapsulator : public cSimpleModule
 {
-	parameters:
-        @display("i=block/filter");
-        
-        int portCount;
-    
-    gates:
-        input in[portCount];
-        output out[portCount];
-}
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
+
+} //namespace
+
+#endif

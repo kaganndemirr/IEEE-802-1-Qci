@@ -15,6 +15,7 @@
 
 #include "Forwarder.h"
 #include "../application/EthernetFrame_m.h"
+#include "ControlPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -34,7 +35,9 @@ void Forwarder::handleMessage(cMessage *msg)
         int port = m_fdb->getPort(std::string(dst));
 
         if (port != -1) {
-            send(msg, "out", port);
+            ControlPacket* ctrlPkt = new ControlPacket();
+            ctrlPkt->encapsulate(pkt);
+            send(ctrlPkt, "out", port);
         } else {
             EV_WARN << "No matching entry found: " << msg->getDisplayString();
             delete msg;
