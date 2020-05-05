@@ -17,11 +17,17 @@
 
 namespace ieee_802_1_qci {
 
+std::ostream& operator << (std::ostream& o, const ScheduledCall& sc) {
+    return o << "nextTime: " << sc.nextTime << ", param: " << sc.param;
+}
+
 Define_Module(Clock);
 
 void Clock::initialize()
 {
     mTickInterval = par("tickInterval");
+
+    WATCH_LIST(mScheduleList);
 }
 
 void Clock::handleMessage(cMessage *msg)
