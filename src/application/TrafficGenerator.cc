@@ -27,6 +27,7 @@ void TrafficGenerator::initialize()
     mTarget = par("target").stringValue();
     mStreamId = par("streamId").intValue();
     mPriority = par("priority").intValue();
+    mPayloadSize = par("payloadSize").intValue();
     mDelay = par("startDelay");
     mInterval = par("sendInterval");
 
@@ -40,8 +41,7 @@ void TrafficGenerator::handleMessage(cMessage *msg)
 {
     EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
     EV_INFO << "Packet received src=" << pkt->getSrc()
-            << " length=" << strlen(pkt->getPayload())
-            << " payload=" << pkt->getPayload();
+            << " length=" << pkt->getPayloadSize();
     delete msg;
 }
 
@@ -58,7 +58,7 @@ simtime_t TrafficGenerator::tick(int param)
     EthernetFrame* msg = new EthernetFrame();
     msg->setStreamId(mStreamId);
     msg->setDst(mTarget);
-    msg->setPayload("demo message");
+    msg->setPayloadSize(mPayloadSize);
     msg->setPriority(mPriority);
     send(msg, "out");
 
