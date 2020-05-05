@@ -19,6 +19,8 @@
 #include <omnetpp.h>
 #include <vector>
 #include <bits/stdc++.h>
+#include <unordered_map>
+#include "../../utils/TokenBucket.h"
 
 using namespace omnetpp;
 
@@ -31,24 +33,33 @@ struct FlowMeter {
     int committedBurstSize; // green bucket size
     int excessInformationRate; // yellow tokens (octets) per second
     int excessBurstSize; // yellow bucket size
-
     bool couplingFlag; // true: use overflowing green tokens as yellow tokens
+
     bool colorMode; // true: color aware, false: color blind
     bool dropOnYellow;
+    bool markAllFramesRed;
     bool markAllFramesRedEnable;
 };
 
 class FlowMeterTable : public cSimpleModule
 {
 private:
+    simtime_t mLastUpdate;
     std::vector<FlowMeter> mList;
+
+    // TODO allow tokens to be inspected
+    std::unordered_map<int, TokenBucket*> greenBuckets;
+    std::unordered_map<int, TokenBucket*> yellowBuckets;
 
 protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
 
 public:
+    void updateBuckets();
     FlowMeter* getFlowMeter(int fmId);
+    bool tryGreenBucket(int fmId, int tokens);
+    bool tryYellowBucket(int fmId, int tokens);
 };
 
 bool compareFlowMeter(FlowMeter fm1, FlowMeter fm2);

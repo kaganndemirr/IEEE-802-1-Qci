@@ -48,6 +48,7 @@ void StreamFilterTable::initialize()
 
             filterList = elm->getFirstChildWithTag("FilterList");
             if (filterList && filterList->hasChildren()) {
+                // There is only one MaxSDUSize allowed in filters
                 maxSDUSizeTag = filterList->getFirstChildWithTag("MaxSDUSize");
                 if (maxSDUSizeTag) {
                     maxSDUSize.value = readXMLUInt(maxSDUSizeTag, "MaxSDUSize");
