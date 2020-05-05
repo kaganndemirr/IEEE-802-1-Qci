@@ -34,6 +34,7 @@ OBJS = \
     $O/application/TrafficGenerator.o \
     $O/link/NetworkController.o \
     $O/tsn/Clock.o \
+    $O/tsn/Decapsulator.o \
     $O/tsn/FilteringDatabase.o \
     $O/tsn/FilteringUnit.o \
     $O/tsn/Forwarder.o \
@@ -43,11 +44,13 @@ OBJS = \
     $O/tsn/table/StreamGateTable.o \
     $O/tsn/table/TableUtils.o \
     $O/utils/TokenBucket.o \
-    $O/application/EthernetFrame_m.o
+    $O/application/EthernetFrame_m.o \
+    $O/tsn/ControlPacket_m.o
 
 # Message files
 MSGFILES = \
-    application/EthernetFrame.msg
+    application/EthernetFrame.msg \
+    tsn/ControlPacket.msg
 
 # SM files
 SMFILES =

@@ -18,11 +18,12 @@ package ieee_802_1_qci.tsn;
 import ieee_802_1_qci.tsn.Forwarder;
 import ieee_802_1_qci.tsn.StreamIdentifier;
 import ieee_802_1_qci.tsn.FilteringUnit;
+import ieee_802_1_qci.tsn.Decapsulator;
 
 module Relay
 {
     parameters:
-        @display("i=block/dispatch;bgb=240,220,white");
+        @display("i=block/dispatch;bgb=300,220,white");
 
         int portCount;
 
@@ -36,11 +37,15 @@ module Relay
             portCount = sizeof(in);
         }
         identifier: StreamIdentifier {
-            @display("p=120,50");
+            @display("p=70,50");
             portCount = sizeof(in);
         }
         filtering: FilteringUnit {
-            @display("p=170,150");
+            @display("p=200,50");
+            portCount = sizeof(in);
+        }
+        decap: Decapsulator {
+            @display("p=200,150");
             portCount = sizeof(in);
         }
 
@@ -49,6 +54,7 @@ module Relay
             in[i] --> forwarder.in[i];
             forwarder.out[i] --> identifier.in[i];
             identifier.out[i] --> filtering.in[i];
-            filtering.out[i] --> out[i];
+            filtering.out[i] --> decap.in[i];
+            decap.out[i] --> out[i];
         }
 }

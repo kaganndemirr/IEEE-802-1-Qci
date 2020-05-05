@@ -14,7 +14,7 @@
 // 
 
 #include "FilteringUnit.h"
-#include "../application/EthernetFrame_m.h"
+#include "ControlPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -29,7 +29,7 @@ void FilteringUnit::initialize()
 
 void FilteringUnit::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    ControlPacket* pkt = check_and_cast<ControlPacket *>(msg);
     if (pkt) {
         int streamHandle = pkt->getStreamHandle();
         int priority = pkt->getPriority();
@@ -214,6 +214,9 @@ void FilteringUnit::handleMessage(cMessage *msg)
                 }
             }
         }
+    }
+    else {
+        throw cRuntimeError("Received message isn't a ControlPacket");
     }
 
     send(msg, "out", msg->getArrivalGate()->getIndex());
