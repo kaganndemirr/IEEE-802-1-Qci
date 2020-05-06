@@ -28,7 +28,7 @@ import ieee_802_1_qci.tsn.Relay;
 module Switch
 {
     parameters:
-        @display("i=device/switch;bgb=200,200,white");
+        @display("i=device/switch;bgb=300,300,white");
 
     gates:
         inout port[];
@@ -36,27 +36,27 @@ module Switch
     types:
     submodules:
         clk: Clock {
-            @display("p=175,25");
+            @display("p=270,25");
         }
 
         fdb: FilteringDatabase {
-            @display("p=35,25");
+            @display("p=50,25");
         }
         streamfilters: StreamFilterTable {
-            @display("p=100,25");
+            @display("p=150,25");
         }
         streamgates: StreamGateTable {
-            @display("p=35,75");
+            @display("p=50,125");
         }
         flowmeters: FlowMeterTable {
-            @display("p=100,75");
+            @display("p=150,125");
         }
 
         nc[sizeof(port)]: NetworkController {
-            @display("p=60,150");
+            @display("p=60,230");
         }
         relay: Relay {
-            @display("p=150,150");
+            @display("p=250,230");
             portCount = sizeof(port);
         }
 

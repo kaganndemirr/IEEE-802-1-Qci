@@ -27,12 +27,12 @@ void TrafficGenerator::initialize()
     mTarget = par("target").stringValue();
     mStreamId = par("streamId").intValue();
     mPriority = par("priority").intValue();
-    mPayloadSize = par("payloadSize").intValue();
     mDelay = par("startDelay");
-    mInterval = par("sendInterval");
+
+    simtime_t sendInterval = par("sendInterval");
 
     if (mDelay.isZero())
-        mClock->scheduleCall(this, mInterval, 0);
+        mClock->scheduleCall(this, sendInterval, 0);
     else
         mClock->scheduleCall(this, mDelay, 1);
 }
@@ -45,24 +45,43 @@ void TrafficGenerator::handleMessage(cMessage *msg)
     delete msg;
 }
 
+void TrafficGenerator::handleParameterChange(const char *parname)
+{
+    if (!parname) {
+        return;
+    }
+
+    if (strcmp(parname, "target") == 0) {
+        mTarget = par("target").stringValue();
+    }
+    else if (strcmp(parname, "streamId") == 0) {
+        mStreamId = par("streamId").intValue();
+    }
+    else if (strcmp(parname, "priority") == 0) {
+        mPriority = par("priority").intValue();
+    }
+}
+
 simtime_t TrafficGenerator::tick(int param)
 {
     Enter_Method("tick()");
 
+    simtime_t sendInterval = par("sendInterval");
+
     if (param == 1)
     {
-        mClock->scheduleCall(this, mInterval, 0);
+        mClock->scheduleCall(this, sendInterval, 0);
         return 0;
     }
 
     EthernetFrame* msg = new EthernetFrame();
     msg->setStreamId(mStreamId);
     msg->setDst(mTarget);
-    msg->setPayloadSize(mPayloadSize);
+    msg->setPayloadSize(par("payloadSize").doubleValueInUnit("byte"));
     msg->setPriority(mPriority);
     send(msg, "out");
 
-    return mInterval;
+    return sendInterval;
 }
 
 } //namespace

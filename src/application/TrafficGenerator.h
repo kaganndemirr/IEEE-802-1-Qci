@@ -30,13 +30,12 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
     const char* mTarget;
     int mStreamId;
     int mPriority;
-    unsigned int mPayloadSize;
     simtime_t mDelay;
-    simtime_t mInterval;
 
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void handleParameterChange(const char *parname);
 
   public:
     simtime_t tick(int param);

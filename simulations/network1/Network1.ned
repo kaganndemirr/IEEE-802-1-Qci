@@ -38,7 +38,7 @@ network Network1
             @display("p=100,150");
         }
         switch: Switch {
-            @display("p=300,150");
+            @display("p=300,100");
         }
         hostC: Host {
             @display("p=500,50");

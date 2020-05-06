@@ -31,6 +31,9 @@ void StreamFilterTable::initialize()
     cXMLElement* filterList;
     cXMLElement* maxSDUSizeTag;
 
+    maxSDUSize.value = 0;
+    maxSDUSize.isActive = false;
+
     // Read stream filters
     if (table->hasChildren()) {
         for (cXMLElement* elm : table->getChildrenByTagName("StreamFilter")) {

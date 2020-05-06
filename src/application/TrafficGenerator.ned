@@ -22,9 +22,9 @@ simple TrafficGenerator
         int streamId;
         string target;
         int priority;
-        int payloadSize;
+        volatile int payloadSize @unit(byte) = default(100B);
         double startDelay @unit(s) = default(0);
-        double sendInterval @unit(s) = default(1s);
+        volatile double sendInterval @unit(s) = default(1s);
 
     gates:
         input in;
