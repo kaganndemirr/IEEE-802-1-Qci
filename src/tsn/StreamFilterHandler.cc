@@ -15,6 +15,7 @@
 
 #include "StreamFilterHandler.h"
 #include "ControlPacket_m.h"
+#include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -33,8 +34,14 @@ void StreamFilterHandler::handleMessage(cMessage *msg)
         throw cRuntimeError("Received message isn't a ControlPacket");
     }
 
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
+
+    if (!frame) {
+        throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
+    }
+
     int streamHandle = pkt->getStreamHandle();
-    int priority = pkt->getPriority();
+    int priority = frame->getPriority();
 
     std::ostringstream bubbleText;
 
@@ -65,7 +72,7 @@ void StreamFilterHandler::handleMessage(cMessage *msg)
 
     // Drop packets > maxSDUSize
     if (sf->maxSDUSize.isActive) {
-        unsigned int pktSize = pkt->getPayloadSize();
+        unsigned int pktSize = frame->getPayloadSize();
         if (pktSize > sf->maxSDUSize.value) {
             EV_WARN << "Packet dropped because it exceeds MaxSDUSize (ID: " << sf->instanceId
                     << ", " << pktSize << " > " << sf->maxSDUSize.value << ")";

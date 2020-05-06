@@ -15,6 +15,7 @@
 
 #include "FlowMeterHandler.h"
 #include "ControlPacket_m.h"
+#include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -31,6 +32,12 @@ void FlowMeterHandler::handleMessage(cMessage *msg)
 
     if (!pkt) {
         throw cRuntimeError("Received message isn't a ControlPacket");
+    }
+
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
+
+    if (!frame) {
+        throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
     }
 
     std::ostringstream bubbleText;
@@ -59,7 +66,7 @@ void FlowMeterHandler::handleMessage(cMessage *msg)
                 return;
             }
 
-            unsigned int packetSize = pkt->getPayloadSize();
+            unsigned int packetSize = frame->getPayloadSize();
 
             if (mFlowMeterTable->tryGreenBucket(meter->instanceId, packetSize) &&
                     (pkt->getColor() == 0

@@ -13,15 +13,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-cplusplus {{
-#include "../application/EthernetFrame_m.h"
-}}
-
-class ieee_802_1_qci::EthernetFrame;
-
 namespace ieee_802_1_qci;
 
-packet ControlPacket extends EthernetFrame {
+packet ControlPacket {
     int streamHandle;
     uint8_t ipv;
     uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow

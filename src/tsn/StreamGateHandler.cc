@@ -15,6 +15,7 @@
 
 #include "StreamGateHandler.h"
 #include "ControlPacket_m.h"
+#include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -31,6 +32,12 @@ void StreamGateHandler::handleMessage(cMessage *msg)
 
     if (!pkt) {
         throw cRuntimeError("Received message isn't a ControlPacket");
+    }
+
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
+
+    if (!frame) {
+        throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
     }
 
     std::ostringstream bubbleText;
@@ -66,7 +73,7 @@ void StreamGateHandler::handleMessage(cMessage *msg)
     }
 
     if (!gate->intervalOctetLeft.isNull) {
-        unsigned int pktSize = pkt->getPayloadSize();
+        unsigned int pktSize = frame->getPayloadSize();
 
         // Drop packets when its bigger than allowed octets
         if (pktSize > gate->intervalOctetLeft.value) {
