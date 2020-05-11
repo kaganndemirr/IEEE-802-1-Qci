@@ -14,7 +14,7 @@
 // 
 
 #include "Decapsulator.h"
-#include "ControlPacket_m.h"
+#include "TSNPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -26,14 +26,14 @@ void Decapsulator::initialize()
 
 void Decapsulator::handleMessage(cMessage *msg)
 {
-    ControlPacket* ctrlPkt = check_and_cast<ControlPacket *>(msg);
+    TSNPacket* ctrlPkt = check_and_cast<TSNPacket *>(msg);
     if (!ctrlPkt) {
-        throw cRuntimeError("Received message isn't a ControlPacket");
+        throw cRuntimeError("Received message isn't a TSNPacket");
     }
 
     cPacket* pkt = ctrlPkt->decapsulate();
     if (!pkt) {
-        throw cRuntimeError("No encapsulated packet exists in ControlPacket!");
+        throw cRuntimeError("No encapsulated packet exists in TSNPacket!");
     }
 
     send(pkt, "out", msg->getArrivalGate()->getIndex());

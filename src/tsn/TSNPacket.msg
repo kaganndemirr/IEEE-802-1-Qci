@@ -15,7 +15,7 @@
 
 namespace ieee_802_1_qci;
 
-packet ControlPacket {
+packet TSNPacket {
     int streamHandle;
     uint8_t ipv;
     uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow

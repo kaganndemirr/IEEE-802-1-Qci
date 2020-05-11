@@ -14,7 +14,7 @@
 // 
 
 #include "StreamFilterHandler.h"
-#include "ControlPacket_m.h"
+#include "TSNPacket_m.h"
 #include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
@@ -28,10 +28,10 @@ void StreamFilterHandler::initialize()
 
 void StreamFilterHandler::handleMessage(cMessage *msg)
 {
-    ControlPacket* pkt = check_and_cast<ControlPacket *>(msg);
+    TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
     if (!pkt) {
-        throw cRuntimeError("Received message isn't a ControlPacket");
+        throw cRuntimeError("Received message isn't a TSNPacket");
     }
 
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());

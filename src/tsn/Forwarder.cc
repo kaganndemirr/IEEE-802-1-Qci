@@ -15,7 +15,7 @@
 
 #include "Forwarder.h"
 #include "../application/EthernetFrame_m.h"
-#include "ControlPacket_m.h"
+#include "TSNPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -35,7 +35,7 @@ void Forwarder::handleMessage(cMessage *msg)
         int port = m_fdb->getPort(std::string(dst));
 
         if (port != -1) {
-            ControlPacket* ctrlPkt = new ControlPacket();
+            TSNPacket* ctrlPkt = new TSNPacket();
             ctrlPkt->encapsulate(pkt);
             send(ctrlPkt, "out", port);
         } else {

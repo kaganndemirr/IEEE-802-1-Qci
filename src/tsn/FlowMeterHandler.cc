@@ -14,7 +14,7 @@
 // 
 
 #include "FlowMeterHandler.h"
-#include "ControlPacket_m.h"
+#include "TSNPacket_m.h"
 #include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
@@ -28,16 +28,16 @@ void FlowMeterHandler::initialize()
 
 void FlowMeterHandler::handleMessage(cMessage *msg)
 {
-    ControlPacket* pkt = check_and_cast<ControlPacket *>(msg);
+    TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
     if (!pkt) {
-        throw cRuntimeError("Received message isn't a ControlPacket");
+        throw cRuntimeError("Received message isn't a TSNPacket");
     }
 
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
     if (!frame) {
-        throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
+        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
     }
 
     std::ostringstream bubbleText;
