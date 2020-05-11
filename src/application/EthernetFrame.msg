@@ -21,4 +21,5 @@ packet EthernetFrame {
     int streamId; // instead of vid
     uint8_t priority; // 3 bits
     int payloadSize @unit(byte);
+    double creationTime @unit(s);
 }

@@ -15,6 +15,7 @@
 
 #include "TrafficGenerator.h"
 #include "EthernetFrame_m.h"
+#include <iomanip>
 
 namespace ieee_802_1_qci {
 
@@ -40,8 +41,10 @@ void TrafficGenerator::initialize()
 void TrafficGenerator::handleMessage(cMessage *msg)
 {
     EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    double delay = (simTime().dbl() - pkt->getCreationTime()) * 1000;
     EV_INFO << "Packet received src=" << pkt->getSrc()
-            << " length=" << pkt->getPayloadSize();
+            << " length=" << pkt->getPayloadSize()
+            << " delay=" << delay << "ms";
     delete msg;
 }
 
@@ -79,6 +82,7 @@ simtime_t TrafficGenerator::tick(int param)
     msg->setDst(mTarget);
     msg->setPayloadSize(par("payloadSize").doubleValueInUnit("byte"));
     msg->setPriority(mPriority);
+    msg->setCreationTime(simTime().dbl());
     send(msg, "out");
 
     return sendInterval;
