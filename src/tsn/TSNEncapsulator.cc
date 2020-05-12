@@ -13,30 +13,29 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "Decapsulator.h"
-#include "ControlPacket_m.h"
+#include "TSNEncapsulator.h"
+#include "../application/EthernetFrame_m.h"
+#include "TSNPacket_m.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(Decapsulator);
+Define_Module(TSNEncapsulator);
 
-void Decapsulator::initialize()
+void TSNEncapsulator::initialize()
 {
 }
 
-void Decapsulator::handleMessage(cMessage *msg)
+void TSNEncapsulator::handleMessage(cMessage *msg)
 {
-    ControlPacket* ctrlPkt = check_and_cast<ControlPacket *>(msg);
-    if (!ctrlPkt) {
-        throw cRuntimeError("Received message isn't a ControlPacket");
+    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    if (pkt) {
+        TSNPacket* tsnPkt = new TSNPacket();
+        tsnPkt->encapsulate(pkt);
+        send(tsnPkt, "out", msg->getArrivalGate()->getIndex());
+    } else {
+        EV_WARN << "Unknown message received: " << msg->getDisplayString();
+        delete msg;
     }
-
-    cPacket* pkt = ctrlPkt->decapsulate();
-    if (!pkt) {
-        throw cRuntimeError("No encapsulated packet exists in ControlPacket!");
-    }
-
-    send(pkt, "out", msg->getArrivalGate()->getIndex());
 }
 
 } //namespace

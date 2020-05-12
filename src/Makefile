@@ -33,26 +33,29 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 OBJS = \
     $O/application/TrafficGenerator.o \
     $O/link/NetworkController.o \
+    $O/queue/BufferQueue.o \
+    $O/queue/PriorityQueue.o \
     $O/tsn/Clock.o \
-    $O/tsn/Decapsulator.o \
     $O/tsn/FilteringDatabase.o \
     $O/tsn/FlowMeterHandler.o \
     $O/tsn/Forwarder.o \
     $O/tsn/StreamFilterHandler.o \
     $O/tsn/StreamGateHandler.o \
     $O/tsn/StreamIdentifier.o \
+    $O/tsn/TSNDecapsulator.o \
+    $O/tsn/TSNEncapsulator.o \
     $O/tsn/table/FlowMeterTable.o \
     $O/tsn/table/StreamFilterTable.o \
     $O/tsn/table/StreamGateTable.o \
     $O/tsn/table/TableUtils.o \
     $O/utils/TokenBucket.o \
     $O/application/EthernetFrame_m.o \
-    $O/tsn/ControlPacket_m.o
+    $O/tsn/TSNPacket_m.o
 
 # Message files
 MSGFILES = \
     application/EthernetFrame.msg \
-    tsn/ControlPacket.msg
+    tsn/TSNPacket.msg
 
 # SM files
 SMFILES =

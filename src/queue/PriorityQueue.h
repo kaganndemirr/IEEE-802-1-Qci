@@ -13,12 +13,34 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-namespace ieee_802_1_qci;
+#ifndef __IEEE_802_1_QCI_PRIORITYQUEUE_H_
+#define __IEEE_802_1_QCI_PRIORITYQUEUE_H_
 
-packet ControlPacket {
-    int streamHandle;
-    uint8_t ipv;
-    uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
-    int streamGateId;
-    int flowMeterIds[];
-}
+#include <omnetpp.h>
+#include <vector>
+#include "../tsn/Clock.h"
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class PriorityQueue : public cSimpleModule, public IScheduled
+{
+  private:
+    Clock* mClock;
+    std::vector<cPacketQueue*> mQueue;
+    int mPriorityCount;
+    simtime_t mInterval;
+
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+    virtual void handleParameterChange(const char *parname);
+
+  public:
+    simtime_t tick(int priority);
+};
+
+} //namespace
+
+#endif

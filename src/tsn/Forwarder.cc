@@ -15,7 +15,7 @@
 
 #include "Forwarder.h"
 #include "../application/EthernetFrame_m.h"
-#include "ControlPacket_m.h"
+#include "TSNPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -28,22 +28,26 @@ void Forwarder::initialize()
 
 void Forwarder::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-    if (pkt) {
-        // Forward packet to matching port
-        const char* dst = pkt->getDst();
-        int port = m_fdb->getPort(std::string(dst));
+    TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
-        if (port != -1) {
-            ControlPacket* ctrlPkt = new ControlPacket();
-            ctrlPkt->encapsulate(pkt);
-            send(ctrlPkt, "out", port);
-        } else {
-            EV_WARN << "No matching entry found: " << msg->getDisplayString();
-            delete msg;
-        }
+    if (!pkt) {
+        throw cRuntimeError("Received message isn't a TSNPacket");
+    }
+
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
+
+    if (!frame) {
+        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
+    }
+
+    // Forward packet to matching port
+    const char* dst = frame->getDst();
+    int port = m_fdb->getPort(std::string(dst));
+
+    if (port != -1) {
+        send(pkt, "out", port);
     } else {
-        EV_WARN << "Unknown message received: " << msg->getDisplayString();
+        EV_WARN << "No matching entry found: " << msg->getDisplayString();
         delete msg;
     }
 }

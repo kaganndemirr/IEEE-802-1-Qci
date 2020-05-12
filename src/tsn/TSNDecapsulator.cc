@@ -13,18 +13,31 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+#include "TSNDecapsulator.h"
 
-simple Decapsulator
+#include "TSNPacket_m.h"
+
+namespace ieee_802_1_qci {
+
+Define_Module(TSNDecapsulator);
+
+void TSNDecapsulator::initialize()
 {
-	parameters:
-        @display("i=block/triangle");
-        
-        int portCount;
-    
-    gates:
-        input filterIn[portCount];
-        input gateIn[portCount];
-        input meterIn[portCount];
-        output out[portCount];
 }
+
+void TSNDecapsulator::handleMessage(cMessage *msg)
+{
+    TSNPacket* ctrlPkt = check_and_cast<TSNPacket *>(msg);
+    if (!ctrlPkt) {
+        throw cRuntimeError("Received message isn't a TSNPacket");
+    }
+
+    cPacket* pkt = ctrlPkt->decapsulate();
+    if (!pkt) {
+        throw cRuntimeError("No encapsulated packet exists in TSNPacket!");
+    }
+
+    send(pkt, "out", msg->getArrivalGate()->getIndex());
+}
+
+} //namespace
