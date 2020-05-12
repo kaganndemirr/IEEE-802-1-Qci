@@ -34,6 +34,7 @@ OBJS = \
     $O/application/TrafficGenerator.o \
     $O/link/NetworkController.o \
     $O/queue/BufferQueue.o \
+    $O/queue/PriorityQueue.o \
     $O/tsn/Clock.o \
     $O/tsn/FilteringDatabase.o \
     $O/tsn/FlowMeterHandler.o \

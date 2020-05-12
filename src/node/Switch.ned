@@ -22,7 +22,7 @@ import ieee_802_1_qci.tsn.table.StreamFilterTable;
 import ieee_802_1_qci.tsn.table.StreamGateTable;
 import ieee_802_1_qci.tsn.table.FlowMeterTable;
 
-import ieee_802_1_qci.link.NetworkController;
+import ieee_802_1_qci.link.NetworkControllerSwitch;
 import ieee_802_1_qci.queue.BufferQueue;
 import ieee_802_1_qci.tsn.Relay;
 
@@ -53,7 +53,7 @@ module Switch
             @display("p=750,200");
         }
 
-        nc[sizeof(port)]: NetworkController {
+        nc[sizeof(port)]: NetworkControllerSwitch {
             @display("p=400,300");
         }
         buffer: BufferQueue {
