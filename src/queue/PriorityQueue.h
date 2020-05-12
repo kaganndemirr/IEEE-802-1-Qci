@@ -31,6 +31,7 @@ class PriorityQueue : public cSimpleModule, public IScheduled
     std::vector<cPacketQueue*> mQueue;
     int mPriorityCount;
     simtime_t mInterval;
+    bool mTicking;
 
   protected:
     virtual void initialize();
@@ -38,7 +39,7 @@ class PriorityQueue : public cSimpleModule, public IScheduled
     virtual void handleParameterChange(const char *parname);
 
   public:
-    simtime_t tick(int priority);
+    simtime_t tick(int unused);
 };
 
 } //namespace

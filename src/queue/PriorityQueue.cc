@@ -25,6 +25,8 @@ void PriorityQueue::initialize()
     mPriorityCount = par("priorityCount");
     mInterval = par("interval");
 
+    mTicking = false;
+
     std::ostringstream queueName;
     for (int i=0; i<mPriorityCount; i++) {
         queueName.str("");
@@ -59,12 +61,13 @@ void PriorityQueue::handleMessage(cMessage *msg)
 
     cPacketQueue* queue = mQueue[priority];
 
-    if (queue->isEmpty()) {
+    if (mTicking) {
         queue->insert(pkt);
-        mClock->scheduleCall(this, mInterval, priority);
     }
     else {
+        mTicking = true;
         queue->insert(pkt);
+        mClock->scheduleCall(this, mInterval, 0);
     }
 }
 
@@ -79,30 +82,39 @@ void PriorityQueue::handleParameterChange(const char *parname)
     }
 }
 
-simtime_t PriorityQueue::tick(int priority)
+simtime_t PriorityQueue::tick(int unused)
 {
     Enter_Method("tick()");
 
-    if (priority < 0 || priority >= mPriorityCount) {
-        throw cRuntimeError("Invalid priority!");
-    }
+    cPacketQueue* queue;
+    bool ticking = false;
 
-    cPacketQueue* queue = mQueue[priority];
+    // Loop in priority order
+    for (int i=0; i<mPriorityCount; i++) {
+        queue = mQueue[i];
 
-    if (!queue->isEmpty()) {
-        cPacket* pkt = queue->pop();
-        if (!pkt) {
-            throw cRuntimeError("Invalid cPacket in queue");
+        if (!queue->isEmpty()) {
+            cPacket* pkt = queue->pop();
+            if (!pkt) {
+                throw cRuntimeError("Invalid cPacket in queue");
+            }
+
+            send(check_and_cast<cMessage *>(pkt), "out");
+
+            // Continue ticking if there is still a non-empty queue
+            if (!queue->isEmpty()) {
+                ticking = true;
+            }
         }
-
-        send(check_and_cast<cMessage *>(pkt), "out");
     }
 
-    if (queue->isEmpty()){
-        return 0;
+    mTicking = ticking;
+
+    if (ticking) {
+        return mInterval;
     }
 
-    return mInterval;
+    return 0;
 }
 
 
