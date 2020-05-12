@@ -20,12 +20,13 @@ import ieee_802_1_qci.tsn.StreamIdentifier;
 import ieee_802_1_qci.tsn.StreamFilterHandler;
 import ieee_802_1_qci.tsn.StreamGateHandler;
 import ieee_802_1_qci.tsn.FlowMeterHandler;
-import ieee_802_1_qci.tsn.Decapsulator;
+import ieee_802_1_qci.tsn.TSNEncapsulator;
+import ieee_802_1_qci.tsn.TSNDecapsulator;
 
 module Relay
 {
     parameters:
-        @display("i=block/dispatch;bgb=400,220,white");
+        @display("i=block/dispatch;bgb=500,300,white");
 
         int portCount;
 
@@ -34,43 +35,49 @@ module Relay
         output out[portCount];
 
     submodules:
+        encap: TSNEncapsulator {
+            @display("p=80,225");
+            portCount = sizeof(in);
+        }
         forwarder: Forwarder {
-            @display("p=70,150");
+            @display("p=80,140");
             portCount = sizeof(in);
         }
         identifier: StreamIdentifier {
-            @display("p=70,50");
+            @display("p=80,50");
             portCount = sizeof(in);
         }
         streamFilter: StreamFilterHandler {
-            @display("p=200,50");
+            @display("p=250,50");
             portCount = sizeof(in);
         }
         streamGate: StreamGateHandler {
-            @display("p=300,50");
+            @display("p=450,50");
             portCount = sizeof(in);
         }
         flowMeter: FlowMeterHandler {
-            @display("p=300,150");
+            @display("p=450,225");
             portCount = sizeof(in);
         }
-        decap: Decapsulator {
-            @display("p=200,150");
+        decap: TSNDecapsulator {
+            @display("p=250,225");
             portCount = sizeof(in);
         }
 
     connections:
         for i=0..portCount-1 {
-            in[i] --> forwarder.in[i];
+            in[i] --> encap.in[i];
+            encap.out[i] --> forwarder.in[i];
+
             forwarder.out[i] --> identifier.in[i];
             identifier.out[i] --> streamFilter.in[i];
-            
+
             streamFilter.next[i] --> streamGate.in[i];
             streamFilter.out[i] --> decap.filterIn[i];
-            
+
             streamGate.next[i] --> flowMeter.in[i];
             streamGate.out[i] --> decap.gateIn[i];
-            
+
             flowMeter.out[i] --> decap.meterIn[i];
             decap.out[i] --> out[i];
         }

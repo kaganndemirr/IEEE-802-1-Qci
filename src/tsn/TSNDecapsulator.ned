@@ -13,22 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_DECAPSULATOR_H_
-#define __IEEE_802_1_QCI_DECAPSULATOR_H_
+package ieee_802_1_qci.tsn;
 
-#include <omnetpp.h>
-
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class Decapsulator : public cSimpleModule
+simple TSNDecapsulator
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
-
-} //namespace
-
-#endif
+	parameters:
+        @display("i=block/triangle");
+        
+        int portCount;
+    
+    gates:
+        input filterIn[portCount];
+        input gateIn[portCount];
+        input meterIn[portCount];
+        output out[portCount];
+}
