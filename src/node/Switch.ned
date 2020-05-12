@@ -23,12 +23,13 @@ import ieee_802_1_qci.tsn.table.StreamGateTable;
 import ieee_802_1_qci.tsn.table.FlowMeterTable;
 
 import ieee_802_1_qci.link.NetworkController;
+import ieee_802_1_qci.queue.BufferQueue;
 import ieee_802_1_qci.tsn.Relay;
 
 module Switch
 {
     parameters:
-        @display("i=device/switch;bgb=300,300,white");
+        @display("i=device/switch;bgb=800,400,white");
 
     gates:
         inout port[];
@@ -36,34 +37,40 @@ module Switch
     types:
     submodules:
         clk: Clock {
-            @display("p=270,25");
+            @display("p=50,50");
         }
-
         fdb: FilteringDatabase {
-            @display("p=50,25");
-        }
-        streamfilters: StreamFilterTable {
-            @display("p=150,25");
-        }
-        streamgates: StreamGateTable {
             @display("p=50,125");
         }
+        
+        streamfilters: StreamFilterTable {
+            @display("p=750,50");
+        }
+        streamgates: StreamGateTable {
+            @display("p=750,125");
+        }
         flowmeters: FlowMeterTable {
-            @display("p=150,125");
+            @display("p=750,200");
         }
 
         nc[sizeof(port)]: NetworkController {
-            @display("p=60,230");
+            @display("p=400,300");
+        }
+        buffer: BufferQueue {
+            @display("p=250,150");
+            portCount = sizeof(port);
         }
         relay: Relay {
-            @display("p=250,230");
+            @display("p=550,150");
             portCount = sizeof(port);
         }
 
     connections:
         for i=0..sizeof(port)-1 {
             port[i] <--> nc[i].phys;
-            nc[i].upperOut --> relay.in[i];
+            nc[i].upperOut --> buffer.in[i];
+
+            buffer.out[i] --> relay.in[i];
             relay.out[i] --> nc[i].upperIn;
         }
 }
