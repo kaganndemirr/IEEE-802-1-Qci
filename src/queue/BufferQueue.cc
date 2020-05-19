@@ -64,7 +64,7 @@ simtime_t BufferQueue::tick(int unused)
             throw cRuntimeError("Invalid cPacket in queue");
         }
 
-        send(check_and_cast<cMessage *>(pkt), "out", pkt->getArrivalGate()->getIndex());
+        send(pkt, "out");
     }
 
     if (mQueue->isEmpty()){

@@ -52,7 +52,7 @@ void StreamFilterHandler::handleMessage(cMessage *msg)
         bubbleText << "PASS[No StreamFilter]";
         bubble(bubbleText.str().c_str());
 
-        send(msg, "out", msg->getArrivalGate()->getIndex());
+        send(msg, "out");
         return;
     }
 
@@ -102,7 +102,7 @@ void StreamFilterHandler::handleMessage(cMessage *msg)
     bubbleText << " PASS";
     bubble(bubbleText.str().c_str());
 
-    send(msg, "next", msg->getArrivalGate()->getIndex());
+    send(msg, "next");
 }
 
 } //namespace

@@ -24,5 +24,5 @@ simple TSNEncapsulator
     
     gates:
         input in[portCount];
-        output out[portCount];
+        output out;
 }

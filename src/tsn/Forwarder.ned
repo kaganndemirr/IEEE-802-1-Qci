@@ -19,10 +19,8 @@ simple Forwarder
 {
     parameters:
         @display("i=block/routing");
-        
-        int portCount;
     
     gates:
-        input in[portCount];
-        output out[portCount];
+        input in;
+        output out;
 }

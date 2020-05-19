@@ -19,10 +19,8 @@ simple StreamIdentifier
 {
 	parameters:
         @display("i=block/classifier"); //routing
-        
-        int portCount;
     
     gates:
-        input in[portCount];
-        output out[portCount];
+        input in;
+        output out;
 }

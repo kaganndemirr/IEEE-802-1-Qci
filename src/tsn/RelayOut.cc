@@ -13,31 +13,33 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "TSNDecapsulator.h"
-
+#include "RelayOut.h"
 #include "TSNPacket_m.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(TSNDecapsulator);
+Define_Module(RelayOut);
 
-void TSNDecapsulator::initialize()
+void RelayOut::initialize()
 {
 }
 
-void TSNDecapsulator::handleMessage(cMessage *msg)
+void RelayOut::handleMessage(cMessage *msg)
 {
     TSNPacket* tsnPkt = check_and_cast<TSNPacket *>(msg);
     if (!tsnPkt) {
         throw cRuntimeError("Received message isn't a TSNPacket");
     }
 
-    cPacket* pkt = tsnPkt->decapsulate();
-    if (!pkt) {
-        throw cRuntimeError("No encapsulated packet exists in TSNPacket!");
+    int port = tsnPkt->getPortOut();
+    int portCount = par("portCount");
+    if (port < 0 || port >= portCount) {
+        EV_WARN << "Invalid port: " << msg->getDisplayString();
+        delete msg;
+        return;
     }
 
-    send(pkt, "out");
+    send(msg, "out", port);
 }
 
 } //namespace

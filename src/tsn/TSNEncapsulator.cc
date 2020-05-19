@@ -30,8 +30,11 @@ void TSNEncapsulator::handleMessage(cMessage *msg)
     EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
     if (pkt) {
         TSNPacket* tsnPkt = new TSNPacket();
+
         tsnPkt->encapsulate(pkt);
-        send(tsnPkt, "out", msg->getArrivalGate()->getIndex());
+        tsnPkt->setPortIn(msg->getArrivalGate()->getIndex());
+
+        send(tsnPkt, "out");
     } else {
         EV_WARN << "Unknown message received: " << msg->getDisplayString();
         delete msg;

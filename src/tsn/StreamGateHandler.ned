@@ -19,11 +19,9 @@ simple StreamGateHandler
 {
 	parameters:
         @display("i=block/layer");
-        
-        int portCount;
     
     gates:
-        input in[portCount];
-        output next[portCount];
-        output out[portCount];
+        input in;
+        output next;
+        output out;
 }

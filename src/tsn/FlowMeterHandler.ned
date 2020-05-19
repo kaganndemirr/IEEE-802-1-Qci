@@ -19,10 +19,8 @@ simple FlowMeterHandler
 {
 	parameters:
         @display("i=block/bucket");
-        
-        int portCount;
     
     gates:
-        input in[portCount];
-        output out[portCount];
+        input in;
+        output out;
 }

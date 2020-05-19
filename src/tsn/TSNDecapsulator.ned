@@ -19,12 +19,8 @@ simple TSNDecapsulator
 {
 	parameters:
         @display("i=block/triangle");
-        
-        int portCount;
     
     gates:
-        input filterIn[portCount];
-        input gateIn[portCount];
-        input meterIn[portCount];
-        output out[portCount];
+        input in;
+        output out;
 }

@@ -39,6 +39,7 @@ OBJS = \
     $O/tsn/FilteringDatabase.o \
     $O/tsn/FlowMeterHandler.o \
     $O/tsn/Forwarder.o \
+    $O/tsn/RelayOut.o \
     $O/tsn/StreamFilterHandler.o \
     $O/tsn/StreamGateHandler.o \
     $O/tsn/StreamIdentifier.o \

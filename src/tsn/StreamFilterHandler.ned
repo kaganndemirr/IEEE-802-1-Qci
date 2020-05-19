@@ -19,11 +19,9 @@ simple StreamFilterHandler
 {
 	parameters:
         @display("i=block/filter");
-        
-        int portCount;
     
     gates:
-        input in[portCount];
-        output next[portCount];
-        output out[portCount];
+        input in;
+        output next;
+        output out;
 }

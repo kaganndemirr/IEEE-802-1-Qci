@@ -46,7 +46,7 @@ void StreamIdentifier::handleMessage(cMessage *msg)
     // TODO set streamHandle using dst,streamId or src,streamId (see 802.1CB Table-6.1)
     pkt->setStreamHandle(streamId);
 
-    send(msg, "out", msg->getArrivalGate()->getIndex());
+    send(pkt, "out");
 }
 
 } //namespace

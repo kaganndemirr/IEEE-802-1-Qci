@@ -17,8 +17,10 @@ namespace ieee_802_1_qci;
 
 packet TSNPacket {
     int streamHandle;
-    uint8_t ipv;
+    int ipv = -1;
     uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
     int streamGateId;
     int flowMeterIds[];
+    int portIn = -1;
+    int portOut = -1;
 }

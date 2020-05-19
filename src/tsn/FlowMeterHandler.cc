@@ -106,7 +106,7 @@ void FlowMeterHandler::handleMessage(cMessage *msg)
     bubbleText << " PASS";
     bubble(bubbleText.str().c_str());
 
-    send(msg, "out", msg->getArrivalGate()->getIndex());
+    send(msg, "out");
 }
 
 } //namespace

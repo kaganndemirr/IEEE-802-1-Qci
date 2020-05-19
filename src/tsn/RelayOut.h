@@ -13,34 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.link;
+#ifndef __IEEE_802_1_QCI_RELAYOUT_H_
+#define __IEEE_802_1_QCI_RELAYOUT_H_
 
-import ieee_802_1_qci.link.NetworkController;
-import ieee_802_1_qci.queue.PriorityQueue;
+#include <omnetpp.h>
 
-module NetworkControllerSwitch
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class RelayOut : public cSimpleModule
 {
-    parameters:
-        @display("i=block/ifcard");
-        string addr = default("");
-    
-    gates:
-        input upperIn;
-        output upperOut;
-        inout phys;
-        
-   submodules:
-        nc: NetworkController {
-            @display("p=400,300");
-            addr = addr;
-        }
-        queue: PriorityQueue {
-            @display("p=250,150");
-        }
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
 
-    connections:
-        phys <--> nc.phys;
-        nc.upperOut --> upperOut;
-        upperIn --> queue.in;
-        queue.out --> nc.upperIn;
-}
+} //namespace
+
+#endif

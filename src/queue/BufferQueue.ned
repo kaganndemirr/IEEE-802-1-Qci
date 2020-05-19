@@ -19,10 +19,9 @@ simple BufferQueue
 {
     parameters:
         @display("i=block/queue");
-        int portCount;
         double interval @unit(s) = default(1us);
     
     gates:
-        input in[portCount];
-        output out[portCount];
+        input in;
+        output out;
 }

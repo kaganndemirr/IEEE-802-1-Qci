@@ -45,7 +45,8 @@ void Forwarder::handleMessage(cMessage *msg)
     int port = m_fdb->getPort(std::string(dst));
 
     if (port != -1) {
-        send(pkt, "out", port);
+        pkt->setPortOut(port);
+        send(pkt, "out");
     } else {
         EV_WARN << "No matching entry found: " << msg->getDisplayString();
         delete msg;

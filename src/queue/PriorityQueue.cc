@@ -15,6 +15,7 @@
 
 #include "PriorityQueue.h"
 #include "../application/EthernetFrame_m.h"
+#include "../tsn/TSNPacket_m.h"
 
 namespace ieee_802_1_qci {
 
@@ -35,28 +36,34 @@ void PriorityQueue::initialize()
     }
     WATCH_VECTOR(mQueue);
 
-    mClock = check_and_cast<Clock*> (getParentModule()->getParentModule()->getSubmodule("clk"));
+    mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
 }
 
 void PriorityQueue::handleMessage(cMessage *msg)
 {
-    cPacket* pkt = check_and_cast<cPacket *>(msg);
+    TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
     if (!pkt) {
-        throw cRuntimeError("Received cMessage doesn't contain a cPacket");
+        throw cRuntimeError("Received cMessage doesn't contain a TSNPacket");
     }
 
-    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt);
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
     if (!frame) {
-        throw cRuntimeError("Received cPacket doesn't contain an EthernetFrame");
+        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
     }
 
+    int ipv = pkt->getIpv();
     int priority = frame->getPriority();
     if (priority < 0 || priority >= mPriorityCount) {
         EV_WARN << "Invalid priority packet: " << frame->getDisplayString();
         delete msg;
         return;
+    }
+
+    // Use internal priority value
+    if (ipv >= 0 && ipv <= mPriorityCount) {
+        priority = ipv;
     }
 
     cPacketQueue* queue = mQueue[priority];
