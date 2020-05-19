@@ -64,6 +64,7 @@ void PriorityQueue::handleMessage(cMessage *msg)
     // Use internal priority value
     if (ipv >= 0 && ipv <= mPriorityCount) {
         priority = ipv;
+        bubble("Using IPV instead of packet priority!");
     }
 
     cPacketQueue* queue = mQueue[priority];
@@ -94,33 +95,37 @@ simtime_t PriorityQueue::tick(int unused)
     Enter_Method("tick()");
 
     cPacketQueue* queue;
-    bool ticking = false;
+    bool sent = false;
 
     // Loop in priority order
     for (int i=0; i<mPriorityCount; i++) {
         queue = mQueue[i];
 
-        if (!queue->isEmpty()) {
+        // Skip empty queues
+        if (queue->isEmpty()) {
+            continue;
+        }
+
+        // Prevent sending more than one packet per tick
+        if (!sent) {
             cPacket* pkt = queue->pop();
             if (!pkt) {
                 throw cRuntimeError("Invalid cPacket in queue");
             }
 
-            send(check_and_cast<cMessage *>(pkt), "out");
+            send(pkt, "out");
+            sent = true;
+        }
 
-            // Continue ticking if there is still a non-empty queue
-            if (!queue->isEmpty()) {
-                ticking = true;
-            }
+        // Continue ticking if there is still a non-empty queue
+        if (!queue->isEmpty()) {
+            mTicking = true;
+            return mInterval;
         }
     }
 
-    mTicking = ticking;
-
-    if (ticking) {
-        return mInterval;
-    }
-
+    // All queues are empty, no need to continue ticking
+    mTicking = false;
     return 0;
 }
 
