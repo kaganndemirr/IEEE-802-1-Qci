@@ -40,11 +40,11 @@ module Relay
             @display("p=80,50");
         }
         streamFilter: Table {
-            @display("p=250,50");
+            @display("i=block/filter;p=250,50");
             queryNode = "ieee_802_1_qci.tsn.streamfilter.SFQuery";
         }
         streamGate: Table {
-            @display("p=450,50");
+            @display("i=block/layer;p=450,50");
             queryNode = "ieee_802_1_qci.tsn.streamgate.SGQuery";
         }
         flowMeter: FlowMeterHandler {
@@ -65,7 +65,7 @@ module Relay
         streamFilter.out --> streamGate.in;
         streamGate.out --> flowMeter.in;
 
-        flowMeter.out --> relayOut.meterIn;
+        flowMeter.out --> relayOut.in;
 
         for i=0..portCount-1 {
             relayOut.out[i] --> out[i];

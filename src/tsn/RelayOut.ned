@@ -23,6 +23,6 @@ simple RelayOut
         int portCount;
     
     gates:
-        input meterIn;
+        input in;
         output out[portCount];
 }
