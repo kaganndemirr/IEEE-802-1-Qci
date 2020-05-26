@@ -15,7 +15,7 @@
 
 #include "FlowMeterTable.h"
 
-#include "TableUtils.h"
+#include "../../utils/Table.h"
 
 namespace ieee_802_1_qci {
 

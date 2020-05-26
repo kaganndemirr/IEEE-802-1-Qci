@@ -20,7 +20,6 @@
 #include <vector>
 #include <bits/stdc++.h>
 
-#include "TableUtils.h"
 #include "../Clock.h"
 
 using namespace omnetpp;

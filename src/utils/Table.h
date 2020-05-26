@@ -13,14 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-#ifndef __IEEE_802_1_QCI_XMLUTILS_H_
-#define __IEEE_802_1_QCI_XMLUTILS_H_
+#ifndef __IEEE_802_1_QCI_UTILS_TABLE_H_
+#define __IEEE_802_1_QCI_UTILS_TABLE_H_
 
 #include <omnetpp.h>
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
+
+int readUInt(const char* str, const char* name);
+bool readBool(const char* str, const char* name);
+int readUIntStr(const char* str, const char* name, const char* flagStr, bool* flag);
 
 int readXMLUInt(cXMLElement* elm, const char* tagName);
 bool readXMLBool(cXMLElement* elm, const char* tagName);

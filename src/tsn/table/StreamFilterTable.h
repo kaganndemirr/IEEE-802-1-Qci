@@ -20,7 +20,7 @@
 #include <vector>
 #include <bits/stdc++.h>
 
-#include "TableUtils.h"
+#include "../../utils/Table.h"
 
 using namespace omnetpp;
 

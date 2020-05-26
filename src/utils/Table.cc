@@ -13,9 +13,42 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-#include "TableUtils.h"
+#include "Table.h"
 
 namespace ieee_802_1_qci {
+
+int readUInt(const char* str, const char* name) {
+    int val = atoi(str);
+    if (val < 0)
+        throw omnetpp::cRuntimeError("%s cannot be negative, given: %d", name, val);
+    return val;
+}
+
+bool readBool(const char* str, const char* name) {
+    if (strcmp(str, "true") == 0) {
+        return true;
+    }
+    if (strcmp(str, "false") == 0) {
+        return false;
+    }
+
+    throw omnetpp::cRuntimeError("%s must be true or false, given: %s", name, str);
+}
+
+int readUIntStr(const char* str, const char* name, const char* flagStr, bool* flag) {
+    int num;
+    if (strcmp(str, flagStr) == 0) {
+        *flag = true;
+        return 0;
+    }
+
+    num = atoi(str);
+    if (num < 0)
+        throw omnetpp::cRuntimeError("%s cannot be negative, given: %d", name, num);
+
+    *flag = false;
+    return num;
+}
 
 int readXMLUInt(cXMLElement* elm, const char* tagName) {
     int val = atoi(elm->getNodeValue());
