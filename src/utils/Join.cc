@@ -13,17 +13,19 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+#include "Join.h"
 
-simple RelayOut
+namespace ieee_802_1_qci {
+
+Define_Module(Join);
+
+void Join::initialize()
 {
-	parameters:
-        @display("i=block/arrival");
-        
-        int portCount;
-    
-    gates:
-        input gateIn;
-        input meterIn;
-        output out[portCount];
 }
+
+void Join::handleMessage(cMessage *msg)
+{
+    send(msg, "out");
+}
+
+} //namespace

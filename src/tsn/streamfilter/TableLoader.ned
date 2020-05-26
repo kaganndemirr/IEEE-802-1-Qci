@@ -13,17 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamfilter;
 
-simple RelayOut
+simple TableLoader
 {
-	parameters:
-        @display("i=block/arrival");
-        
-        int portCount;
-    
-    gates:
-        input gateIn;
-        input meterIn;
-        output out[portCount];
+    parameters:
+        @display("i=block/table2");
+        xml table = default(xml("<StreamFilters/>"));
 }

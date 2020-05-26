@@ -13,17 +13,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamfilter;
 
-simple RelayOut
+simple Query
 {
-	parameters:
-        @display("i=block/arrival");
-        
-        int portCount;
-    
+    parameters:
+        @display("i=block/classifier");
+
     gates:
-        input gateIn;
-        input meterIn;
-        output out[portCount];
+        input in;
+        output out[1];
 }

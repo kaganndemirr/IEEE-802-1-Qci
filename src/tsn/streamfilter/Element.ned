@@ -13,17 +13,24 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamfilter;
 
-simple RelayOut
+simple Element
 {
-	parameters:
-        @display("i=block/arrival");
+    parameters:
+        @display("i=block/filter");
         
-        int portCount;
-    
+        string instanceId;
+        string streamHandle;
+        string priority;
+        string streamGateId;
+        string maxSDUSize;
+        string flowMeters;
+        
+        string streamBlockedDueToOversizeFrameEnable;
+        string streamBlockedDueToOversizeFrame;
+
     gates:
-        input gateIn;
-        input meterIn;
-        output out[portCount];
+        input in;
+        output out;
 }

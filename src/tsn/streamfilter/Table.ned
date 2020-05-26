@@ -13,17 +13,29 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamfilter;
 
-simple RelayOut
+import ieee_802_1_qci.tsn.streamfilter.Query;
+import ieee_802_1_qci.tsn.streamfilter.Element;
+import ieee_802_1_qci.utils.Join;
+
+module Table
 {
-	parameters:
-        @display("i=block/arrival");
-        
-        int portCount;
-    
+    parameters:
+        @display("i=block/table");
+
     gates:
-        input gateIn;
-        input meterIn;
-        output out[portCount];
+        input in;
+        output out;
+
+    submodules:
+        query: Query {
+        }
+        next: Join {
+        }
+
+    connections:
+        in --> query.in;
+        query.out[0] --> next.in[0];
+        next.out --> out;
 }

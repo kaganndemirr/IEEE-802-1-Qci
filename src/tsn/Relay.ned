@@ -17,6 +17,7 @@ package ieee_802_1_qci.tsn;
 
 import ieee_802_1_qci.tsn.Forwarder;
 import ieee_802_1_qci.tsn.StreamIdentifier;
+import ieee_802_1_qci.tsn.streamfilter.Table;
 import ieee_802_1_qci.tsn.StreamFilterHandler;
 import ieee_802_1_qci.tsn.StreamGateHandler;
 import ieee_802_1_qci.tsn.FlowMeterHandler;
@@ -40,7 +41,7 @@ module Relay
         identifier: StreamIdentifier {
             @display("p=80,50");
         }
-        streamFilter: StreamFilterHandler {
+        streamFilter: ieee_802_1_qci.tsn.streamfilter.Table {
             @display("p=250,50");
         }
         streamGate: StreamGateHandler {
@@ -61,8 +62,7 @@ module Relay
         forwarder.out --> identifier.in;
         identifier.out --> streamFilter.in;
 
-        streamFilter.next --> streamGate.in;
-        streamFilter.out --> relayOut.filterIn;
+        streamFilter.out --> streamGate.in;
 
         streamGate.next --> flowMeter.in;
         streamGate.out --> relayOut.gateIn;

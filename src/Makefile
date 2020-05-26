@@ -45,10 +45,14 @@ OBJS = \
     $O/tsn/StreamIdentifier.o \
     $O/tsn/TSNDecapsulator.o \
     $O/tsn/TSNEncapsulator.o \
+    $O/tsn/streamfilter/Element.o \
+    $O/tsn/streamfilter/Query.o \
+    $O/tsn/streamfilter/TableLoader.o \
     $O/tsn/table/FlowMeterTable.o \
     $O/tsn/table/StreamFilterTable.o \
     $O/tsn/table/StreamGateTable.o \
-    $O/tsn/table/TableUtils.o \
+    $O/utils/Join.o \
+    $O/utils/Table.o \
     $O/utils/TokenBucket.o \
     $O/application/EthernetFrame_m.o \
     $O/tsn/TSNPacket_m.o

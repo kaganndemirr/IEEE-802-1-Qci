@@ -44,7 +44,8 @@ void StreamGateHandler::handleMessage(cMessage *msg)
 
     StreamGate* gate = mStreamGateTable->getStreamGate(pkt->getStreamGateId());
     if (!gate) {
-        throw cRuntimeError("StreamGate not found!");
+        send(msg, "out");
+        return;
     }
 
     bubbleText << "StreamGate[" << gate->instanceId << "]";
