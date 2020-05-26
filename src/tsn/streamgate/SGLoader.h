@@ -13,29 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.streamfilter;
+#ifndef __IEEE_802_1_QCI_SGLOADER_H_
+#define __IEEE_802_1_QCI_SGLOADER_H_
 
-import ieee_802_1_qci.tsn.streamfilter.Query;
-import ieee_802_1_qci.tsn.streamfilter.Element;
-import ieee_802_1_qci.utils.Join;
+#include <omnetpp.h>
 
-module Table
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class SGLoader : public cSimpleModule
 {
-    parameters:
-        @display("i=block/table");
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
 
-    gates:
-        input in;
-        output out;
+} //namespace
 
-    submodules:
-        query: Query {
-        }
-        next: Join {
-        }
-
-    connections:
-        in --> query.in;
-        query.out[0] --> next.in[0];
-        next.out --> out;
-}
+#endif

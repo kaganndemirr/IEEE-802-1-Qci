@@ -13,23 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_QUERY_H_
-#define __IEEE_802_1_QCI_QUERY_H_
+package ieee_802_1_qci.tsn.streamgate;
 
-#include <omnetpp.h>
-#include <unordered_map>
-
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class Query : public cSimpleModule
+simple SGLoader
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
-
-} //namespace
-
-#endif
+    parameters:
+        @display("i=block/table2");
+        xml table = default(xml("<StreamGates/>"));
+}

@@ -13,21 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "Query.h"
-#include "Element.h"
+#include "SFQuery.h"
 #include "../TSNPacket_m.h"
 #include "../../application/EthernetFrame_m.h"
+#include "StreamFilter.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(Query);
+Define_Module(SFQuery);
 
-void Query::initialize()
+void SFQuery::initialize()
 {
-    // TODO - Generated method body
 }
 
-void Query::handleMessage(cMessage *msg)
+void SFQuery::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
@@ -45,16 +44,16 @@ void Query::handleMessage(cMessage *msg)
     int priority = frame->getPriority();
 
     cModule* module;
-    Element* elm;
+    StreamFilter* elm;
     int count = gateSize("out");
 
     for (int i=1; i<count; i++) {
-        module = getParentModule()->getSubmodule("elm", i);
+        module = getParentModule()->getSubmodule("elm", i-1);
         if (module == nullptr) {
             throw cRuntimeError("Size of gate and number of elm don't match!");
         }
 
-        elm = check_and_cast<Element*>(module);
+        elm = check_and_cast<StreamFilter*>(module);
         if (elm->match(streamHandle, priority)) {
             send(msg, "out", i);
             return;

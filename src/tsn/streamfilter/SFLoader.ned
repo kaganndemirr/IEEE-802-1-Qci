@@ -15,12 +15,9 @@
 
 package ieee_802_1_qci.tsn.streamfilter;
 
-simple Query
+simple SFLoader
 {
     parameters:
-        @display("i=block/classifier");
-
-    gates:
-        input in;
-        output out[1];
+        @display("i=block/table2");
+        xml table = default(xml("<StreamFilters/>"));
 }

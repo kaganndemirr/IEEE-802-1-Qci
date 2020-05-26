@@ -13,22 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_TABLELOADER_H_
-#define __IEEE_802_1_QCI_TABLELOADER_H_
+package ieee_802_1_qci.tsn.streamfilter;
 
-#include <omnetpp.h>
+import ieee_802_1_qci.tsn.table.IQuery;
 
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class TableLoader : public cSimpleModule
+simple SFQuery like IQuery
 {
-  protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
+    parameters:
+        @display("i=block/classifier");
 
-} //namespace
-
-#endif
+    gates:
+        input in;
+        output out[1];
+}

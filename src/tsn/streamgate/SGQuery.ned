@@ -13,15 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamgate;
 
-simple StreamGateHandler
+import ieee_802_1_qci.tsn.table.IQuery;
+
+simple SGQuery like IQuery
 {
-	parameters:
-        @display("i=block/layer");
-    
+    parameters:
+        @display("i=block/classifier");
+
     gates:
         input in;
-        output next;
-        output out;
+        output out[1];
 }

@@ -13,24 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.streamfilter;
+#ifndef __IEEE_802_1_QCI_SFLOADER_H_
+#define __IEEE_802_1_QCI_SFLOADER_H_
 
-simple Element
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class SFLoader : public cSimpleModule
 {
-    parameters:
-        @display("i=block/filter");
-        
-        string instanceId;
-        string streamHandle;
-        string priority;
-        string streamGateId;
-        string maxSDUSize;
-        string flowMeters;
-        
-        string streamBlockedDueToOversizeFrameEnable;
-        string streamBlockedDueToOversizeFrame;
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
 
-    gates:
-        input in;
-        output out;
-}
+} //namespace
+
+#endif

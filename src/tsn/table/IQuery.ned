@@ -15,9 +15,9 @@
 
 package ieee_802_1_qci.tsn.table;
 
-simple StreamFilterTable
+moduleinterface IQuery
 {
-    parameters:
-        @display("i=block/table2");
-        xml table = default(xml("<StreamFilters/>"));
+    gates:
+        input in;
+        output out[1];
 }

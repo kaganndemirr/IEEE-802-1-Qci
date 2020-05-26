@@ -13,8 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_ELEMENT_H_
-#define __IEEE_802_1_QCI_ELEMENT_H_
+#ifndef __IEEE_802_1_QCI_SFQUERY_H_
+#define __IEEE_802_1_QCI_SFQUERY_H_
 
 #include <omnetpp.h>
 
@@ -22,45 +22,11 @@ using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-struct StreamHandleSpec {
-    int value;
-    bool isWildcard;
-};
-
-struct PrioritySpec {
-    int value;
-    bool isWildcard;
-};
-
-struct MaxSDUSizeSpec {
-    size_t value;
-    bool isActive;
-};
-
-struct StreamFilter {
-    int instanceId;
-    StreamHandleSpec streamHandle;
-    PrioritySpec priority;
-    int streamGateId;
-    MaxSDUSizeSpec maxSDUSize;
-    std::vector<int> flowMeters;
-
-    bool streamBlockedDueToOversizeFrameEnable;
-    bool streamBlockedDueToOversizeFrame;
-};
-
-class Element : public cSimpleModule
+class SFQuery : public cSimpleModule
 {
-  private:
-    StreamFilter mPar;
-
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
-    virtual void handleParameterChange(const char *parname);
-
-  public:
-    bool match(int streamId, int priority);
 };
 
 } //namespace

@@ -13,13 +13,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "TableLoader.h"
+#include "SFLoader.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(TableLoader);
+Define_Module(SFLoader);
 
-void TableLoader::initialize()
+void SFLoader::initialize()
 {
     cXMLElement* table = par("table");
 
@@ -36,7 +36,7 @@ void TableLoader::initialize()
         std::string flowMeters;
         std::string maxSDUSize;
 
-        cModuleType* moduleType = cModuleType::get("ieee_802_1_qci.tsn.streamfilter.Element");
+        cModuleType* moduleType = cModuleType::get("ieee_802_1_qci.tsn.streamfilter.StreamFilter");
         cModule* tableModule = getModuleByPath("^.relay.streamFilter");
         cModule* queryModule = getModuleByPath("^.relay.streamFilter.query");
         cModule* nextModule = getModuleByPath("^.relay.streamFilter.next");
@@ -93,9 +93,8 @@ void TableLoader::initialize()
     }
 }
 
-void TableLoader::handleMessage(cMessage *msg)
+void SFLoader::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 } //namespace

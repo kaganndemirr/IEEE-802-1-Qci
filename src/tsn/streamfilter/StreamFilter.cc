@@ -13,21 +13,21 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "Element.h"
 #include "../TSNPacket_m.h"
 #include "../../application/EthernetFrame_m.h"
 #include "../../utils/Table.h"
+#include "StreamFilter.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(Element);
+Define_Module(StreamFilter);
 
-void Element::initialize()
+void StreamFilter::initialize()
 {
     handleParameterChange(nullptr);
 }
 
-void Element::handleMessage(cMessage *msg)
+void StreamFilter::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
@@ -38,7 +38,7 @@ void Element::handleMessage(cMessage *msg)
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
     if (!frame) {
-        throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
+        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
     }
 
     std::ostringstream bubbleText;
@@ -92,7 +92,7 @@ void Element::handleMessage(cMessage *msg)
     send(msg, "out");
 }
 
-void Element::handleParameterChange(const char *parname)
+void StreamFilter::handleParameterChange(const char *parname)
 {
     if (!parname || !strcmp(parname, "instanceId")) {
         mPar.instanceId = readUInt(par("instanceId"), "instanceId");
@@ -153,7 +153,7 @@ void Element::handleParameterChange(const char *parname)
     }
 }
 
-bool Element::match(int streamId, int priority) {
+bool StreamFilter::match(int streamId, int priority) {
     return (mPar.streamHandle.isWildcard || mPar.streamHandle.value == streamId)
             && (mPar.priority.isWildcard || mPar.priority.value == priority);
 }

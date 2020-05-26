@@ -13,26 +13,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMFILTERHANDLER_H_
-#define __IEEE_802_1_QCI_STREAMFILTERHANDLER_H_
+package ieee_802_1_qci.tsn.table;
 
-#include <omnetpp.h>
-#include "table/StreamFilterTable.h"
+import ieee_802_1_qci.tsn.table.IQuery;
+import ieee_802_1_qci.utils.Join;
 
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class StreamFilterHandler : public cSimpleModule
+module Table
 {
-    private:
-        StreamFilterTable* mStreamFilterTable;
+    parameters:
+        @display("i=block/table");
+        
+        string queryNode;
 
-    protected:
-        virtual void initialize();
-        virtual void handleMessage(cMessage *msg);
-};
+    gates:
+        input in;
+        output out;
 
-} //namespace
+    submodules:
+        query: <queryNode> like IQuery {
+        }
+        next: Join {
+        }
 
-#endif
+    connections:
+        in --> query.in;
+        query.out[0] --> next.in[0];
+        next.out --> out;
+}

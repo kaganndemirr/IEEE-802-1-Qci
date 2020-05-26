@@ -13,11 +13,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+package ieee_802_1_qci.tsn.streamgate;
 
-simple StreamGateTable
+simple GateControlOp
 {
     parameters:
-        @display("i=block/table2");
-        xml table = default(xml("<StreamGates/>"));
+        string state;
+        string ipv;
+        string timeInterval;
+        string intervalOctetMax;
 }

@@ -18,9 +18,8 @@ package ieee_802_1_qci.node;
 import ieee_802_1_qci.tsn.Clock;
 
 import ieee_802_1_qci.tsn.FilteringDatabase;
-import ieee_802_1_qci.tsn.streamfilter.TableLoader;
-import ieee_802_1_qci.tsn.table.StreamFilterTable;
-import ieee_802_1_qci.tsn.table.StreamGateTable;
+import ieee_802_1_qci.tsn.streamfilter.SFLoader;
+import ieee_802_1_qci.tsn.streamgate.SGLoader;
 import ieee_802_1_qci.tsn.table.FlowMeterTable;
 
 import ieee_802_1_qci.link.NetworkController;
@@ -47,10 +46,10 @@ module Switch
             @display("p=50,125");
         }
 
-        streamfilters: ieee_802_1_qci.tsn.streamfilter.TableLoader {
+        streamfilters: SFLoader {
             @display("p=750,50");
         }
-        streamgates: StreamGateTable {
+        streamgates: SGLoader {
             @display("p=750,125");
         }
         flowmeters: FlowMeterTable {

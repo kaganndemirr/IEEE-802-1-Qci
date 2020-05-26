@@ -13,16 +13,29 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamgate;
 
-simple RelayOut
+simple StreamGate
 {
-	parameters:
-        @display("i=block/arrival");
+    parameters:
+        @display("i=block/layer");
         
-        int portCount;
+        string iconClosed = "icon/gateclosed"; // block/encrypt
+        string iconOpen = "block/layer"; // block/decrypt
+        
+        string instanceId;
+        string state;
+        string ipv;
+    
+        string closedDueToInvalidRxEnable;
+        string closedDueToInvalidRx;
+        string closedDueToOctetsExceededEnable;
+        string closedDueToOctetsExceeded;
+    
+        string intervalOctetLeft;
+        string opIndex;
     
     gates:
-        input meterIn;
-        output out[portCount];
+        input in;
+        output out;
 }
