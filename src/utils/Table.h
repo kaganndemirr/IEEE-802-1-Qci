@@ -3,25 +3,33 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
+//
 
-namespace ieee_802_1_qci;
+#ifndef __IEEE_802_1_QCI_UTILS_TABLE_H_
+#define __IEEE_802_1_QCI_UTILS_TABLE_H_
 
-packet TSNPacket {
-    int streamHandle;
-    int ipv = -1;
-    uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
-    int streamGateId = -1;
-    int flowMeterIds[];
-    int meterIdx = 0;
-    int portIn = -1;
-    int portOut = -1;
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+int readUInt(const char* str, const char* name);
+bool readBool(const char* str, const char* name);
+int readUIntStr(const char* str, const char* name, const char* flagStr, bool* flag);
+
+int readXMLUInt(cXMLElement* elm, const char* tagName);
+bool readXMLBool(cXMLElement* elm, const char* tagName);
+int readXMLUIntStr(cXMLElement* elm, const char* tagName, const char* str, bool* isStr);
+
 }
+
+#endif

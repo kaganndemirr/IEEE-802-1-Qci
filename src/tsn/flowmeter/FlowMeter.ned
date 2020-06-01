@@ -13,16 +13,27 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.flowmeter;
 
-simple RelayOut
+simple FlowMeter
 {
-	parameters:
-        @display("i=block/arrival");
+    parameters:
+        @display("i=block/bucket");
         
-        int portCount;
+        string instanceId;
+        
+        string committedInformationRate; // green tokens (octets) per second
+        string committedBurstSize; // green bucket size
+        string excessInformationRate; // yellow tokens (octets) per second
+        string excessBurstSize; // yellow bucket size
+        string couplingFlag; // true: use overflowing green tokens as yellow tokens
     
+        string colorMode; // true: color aware, false: color blind
+        string dropOnYellow;
+        string markAllFramesRed;
+        string markAllFramesRedEnable;
+
     gates:
         input in;
-        output out[portCount];
+        output out;
 }

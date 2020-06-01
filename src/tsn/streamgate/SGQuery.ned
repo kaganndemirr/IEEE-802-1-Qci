@@ -3,29 +3,26 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+// 
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
-//
+// 
 
-#ifndef __IEEE_802_1_QCI_XMLUTILS_H_
-#define __IEEE_802_1_QCI_XMLUTILS_H_
+package ieee_802_1_qci.tsn.streamgate;
 
-#include <omnetpp.h>
+import ieee_802_1_qci.tsn.table.IQuery;
 
-using namespace omnetpp;
+simple SGQuery like IQuery
+{
+    parameters:
+        @display("i=block/classifier");
 
-namespace ieee_802_1_qci {
-
-int readXMLUInt(cXMLElement* elm, const char* tagName);
-bool readXMLBool(cXMLElement* elm, const char* tagName);
-int readXMLUIntStr(cXMLElement* elm, const char* tagName, const char* str, bool* isStr);
-
+    gates:
+        input in;
+        output out[1];
 }
-
-#endif

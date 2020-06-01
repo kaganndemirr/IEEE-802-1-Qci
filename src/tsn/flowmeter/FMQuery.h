@@ -13,11 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+#ifndef __IEEE_802_1_QCI_FMQUERY_H_
+#define __IEEE_802_1_QCI_FMQUERY_H_
 
-simple StreamFilterTable
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+namespace ieee_802_1_qci {
+
+class FMQuery : public cSimpleModule
 {
-    parameters:
-        @display("i=block/table2");
-        xml table = default(xml("<StreamFilters/>"));
-}
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+};
+
+} //namespace
+
+#endif

@@ -13,11 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn.table;
+package ieee_802_1_qci.tsn.flowmeter;
 
-simple StreamGateTable
+simple FMLoader
 {
     parameters:
         @display("i=block/table2");
-        xml table = default(xml("<StreamGates/>"));
+        xml table = default(xml("<FlowMeters/>"));
 }

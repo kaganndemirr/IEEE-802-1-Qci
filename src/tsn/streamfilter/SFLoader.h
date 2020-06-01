@@ -13,24 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMFILTERHANDLER_H_
-#define __IEEE_802_1_QCI_STREAMFILTERHANDLER_H_
+#ifndef __IEEE_802_1_QCI_SFLOADER_H_
+#define __IEEE_802_1_QCI_SFLOADER_H_
 
 #include <omnetpp.h>
-#include "table/StreamFilterTable.h"
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-class StreamFilterHandler : public cSimpleModule
+class SFLoader : public cSimpleModule
 {
-    private:
-        StreamFilterTable* mStreamFilterTable;
-
-    protected:
-        virtual void initialize();
-        virtual void handleMessage(cMessage *msg);
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
 };
 
 } //namespace

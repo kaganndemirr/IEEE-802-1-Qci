@@ -13,20 +13,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_FLOWMETERTABLE_H_
-#define __IEEE_802_1_QCI_FLOWMETERTABLE_H_
+#ifndef __IEEE_802_1_QCI_FLOWMETER_H_
+#define __IEEE_802_1_QCI_FLOWMETER_H_
 
 #include <omnetpp.h>
-#include <vector>
-#include <bits/stdc++.h>
-#include <unordered_map>
 #include "../../utils/TokenBucket.h"
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-struct FlowMeter {
+struct FlowMeter_s {
     int instanceId;
 
     int committedInformationRate; // green tokens (octets) per second
@@ -41,28 +38,27 @@ struct FlowMeter {
     bool markAllFramesRedEnable;
 };
 
-class FlowMeterTable : public cSimpleModule
+class FlowMeter : public cSimpleModule
 {
-private:
+  private:
+    FlowMeter_s mPar;
+
     simtime_t mLastUpdate;
-    std::vector<FlowMeter> mList;
+    TokenBucket* greenBucket;
+    TokenBucket* yellowBucket;
 
-    // TODO allow tokens to be inspected
-    std::unordered_map<int, TokenBucket*> greenBuckets;
-    std::unordered_map<int, TokenBucket*> yellowBuckets;
-
-protected:
+  protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void handleParameterChange(const char *parname);
 
-public:
-    void updateBuckets();
-    FlowMeter* getFlowMeter(int fmId);
-    bool tryGreenBucket(int fmId, int tokens);
-    bool tryYellowBucket(int fmId, int tokens);
+    void updateBucket();
+    bool tryGreenBucket(int tokens);
+    bool tryYellowBucket(int tokens);
+
+  public:
+    bool match(int meterId);
 };
-
-bool compareFlowMeter(FlowMeter fm1, FlowMeter fm2);
 
 } //namespace
 

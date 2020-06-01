@@ -13,13 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.tsn;
+package ieee_802_1_qci.tsn.streamfilter;
 
-simple FlowMeterHandler
+simple StreamFilter
 {
-	parameters:
-        @display("i=block/bucket");
-    
+    parameters:
+        @display("i=block/filter");
+        
+        string instanceId;
+        string streamHandle;
+        string priority;
+        string streamGateId;
+        string maxSDUSize;
+        string flowMeters;
+        
+        string streamBlockedDueToOversizeFrameEnable;
+        string streamBlockedDueToOversizeFrame;
+
     gates:
         input in;
         output out;

@@ -13,58 +13,21 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMFILTERTABLE_H_
-#define __IEEE_802_1_QCI_STREAMFILTERTABLE_H_
+#ifndef __IEEE_802_1_QCI_SFQUERY_H_
+#define __IEEE_802_1_QCI_SFQUERY_H_
 
 #include <omnetpp.h>
-#include <vector>
-#include <bits/stdc++.h>
-
-#include "TableUtils.h"
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-struct StreamHandleSpec {
-    int value;
-    bool isWildcard;
-};
-
-struct PrioritySpec {
-    int value;
-    bool isWildcard;
-};
-
-struct MaxSDUSizeSpec {
-    size_t value;
-    bool isActive;
-};
-
-struct StreamFilter {
-    int instanceId;
-    StreamHandleSpec streamHandle;
-    PrioritySpec priority;
-    int streamGateId;
-    MaxSDUSizeSpec maxSDUSize;
-    std::vector<int> flowMeters;
-
-    bool streamBlockedDueToOversizeFrameEnable;
-    bool streamBlockedDueToOversizeFrame;
-};
-
-class StreamFilterTable : public cSimpleModule
+class SFQuery : public cSimpleModule
 {
-private:
-    std::vector<StreamFilter> mList;
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
-  public:
-    StreamFilter* getStreamFilter(int streamId, int priority);
 };
-
-bool compareStreamFilter(StreamFilter f1, StreamFilter f2);
 
 } //namespace
 

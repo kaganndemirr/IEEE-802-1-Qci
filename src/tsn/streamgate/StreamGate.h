@@ -13,38 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMGATETABLE_H_
-#define __IEEE_802_1_QCI_STREAMGATETABLE_H_
+#ifndef __IEEE_802_1_QCI_STREAMGATE_H_
+#define __IEEE_802_1_QCI_STREAMGATE_H_
 
 #include <omnetpp.h>
-#include <vector>
-#include <bits/stdc++.h>
-
-#include "TableUtils.h"
+#include "GateControlOp.h"
 #include "../Clock.h"
 
 using namespace omnetpp;
 
 namespace ieee_802_1_qci {
 
-struct IPVSpec {
-    int value;
-    bool isNull;
-};
-
-struct IntervalOctetSpec {
-    int value;
-    bool isNull;
-};
-
-struct StreamGateControlOperation {
-    bool state;
-    IPVSpec ipv;
-    simtime_t timeInterval;
-    IntervalOctetSpec intervalOctetMax;
-};
-
-struct StreamGate {
+struct StreamGate_s {
     int instanceId;
     bool state;
     IPVSpec ipv;
@@ -60,22 +40,23 @@ struct StreamGate {
     unsigned int opIndex;
 };
 
-class StreamGateTable : public cSimpleModule, public IScheduled
+class StreamGate : public cSimpleModule, public IScheduled
 {
-private:
+  private:
+    StreamGate_s mPar;
     Clock* mClock;
-    std::vector<StreamGate> mList;
+    bool scheduleStarted = false;
 
-protected:
+  protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void handleParameterChange(const char *parname);
 
-public:
-    simtime_t tick(int gateId);
-    StreamGate* getStreamGate(int gateId);
+  public:
+    bool match(int streamGateId);
+    void initScheduling();
+    simtime_t tick(int unused);
 };
-
-bool compareStreamGate(StreamGate g1, StreamGate g2);
 
 } //namespace
 

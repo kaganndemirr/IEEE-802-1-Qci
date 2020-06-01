@@ -13,15 +13,29 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-namespace ieee_802_1_qci;
+package ieee_802_1_qci.tsn.streamgate;
 
-packet TSNPacket {
-    int streamHandle;
-    int ipv = -1;
-    uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
-    int streamGateId = -1;
-    int flowMeterIds[];
-    int meterIdx = 0;
-    int portIn = -1;
-    int portOut = -1;
+simple StreamGate
+{
+    parameters:
+        @display("i=block/layer");
+        
+        string iconClosed = "icon/gateclosed"; // block/encrypt
+        string iconOpen = "block/layer"; // block/decrypt
+        
+        string instanceId;
+        string state;
+        string ipv;
+    
+        string closedDueToInvalidRxEnable;
+        string closedDueToInvalidRx;
+        string closedDueToOctetsExceededEnable;
+        string closedDueToOctetsExceeded;
+    
+        string intervalOctetLeft;
+        string opIndex;
+    
+    gates:
+        input in;
+        output out;
 }

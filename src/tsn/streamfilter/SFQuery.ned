@@ -13,15 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-namespace ieee_802_1_qci;
+package ieee_802_1_qci.tsn.streamfilter;
 
-packet TSNPacket {
-    int streamHandle;
-    int ipv = -1;
-    uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
-    int streamGateId = -1;
-    int flowMeterIds[];
-    int meterIdx = 0;
-    int portIn = -1;
-    int portOut = -1;
+import ieee_802_1_qci.tsn.table.IQuery;
+
+simple SFQuery like IQuery
+{
+    parameters:
+        @display("i=block/classifier");
+
+    gates:
+        input in;
+        output out[1];
 }

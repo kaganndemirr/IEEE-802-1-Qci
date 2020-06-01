@@ -13,15 +13,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-namespace ieee_802_1_qci;
+package ieee_802_1_qci.tsn.table;
 
-packet TSNPacket {
-    int streamHandle;
-    int ipv = -1;
-    uint8_t color; // 8 bits ; 0 => No Color, 1 => Green, 2 => Yellow
-    int streamGateId = -1;
-    int flowMeterIds[];
-    int meterIdx = 0;
-    int portIn = -1;
-    int portOut = -1;
+import ieee_802_1_qci.tsn.table.IQuery;
+import ieee_802_1_qci.utils.Join;
+
+module Table
+{
+    parameters:
+        @display("i=block/table");
+        
+        string queryNode;
+
+    gates:
+        input in;
+        output out;
+
+    submodules:
+        query: <queryNode> like IQuery {
+        }
+        next: Join {
+        }
+
+    connections:
+        in --> query.in;
+        query.out[0] --> next.in[0];
+        next.out --> out;
 }

@@ -13,26 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_STREAMGATEHANDLER_H_
-#define __IEEE_802_1_QCI_STREAMGATEHANDLER_H_
+package ieee_802_1_qci.tsn.streamfilter;
 
-#include <omnetpp.h>
-#include "table/StreamGateTable.h"
-
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class StreamGateHandler : public cSimpleModule
+simple SFLoader
 {
-    private:
-        StreamGateTable* mStreamGateTable;
-
-    protected:
-        virtual void initialize();
-        virtual void handleMessage(cMessage *msg);
-};
-
-} //namespace
-
-#endif
+    parameters:
+        @display("i=block/table2");
+        xml table = default(xml("<StreamFilters/>"));
+}
