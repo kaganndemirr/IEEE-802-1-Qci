@@ -20,7 +20,7 @@ import ieee_802_1_qci.tsn.Clock;
 import ieee_802_1_qci.tsn.FilteringDatabase;
 import ieee_802_1_qci.tsn.streamfilter.SFLoader;
 import ieee_802_1_qci.tsn.streamgate.SGLoader;
-import ieee_802_1_qci.tsn.table.FlowMeterTable;
+import ieee_802_1_qci.tsn.flowmeter.FMLoader;
 
 import ieee_802_1_qci.link.NetworkController;
 import ieee_802_1_qci.queue.BufferQueue;
@@ -52,7 +52,7 @@ module Switch
         streamgates: SGLoader {
             @display("p=750,125");
         }
-        flowmeters: FlowMeterTable {
+        flowmeters: FMLoader {
             @display("p=750,200");
         }
 

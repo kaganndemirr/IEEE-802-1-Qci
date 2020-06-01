@@ -18,7 +18,6 @@ package ieee_802_1_qci.tsn;
 import ieee_802_1_qci.tsn.Forwarder;
 import ieee_802_1_qci.tsn.StreamIdentifier;
 import ieee_802_1_qci.tsn.table.Table;
-import ieee_802_1_qci.tsn.FlowMeterHandler;
 import ieee_802_1_qci.tsn.RelayOut;
 
 module Relay
@@ -47,8 +46,9 @@ module Relay
             @display("i=block/layer;p=450,50");
             queryNode = "ieee_802_1_qci.tsn.streamgate.SGQuery";
         }
-        flowMeter: FlowMeterHandler {
-            @display("p=450,225");
+        flowMeter: Table {
+            @display("i=block/bucket;p=450,225");
+            queryNode = "ieee_802_1_qci.tsn.flowmeter.FMQuery";
         }
         relayOut: RelayOut {
             @display("p=250,225");

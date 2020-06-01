@@ -13,20 +13,20 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
+#include "FMQuery.h"
 #include "../TSNPacket_m.h"
 #include "../../application/EthernetFrame_m.h"
-#include "SGQuery.h"
-#include "StreamGate.h"
+#include "FlowMeter.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(SGQuery);
+Define_Module(FMQuery);
 
-void SGQuery::initialize()
+void FMQuery::initialize()
 {
 }
 
-void SGQuery::handleMessage(cMessage *msg)
+void FMQuery::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
 
@@ -40,15 +40,23 @@ void SGQuery::handleMessage(cMessage *msg)
         throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
     }
 
-    // No stream gate found
-    int streamGateId = pkt->getStreamGateId();
-    if (streamGateId == -1) {
+    int meterCount = pkt->getFlowMeterIdsArraySize();
+    int meterIdx = pkt->getMeterIdx();
+
+    // No flowmeter found
+    if (meterCount < 1 || meterIdx >= meterCount) {
         send(msg, "out", 0);
         return;
     }
 
+    if (meterIdx < 0) {
+        throw cRuntimeError("Invalid meter index!");
+    }
+
+    int meterInstanceId = pkt->getFlowMeterIds(meterIdx);
+
     cModule* module;
-    StreamGate* elm;
+    FlowMeter* elm;
 
     int count = gateSize("out");
     for (int i=1; i<count; i++) {
@@ -57,14 +65,15 @@ void SGQuery::handleMessage(cMessage *msg)
             throw cRuntimeError("Size of gate and number of elm don't match!");
         }
 
-        elm = check_and_cast<StreamGate*>(module);
-        if (elm->match(streamGateId)) {
+        elm = check_and_cast<FlowMeter*>(module);
+        if (elm->match(meterInstanceId)) {
+            pkt->setMeterIdx(meterIdx + 1);
             send(msg, "out", i);
             return;
         }
     }
 
-    throw cRuntimeError("Gate not found!");
+    throw cRuntimeError("Flowmeter not found!");
 }
 
 } //namespace

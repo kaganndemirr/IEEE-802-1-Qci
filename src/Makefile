@@ -37,12 +37,14 @@ OBJS = \
     $O/queue/PriorityQueue.o \
     $O/tsn/Clock.o \
     $O/tsn/FilteringDatabase.o \
-    $O/tsn/FlowMeterHandler.o \
     $O/tsn/Forwarder.o \
     $O/tsn/RelayOut.o \
     $O/tsn/StreamIdentifier.o \
     $O/tsn/TSNDecapsulator.o \
     $O/tsn/TSNEncapsulator.o \
+    $O/tsn/flowmeter/FlowMeter.o \
+    $O/tsn/flowmeter/FMLoader.o \
+    $O/tsn/flowmeter/FMQuery.o \
     $O/tsn/streamfilter/SFLoader.o \
     $O/tsn/streamfilter/SFQuery.o \
     $O/tsn/streamfilter/StreamFilter.o \
@@ -50,7 +52,6 @@ OBJS = \
     $O/tsn/streamgate/SGLoader.o \
     $O/tsn/streamgate/SGQuery.o \
     $O/tsn/streamgate/StreamGate.o \
-    $O/tsn/table/FlowMeterTable.o \
     $O/utils/Join.o \
     $O/utils/Table.o \
     $O/utils/TokenBucket.o \

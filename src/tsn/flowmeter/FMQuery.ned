@@ -13,26 +13,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef __IEEE_802_1_QCI_FLOWMETERHANDLER_H_
-#define __IEEE_802_1_QCI_FLOWMETERHANDLER_H_
+package ieee_802_1_qci.tsn.flowmeter;
 
-#include <omnetpp.h>
-#include "table/FlowMeterTable.h"
+import ieee_802_1_qci.tsn.table.IQuery;
 
-using namespace omnetpp;
-
-namespace ieee_802_1_qci {
-
-class FlowMeterHandler : public cSimpleModule
+simple FMQuery like IQuery
 {
-private:
-    FlowMeterTable* mFlowMeterTable;
+    parameters:
+        @display("i=block/classifier");
 
-protected:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-};
-
-} //namespace
-
-#endif
+    gates:
+        input in;
+        input directIn @directIn;
+        output out[1];
+}
