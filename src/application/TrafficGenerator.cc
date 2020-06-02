@@ -24,16 +24,12 @@ Define_Module(TrafficGenerator);
 void TrafficGenerator::initialize()
 {
     mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
-
-    mTarget = par("target").stringValue();
-    mStreamId = par("streamId").intValue();
-    mPriority = par("priority").intValue();
     mDelay = par("startDelay");
 
-    simtime_t sendInterval = par("sendInterval");
+    handleParameterChange(nullptr);
 
     if (mDelay.isZero())
-        mClock->scheduleCall(this, sendInterval, 0);
+        mClock->scheduleCall(this, mInterval, 0);
     else
         mClock->scheduleCall(this, mDelay, 1);
 }
@@ -50,18 +46,28 @@ void TrafficGenerator::handleMessage(cMessage *msg)
 
 void TrafficGenerator::handleParameterChange(const char *parname)
 {
-    if (!parname) {
-        return;
-    }
-
-    if (strcmp(parname, "target") == 0) {
+    if (!parname || strcmp(parname, "target") == 0) {
         mTarget = par("target").stringValue();
     }
-    else if (strcmp(parname, "streamId") == 0) {
+
+    if (!parname || strcmp(parname, "streamId") == 0) {
         mStreamId = par("streamId").intValue();
     }
-    else if (strcmp(parname, "priority") == 0) {
+
+    if (!parname || strcmp(parname, "priority") == 0) {
         mPriority = par("priority").intValue();
+    }
+
+    if (!parname || strcmp(parname, "sendInterval") == 0) {
+        mInterval = par("sendInterval");
+    }
+
+    if (!parname || strcmp(parname, "msgIcon") == 0) {
+        mIcon = par("msgIcon").stringValue();
+    }
+
+    if (!parname || strcmp(parname, "msgColor") == 0) {
+        mColor = par("msgColor").stringValue();
     }
 }
 
@@ -69,11 +75,9 @@ simtime_t TrafficGenerator::tick(int param)
 {
     Enter_Method("tick()");
 
-    simtime_t sendInterval = par("sendInterval");
-
     if (param == 1)
     {
-        mClock->scheduleCall(this, sendInterval, 0);
+        mClock->scheduleCall(this, mInterval, 0);
         return 0;
     }
 
@@ -83,9 +87,24 @@ simtime_t TrafficGenerator::tick(int param)
     msg->setPayloadSize(par("payloadSize").doubleValueInUnit("byte"));
     msg->setPriority(mPriority);
     msg->setCreationTime(simTime().dbl());
+
+    if (mIcon[0] || mColor[0]) {
+        cDisplayString dispStr = cDisplayString("");
+
+        if (mIcon[0]) {
+            dispStr.setTagArg("i", 0, mIcon);
+        }
+        if (mColor[0]) {
+            dispStr.setTagArg("i", 1, mColor);
+            dispStr.setTagArg("i", 2, "50");
+        }
+
+        msg->setDisplayString(dispStr.str());
+    }
+
     send(msg, "out");
 
-    return sendInterval;
+    return mInterval;
 }
 
 } //namespace

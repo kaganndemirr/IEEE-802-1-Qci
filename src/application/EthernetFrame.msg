@@ -16,6 +16,7 @@
 namespace ieee_802_1_qci;
 
 packet EthernetFrame {
+    string displayString = "";
     string src; // source mac addr
     string dst; // destination mac addr
     int streamId; // instead of vid

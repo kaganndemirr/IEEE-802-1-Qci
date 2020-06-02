@@ -25,6 +25,8 @@ simple TrafficGenerator
         volatile int payloadSize @unit(byte) = default(100B);
         double startDelay @unit(s) = default(0);
         volatile double sendInterval @unit(s) = default(1s);
+        string msgIcon = default("");
+        string msgColor = default("");
 
     gates:
         input in;

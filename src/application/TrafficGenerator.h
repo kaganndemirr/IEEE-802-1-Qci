@@ -31,6 +31,9 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
     int mStreamId;
     int mPriority;
     simtime_t mDelay;
+    simtime_t mInterval;
+    const char* mIcon;
+    const char* mColor;
 
   protected:
     virtual void initialize();
