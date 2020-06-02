@@ -18,23 +18,17 @@ package ieee_802_1_qci.tsn;
 import ieee_802_1_qci.tsn.Forwarder;
 import ieee_802_1_qci.tsn.StreamIdentifier;
 import ieee_802_1_qci.tsn.table.Table;
-import ieee_802_1_qci.tsn.RelayOut;
 
 module Relay
 {
     parameters:
         @display("i=block/dispatch;bgb=500,300,white");
 
-        int portCount;
-
     gates:
         input in;
-        output out[portCount];
+        output out[];
 
     submodules:
-        forwarder: Forwarder {
-            @display("p=80,225");
-        }
         identifier: StreamIdentifier {
             @display("p=80,50");
         }
@@ -50,24 +44,23 @@ module Relay
             @display("i=block/bucket;p=450,225");
             queryNode = "ieee_802_1_qci.tsn.flowmeter.FMQuery";
         }
-        relayOut: RelayOut {
-            @display("p=250,225");
+        forwarder: Forwarder {
+            @display("p=80,225");
 
-            portCount = portCount;
+            gates:
+                out[sizeof(out)];
         }
 
     connections:
-        in --> forwarder.in;
-
-        forwarder.out --> identifier.in;
+        in --> identifier.in;
         identifier.out --> streamFilter.in;
 
         streamFilter.out --> streamGate.in;
         streamGate.out --> flowMeter.in;
 
-        flowMeter.out --> relayOut.in;
+        flowMeter.out --> forwarder.in;
 
-        for i=0..portCount-1 {
-            relayOut.out[i] --> out[i];
+        for i=0..sizeof(out)-1 {
+            forwarder.out[i] --> out[i];
         }
 }

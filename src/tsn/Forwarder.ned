@@ -22,5 +22,5 @@ simple Forwarder
     
     gates:
         input in;
-        output out;
+        output out[];
 }

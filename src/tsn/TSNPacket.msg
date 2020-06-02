@@ -23,5 +23,4 @@ packet TSNPacket {
     int flowMeterIds[];
     int meterIdx = 0;
     int portIn = -1;
-    int portOut = -1;
 }

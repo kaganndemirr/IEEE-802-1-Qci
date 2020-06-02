@@ -39,7 +39,6 @@ OBJS = \
     $O/tsn/Clock.o \
     $O/tsn/FilteringDatabase.o \
     $O/tsn/Forwarder.o \
-    $O/tsn/RelayOut.o \
     $O/tsn/StreamIdentifier.o \
     $O/tsn/TSNDecapsulator.o \
     $O/tsn/TSNEncapsulator.o \

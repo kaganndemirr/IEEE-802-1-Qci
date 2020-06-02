@@ -16,6 +16,7 @@
 #include "Forwarder.h"
 #include "../application/EthernetFrame_m.h"
 #include "TSNPacket_m.h"
+#include <list>
 
 namespace ieee_802_1_qci {
 
@@ -40,16 +41,39 @@ void Forwarder::handleMessage(cMessage *msg)
         throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
     }
 
+    int portIn = pkt->getPortIn();
+
     // Forward packet to matching port
     const char* dst = frame->getDst();
     int port = m_fdb->getPort(std::string(dst));
+    int portCount = gateSize("out");
 
     if (port != -1) {
-        pkt->setPortOut(port);
-        send(pkt, "out");
-    } else {
-        EV_WARN << "No matching entry found: " << msg->getDisplayString();
-        delete msg;
+        if (port < 0 || port >= portCount) {
+            EV_ERROR << "Invalid port: " << msg->getDisplayString();
+            delete msg;
+            return;
+        }
+
+        send(msg, "out", port);
+        return;
+    }
+
+    // Broadcast message to other routers
+    std::list<int> routerPorts = m_fdb->getRouterPorts();
+    for (int port : routerPorts) {
+        if (port < 0 || port >= portCount) {
+            EV_ERROR << "Invalid port: " << msg->getDisplayString();
+            delete msg;
+            return;
+        }
+
+        // Skip that the message received from
+        if (port == portIn) {
+            continue;
+        }
+
+        send(msg, "out", port);
     }
 }
 

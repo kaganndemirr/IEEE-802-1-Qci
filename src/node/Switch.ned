@@ -65,7 +65,8 @@ module Switch
         relay: Relay {
             @display("p=400,150");
             
-            portCount = sizeof(port);
+            gates:
+                out[sizeof(port)];
         }
         encap: TSNEncapsulator {
             @display("p=250,300");
