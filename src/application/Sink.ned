@@ -13,34 +13,17 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.node;
+package ieee_802_1_qci.application;
 
-import ieee_802_1_qci.tsn.Clock;
-
-import ieee_802_1_qci.application.SingleApp;
-import ieee_802_1_qci.link.NetworkController;
-
-module Host
+simple Sink
 {
     parameters:
-        @display("i=device/pc3;bgb=200,100,white");
+        @display("i=block/sink");
+        string bubblePath = default("");
+        int streamId = default(-1);
+        string source = default("");
 
     gates:
-        inout port;
-
-    submodules:
-        clk: Clock {
-            @display("p=150,15");
-        }
-        nc: NetworkController {
-            @display("p=50,50");
-        }
-        app: SingleApp {
-            @display("p=150,50");
-        }
-
-    connections:
-        nc.upperOut --> app.in;
-        nc.upperIn <-- app.out;
-        port <--> nc.phys;
+        input in;
+        output out @loose;
 }

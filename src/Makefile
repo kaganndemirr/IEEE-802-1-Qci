@@ -31,6 +31,7 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
+    $O/application/Sink.o \
     $O/application/TrafficGenerator.o \
     $O/link/NetworkController.o \
     $O/queue/BufferQueue.o \

@@ -13,34 +13,28 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package ieee_802_1_qci.node;
+#ifndef __IEEE_802_1_QCI_SINK_H_
+#define __IEEE_802_1_QCI_SINK_H_
 
-import ieee_802_1_qci.tsn.Clock;
+#include <omnetpp.h>
 
-import ieee_802_1_qci.application.SingleApp;
-import ieee_802_1_qci.link.NetworkController;
+using namespace omnetpp;
 
-module Host
+namespace ieee_802_1_qci {
+
+class Sink : public cSimpleModule
 {
-    parameters:
-        @display("i=device/pc3;bgb=200,100,white");
+  private:
+    cModule* mBubbleModule;
+    int mStreamId;
+    const char* mSource;
 
-    gates:
-        inout port;
+  protected:
+    virtual void initialize();
+    virtual void handleMessage(cMessage *msg);
+    virtual void handleParameterChange(const char *parname);
+};
 
-    submodules:
-        clk: Clock {
-            @display("p=150,15");
-        }
-        nc: NetworkController {
-            @display("p=50,50");
-        }
-        app: SingleApp {
-            @display("p=150,50");
-        }
+} //namespace
 
-    connections:
-        nc.upperOut --> app.in;
-        nc.upperIn <-- app.out;
-        port <--> nc.phys;
-}
+#endif

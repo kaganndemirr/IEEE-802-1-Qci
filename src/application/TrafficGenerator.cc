@@ -23,7 +23,7 @@ Define_Module(TrafficGenerator);
 
 void TrafficGenerator::initialize()
 {
-    mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
+    mClock = check_and_cast<Clock*> (getModuleByPath(par("clockPath")));
     mDelay = par("startDelay");
 
     handleParameterChange(nullptr);
@@ -36,18 +36,12 @@ void TrafficGenerator::initialize()
 
 void TrafficGenerator::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-    double delay = (simTime().dbl() - pkt->getCreationTime()) * 1000;
-    EV_INFO << "Packet received src=" << pkt->getSrc()
-            << " length=" << pkt->getPayloadSize()
-            << " delay=" << delay << "ms";
-    delete msg;
 }
 
 void TrafficGenerator::handleParameterChange(const char *parname)
 {
-    if (!parname || strcmp(parname, "target") == 0) {
-        mTarget = par("target").stringValue();
+    if (!parname || strcmp(parname, "destination") == 0) {
+        mDestination = par("destination").stringValue();
     }
 
     if (!parname || strcmp(parname, "streamId") == 0) {
@@ -83,7 +77,7 @@ simtime_t TrafficGenerator::tick(int param)
 
     EthernetFrame* msg = new EthernetFrame();
     msg->setStreamId(mStreamId);
-    msg->setDst(mTarget);
+    msg->setDst(mDestination);
     msg->setPayloadSize(par("payloadSize").doubleValueInUnit("byte"));
     msg->setPriority(mPriority);
     msg->setCreationTime(simTime().dbl());

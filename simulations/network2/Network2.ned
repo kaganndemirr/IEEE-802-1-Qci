@@ -27,7 +27,7 @@ network Network2
     types:
         channel C extends DelayChannel
         {
-            delay = 300ns;
+            delay = 20ms;
         }
 
     submodules:

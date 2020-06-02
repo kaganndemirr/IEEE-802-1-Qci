@@ -27,7 +27,7 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
 {
   private:
     Clock* mClock;
-    const char* mTarget;
+    const char* mDestination;
     int mStreamId;
     int mPriority;
     simtime_t mDelay;

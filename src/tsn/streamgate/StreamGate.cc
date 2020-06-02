@@ -196,8 +196,6 @@ simtime_t StreamGate::tick(int unused)
 {
     Enter_Method("tick()");
 
-    EV_INFO << "SGTick: " << simTime() << "\n";
-
     int idx = mPar.opIndex + 1;
 
     cModule* module = getSubmodule("op", idx);

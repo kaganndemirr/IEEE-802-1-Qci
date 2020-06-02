@@ -15,13 +15,15 @@
 
 package ieee_802_1_qci.application;
 
-simple TrafficGenerator
+import ieee_802_1_qci.application.TrafficGenerator;
+import ieee_802_1_qci.application.Sink;
+
+module SingleApp
 {
     parameters:
-        @display("i=block/source");
-        string clockPath = default("^.clk");
+        @display("i=block/app");
         int streamId;
-        string destination;
+        string target;
         int priority;
         volatile int payloadSize @unit(byte) = default(100B);
         double startDelay @unit(s) = default(0);
@@ -30,6 +32,28 @@ simple TrafficGenerator
         string msgColor = default("");
 
     gates:
-        input in @loose;
+        input in;
         output out;
+
+    submodules:
+        talker: TrafficGenerator {
+            clockPath = "^.^.clk";
+            streamId = streamId;
+            destination = target;
+            priority = priority;
+            payloadSize = payloadSize;
+            startDelay = startDelay;
+            sendInterval = sendInterval;
+            msgIcon = msgIcon;
+            msgColor = msgColor;
+        }
+        listener: Sink {
+            bubblePath = "^.^";
+            streamId = -1;
+            source = "";
+        }
+
+    connections:
+        in --> listener.in;
+        talker.out --> out;
 }
