@@ -18,7 +18,7 @@ package ieee_802_1_qci.tsn.flowmeter;
 simple FlowMeter
 {
     parameters:
-        @display("i=block/bucket");
+        @display("i=block/bucket;p=,,c");
         
         string instanceId;
         

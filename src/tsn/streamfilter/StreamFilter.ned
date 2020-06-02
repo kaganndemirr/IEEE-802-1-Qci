@@ -18,7 +18,7 @@ package ieee_802_1_qci.tsn.streamfilter;
 simple StreamFilter
 {
     parameters:
-        @display("i=block/filter");
+        @display("i=block/filter;p=,,r");
         
         string instanceId;
         string streamHandle;

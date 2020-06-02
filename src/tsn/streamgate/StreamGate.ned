@@ -18,7 +18,7 @@ package ieee_802_1_qci.tsn.streamgate;
 simple StreamGate
 {
     parameters:
-        @display("i=block/layer");
+        @display("i=block/layer;p=,,r");
         
         string iconClosed = "icon/gateclosed"; // block/encrypt
         string iconOpen = "block/layer"; // block/decrypt
