@@ -15,21 +15,9 @@
 
 package ieee_802_1_qci.application;
 
-simple TrafficGenerator like IApp
+moduleinterface IApp
 {
-    parameters:
-        @display("i=block/source");
-        string clockPath = default("^.clk");
-        int streamId;
-        string destination;
-        int priority;
-        volatile int payloadSize @unit(byte) = default(100B);
-        double startDelay @unit(s) = default(0);
-        volatile double sendInterval @unit(s) = default(1s);
-        string msgIcon = default("");
-        string msgColor = default("");
-
     gates:
-        input in @loose;
+        input in;
         output out;
 }

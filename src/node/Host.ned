@@ -16,14 +16,14 @@
 package ieee_802_1_qci.node;
 
 import ieee_802_1_qci.tsn.Clock;
-
-import ieee_802_1_qci.application.SingleApp;
+import ieee_802_1_qci.application.IApp;
 import ieee_802_1_qci.link.NetworkController;
 
 module Host
 {
     parameters:
         @display("i=device/pc3;bgb=200,100,white");
+        string appPath = default("ieee_802_1_qci.application.DefaultApp");
 
     gates:
         inout port;
@@ -35,7 +35,7 @@ module Host
         nc: NetworkController {
             @display("p=50,50");
         }
-        app: SingleApp {
+        app: <appPath> like IApp {
             @display("p=150,50");
         }
 

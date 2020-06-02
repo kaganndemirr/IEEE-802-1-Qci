@@ -15,10 +15,7 @@
 
 package ieee_802_1_qci.application;
 
-import ieee_802_1_qci.application.TrafficGenerator;
-import ieee_802_1_qci.application.Sink;
-
-module SingleApp
+module DefaultApp like IApp
 {
     parameters:
         @display("i=block/app");
@@ -37,20 +34,18 @@ module SingleApp
 
     submodules:
         talker: TrafficGenerator {
-            clockPath = "^.^.clk";
-            streamId = streamId;
-            destination = target;
-            priority = priority;
-            payloadSize = payloadSize;
-            startDelay = startDelay;
-            sendInterval = sendInterval;
-            msgIcon = msgIcon;
-            msgColor = msgColor;
+            clockPath = default("^.^.clk");
+            streamId = default(streamId);
+            destination = default(target);
+            priority = default(priority);
+            payloadSize = default(payloadSize);
+            startDelay = default(startDelay);
+            sendInterval = default(sendInterval);
+            msgIcon = default(msgIcon);
+            msgColor = default(msgColor);
         }
         listener: Sink {
-            bubblePath = "^.^";
-            streamId = -1;
-            source = "";
+            bubblePath = default("^.^");
         }
 
     connections:

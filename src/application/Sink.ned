@@ -15,7 +15,7 @@
 
 package ieee_802_1_qci.application;
 
-simple Sink
+simple Sink like IApp
 {
     parameters:
         @display("i=block/sink");
