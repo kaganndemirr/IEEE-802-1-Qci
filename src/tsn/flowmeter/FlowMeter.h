@@ -44,8 +44,8 @@ class FlowMeter : public cSimpleModule
     FlowMeter_s mPar;
 
     simtime_t mLastUpdate;
-    TokenBucket* greenBucket;
-    TokenBucket* yellowBucket;
+    TokenBucket greenBucket = TokenBucket(0, 0);
+    TokenBucket yellowBucket = TokenBucket(0, 0);
 
   protected:
     virtual void initialize();

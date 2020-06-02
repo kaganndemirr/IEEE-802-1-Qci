@@ -25,8 +25,9 @@ Define_Module(FlowMeter);
 void FlowMeter::initialize()
 {
     mLastUpdate = simTime();
-    greenBucket = nullptr;
-    yellowBucket = nullptr;
+
+    WATCH(greenBucket);
+    WATCH(yellowBucket);
 
     handleParameterChange(nullptr);
 }
@@ -116,51 +117,23 @@ void FlowMeter::handleParameterChange(const char *parname)
     }
 
     if (!parname || !strcmp(parname, "committedInformationRate")) {
-        if (greenBucket != nullptr && yellowBucket != nullptr) {
-            updateBucket();
-        }
-
+        updateBucket();
         mPar.committedInformationRate = readUInt(par("committedInformationRate"), "committedInformationRate");
     }
 
     if (!parname || !strcmp(parname, "committedBurstSize")) {
         mPar.committedBurstSize = readUInt(par("committedBurstSize"), "committedBurstSize");
-
-        int tokens = 0;
-        if (greenBucket != nullptr) {
-            tokens = greenBucket->getTokens();
-            delete greenBucket;
-
-            // Prevent overflow
-            if (mPar.committedBurstSize < tokens) {
-                tokens = mPar.committedBurstSize;
-            }
-        }
-        greenBucket = new TokenBucket(mPar.committedBurstSize, tokens);
+        greenBucket.setCapacity(mPar.committedBurstSize);
     }
 
     if (!parname || !strcmp(parname, "excessInformationRate")) {
-        if (greenBucket != nullptr && yellowBucket != nullptr) {
-            updateBucket();
-        }
-
+        updateBucket();
         mPar.excessInformationRate = readUInt(par("excessInformationRate"), "excessInformationRate");
     }
 
     if (!parname || !strcmp(parname, "excessBurstSize")) {
         mPar.excessBurstSize = readUInt(par("excessBurstSize"), "excessBurstSize");
-
-        int tokens = 0;
-        if (yellowBucket != nullptr) {
-            tokens = yellowBucket->getTokens();
-            delete yellowBucket;
-
-            // Prevent overflow
-            if (mPar.excessBurstSize < tokens) {
-                tokens = mPar.excessBurstSize;
-            }
-        }
-        yellowBucket = new TokenBucket(mPar.excessBurstSize, tokens);
+        yellowBucket.setCapacity(mPar.excessBurstSize);
     }
 
     if (!parname || !strcmp(parname, "couplingFlag")) {
@@ -197,24 +170,24 @@ void FlowMeter::updateBucket()
     double delta = (simTime() - mLastUpdate).dbl();
     mLastUpdate = simTime();
 
-    double overflow = greenBucket->add(mPar.committedInformationRate * delta);
+    double overflow = greenBucket.add(mPar.committedInformationRate * delta);
 
     if (mPar.couplingFlag) {
-        yellowBucket->add(mPar.excessInformationRate * delta + overflow);
+        yellowBucket.add(mPar.excessInformationRate * delta + overflow);
     }
     else {
-        yellowBucket->add(mPar.excessInformationRate * delta);
+        yellowBucket.add(mPar.excessInformationRate * delta);
     }
 }
 
 bool FlowMeter::tryGreenBucket(int tokens) {
     updateBucket();
-    return greenBucket->remove(tokens) == 0;
+    return greenBucket.remove(tokens) == 0;
 }
 
 bool FlowMeter::tryYellowBucket(int tokens) {
     updateBucket();
-    return yellowBucket->remove(tokens) == 0;
+    return yellowBucket.remove(tokens) == 0;
 }
 
 } //namespace

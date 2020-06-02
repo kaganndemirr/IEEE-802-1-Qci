@@ -11,10 +11,18 @@ TokenBucket::TokenBucket(double capacity, double tokens) : pCapacity(capacity), 
 TokenBucket::~TokenBucket() {
 }
 
-void TokenBucket::setCapacity(double capacity) {
+// @returns Number of overflowing tokens
+double TokenBucket::setCapacity(double capacity) {
     if (capacity >= 0) {
         pCapacity = capacity;
+
+        if (pTokens > pCapacity) {
+            double overflow = pTokens - pCapacity;
+            pTokens = pCapacity;
+            return overflow;
+        }
     }
+    return 0;
 }
 double TokenBucket::getCapacity() {
     return pCapacity;
