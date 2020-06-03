@@ -35,6 +35,7 @@ class PriorityQueue : public cSimpleModule, public IScheduled
 
   protected:
     virtual void initialize();
+    virtual void finish();
     virtual void handleMessage(cMessage *msg);
     virtual void handleParameterChange(const char *parname);
 

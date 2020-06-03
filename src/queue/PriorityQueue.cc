@@ -39,6 +39,17 @@ void PriorityQueue::initialize()
     mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
 }
 
+void PriorityQueue::finish() {
+    for (cPacketQueue* queue : mQueue) {
+        while (!queue->isEmpty()) {
+            cPacket* pkt = queue->pop();
+            cancelAndDelete(pkt);
+        }
+
+        delete queue;
+    }
+}
+
 void PriorityQueue::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);

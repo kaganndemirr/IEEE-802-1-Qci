@@ -26,6 +26,15 @@ void BufferQueue::initialize()
     mInterval = par("interval");
 }
 
+void BufferQueue::finish() {
+    while (!mQueue->isEmpty()) {
+        cPacket* pkt = mQueue->pop();
+        cancelAndDelete(pkt);
+    }
+
+    delete mQueue;
+}
+
 void BufferQueue::handleMessage(cMessage *msg)
 {
     cPacket* pkt = check_and_cast<cPacket *>(msg);
@@ -56,10 +65,6 @@ simtime_t BufferQueue::tick(int unused)
 
     if (!mQueue->isEmpty()) {
         cPacket* pkt = mQueue->pop();
-        if (!pkt) {
-            throw cRuntimeError("Invalid cPacket in queue");
-        }
-
         send(pkt, "out");
     }
 

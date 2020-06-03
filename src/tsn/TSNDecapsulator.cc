@@ -34,6 +34,7 @@ void TSNDecapsulator::handleMessage(cMessage *msg)
         throw cRuntimeError("No encapsulated packet exists in TSNPacket!");
     }
 
+    delete msg;
     send(pkt, "out");
 }
 
