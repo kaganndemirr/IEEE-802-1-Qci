@@ -28,11 +28,8 @@ void TSNDecapsulator::initialize()
 void TSNDecapsulator::handleMessage(cMessage *msg)
 {
     TSNPacket* tsnPkt = check_and_cast<TSNPacket *>(msg);
-    if (!tsnPkt) {
-        throw cRuntimeError("Received message isn't a TSNPacket");
-    }
-
     cPacket* pkt = tsnPkt->decapsulate();
+
     if (!pkt) {
         throw cRuntimeError("No encapsulated packet exists in TSNPacket!");
     }

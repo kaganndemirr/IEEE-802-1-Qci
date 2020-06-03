@@ -34,16 +34,7 @@ void StreamFilter::initialize()
 void StreamFilter::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
-
-    if (!pkt) {
-        throw cRuntimeError("Received message isn't a TSNPacket");
-    }
-
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
-
-    if (!frame) {
-        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
-    }
 
     std::ostringstream bubbleText;
 

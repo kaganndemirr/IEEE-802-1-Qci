@@ -28,16 +28,7 @@ void StreamIdentifier::initialize()
 void StreamIdentifier::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
-
-    if (!pkt) {
-        throw cRuntimeError("Received message isn't a TSNPacket");
-    }
-
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
-
-    if (!frame) {
-        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
-    }
 
     const char* src = frame->getSrc();
     const char* dst = frame->getDst();

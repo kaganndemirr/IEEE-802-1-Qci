@@ -28,12 +28,13 @@ void NetworkController::initialize()
 void NetworkController::handleMessage(cMessage *msg)
 {
     if (msg->arrivedOn("upperIn")) {
+        EthernetFrame* frame = dynamic_cast<EthernetFrame *>(msg);
+
         // Set source MAC address if null
-        EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-        if (pkt) {
-            const char* src = pkt->getSrc();
-            if (!src || !strcmp(src, "")) {
-                pkt->setSrc(addr);
+        if (frame) {
+            const char* src = frame->getSrc();
+            if (!src || !src[0]) {
+                frame->setSrc(addr);
             }
         }
 

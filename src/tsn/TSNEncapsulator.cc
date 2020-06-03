@@ -27,7 +27,7 @@ void TSNEncapsulator::initialize()
 
 void TSNEncapsulator::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
+    EthernetFrame* pkt = dynamic_cast<EthernetFrame *>(msg);
     if (pkt) {
         TSNPacket* tsnPkt = new TSNPacket();
 

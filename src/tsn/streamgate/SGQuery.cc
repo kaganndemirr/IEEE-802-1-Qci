@@ -29,16 +29,7 @@ void SGQuery::initialize()
 void SGQuery::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
-
-    if (!pkt) {
-        throw cRuntimeError("Received message isn't a TSNPacket");
-    }
-
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
-
-    if (!frame) {
-        throw cRuntimeError("Received ControlPacket doesn't contain EthernetFrame");
-    }
 
     // No stream gate found
     int streamGateId = pkt->getStreamGateId();

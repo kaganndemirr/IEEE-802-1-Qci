@@ -30,10 +30,6 @@ void BufferQueue::handleMessage(cMessage *msg)
 {
     cPacket* pkt = check_and_cast<cPacket *>(msg);
 
-    if (!pkt) {
-        throw cRuntimeError("Received cMessage doesn't contain a cPacket");
-    }
-
     if (mQueue->isEmpty()) {
         mQueue->insert(pkt);
         mClock->scheduleCall(this, mInterval, 0);

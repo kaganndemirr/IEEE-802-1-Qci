@@ -42,16 +42,7 @@ void PriorityQueue::initialize()
 void PriorityQueue::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
-
-    if (!pkt) {
-        throw cRuntimeError("Received cMessage doesn't contain a TSNPacket");
-    }
-
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
-
-    if (!frame) {
-        throw cRuntimeError("Received TSNPacket doesn't contain EthernetFrame");
-    }
 
     int ipv = pkt->getIpv();
     int priority = frame->getPriority();

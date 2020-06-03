@@ -33,9 +33,6 @@ void AppManager::handleMessage(cMessage *msg)
     }
 
     EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-    if (!pkt) {
-        throw cRuntimeError("Received message doesn't contain EthernetFrame");
-    }
 
     cModule* parent = getParentModule();
     cModule* app;
