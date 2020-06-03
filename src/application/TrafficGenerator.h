@@ -34,6 +34,7 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
     simtime_t mInterval;
     const char* mIcon;
     const char* mColor;
+    const char* mColorPercent;
 
   protected:
     virtual void initialize();

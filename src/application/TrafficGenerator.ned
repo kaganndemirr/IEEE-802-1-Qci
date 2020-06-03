@@ -28,6 +28,7 @@ simple TrafficGenerator like IApp
         volatile double sendInterval @unit(s) = default(1s);
         string msgIcon = default("");
         string msgColor = default("");
+        string msgColorPercent = default("100");
 
     gates:
         input in @loose;

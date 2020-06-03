@@ -63,6 +63,10 @@ void TrafficGenerator::handleParameterChange(const char *parname)
     if (!parname || strcmp(parname, "msgColor") == 0) {
         mColor = par("msgColor").stringValue();
     }
+
+    if (!parname || strcmp(parname, "msgColorPercent") == 0) {
+        mColorPercent = par("msgColorPercent").stringValue();
+    }
 }
 
 simtime_t TrafficGenerator::tick(int param)
@@ -90,7 +94,7 @@ simtime_t TrafficGenerator::tick(int param)
         }
         if (mColor[0]) {
             dispStr.setTagArg("i", 1, mColor);
-            dispStr.setTagArg("i", 2, "50");
+            dispStr.setTagArg("i", 2, mColorPercent);
         }
 
         msg->setDisplayString(dispStr.str());
