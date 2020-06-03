@@ -18,6 +18,10 @@
 namespace ieee_802_1_qci {
 
 void MultiBubbleModule::bubble(const char *text) {
+    if (!hasGUI() || getEnvir()->isExpressMode()) {
+        return;
+    }
+
     cSimpleModule::bubble(text);
 
     for (cModule* module : mModules) {
