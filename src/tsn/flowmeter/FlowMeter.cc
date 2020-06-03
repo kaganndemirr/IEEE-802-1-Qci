@@ -65,16 +65,18 @@ void FlowMeter::handleMessage(cMessage *msg)
     }
 
     unsigned int packetSize = frame->getPayloadSize();
+    bool yellowPacket = false;
 
     if (tryGreenBucket(packetSize) &&
-            (pkt->getColor() == 0
-            || pkt->getColor() == 1
+            (frame->getColor() == 0
+            || frame->getColor() == 1
             || !mPar.colorMode)) { // color-blind
-        pkt->setColor(1);
+        frame->setColor(1);
     }
     else if (tryYellowBucket(packetSize) && !mPar.dropOnYellow) {
-        pkt->setColor(2);
+        frame->setColor(2);
         bubbleText << " YELLOW";
+        yellowPacket = true;
     }
     else {
         std::string reason = (mPar.dropOnYellow ? "DropOnYellow" : "PacketSize");
@@ -96,7 +98,12 @@ void FlowMeter::handleMessage(cMessage *msg)
     }
 
     bubbleText << " PASS";
-    cSimpleModule::bubble(bubbleText.str().c_str());
+
+    if (yellowPacket) {
+        bubble(bubbleText.str().c_str());
+    } else {
+        cSimpleModule::bubble(bubbleText.str().c_str());
+    }
 
     int meterCount = pkt->getFlowMeterIdsArraySize();
     int meterIdx = pkt->getMeterIdx();
