@@ -22,4 +22,15 @@
 		<DropOnYellow>false</DropOnYellow>
 		<MarkAllFramesRedEnable>false</MarkAllFramesRedEnable>
 	</FlowMeter>
+	<FlowMeter>
+		<InstanceId>3</InstanceId>
+		<CommittedInformationRate>40000</CommittedInformationRate>
+		<CommittedBurstSize>40000</CommittedBurstSize>
+		<ExcessInformationRate>50000</ExcessInformationRate>
+		<ExcessBurstSize>50000</ExcessBurstSize>
+		<CouplingFlag>false</CouplingFlag>
+		<ColorMode>false</ColorMode>
+		<DropOnYellow>false</DropOnYellow>
+		<MarkAllFramesRedEnable>false</MarkAllFramesRedEnable>
+	</FlowMeter>
 </FlowMeters>

@@ -22,7 +22,7 @@ import ieee_802_1_qci.node.Switch;
 network Network2
 {
     parameters:
-        @display("bgb=600,200,white");
+        @display("bgb=600,300,white");
 
     types:
         channel C extends DelayChannel
@@ -42,6 +42,12 @@ network Network2
         VOIP2: Host {
             @display("p=500,50");
         }
+        hostA: Host {
+            @display("p=100,250");
+        }
+        hostB: Host {
+            @display("p=500,250");
+        }
         hostC: Host {
             @display("p=100,150");
         }
@@ -49,10 +55,10 @@ network Network2
             @display("p=500,150");
         }
         switch1: Switch {
-            @display("p=250,100");
+            @display("p=250,150");
         }
         switch2: Switch {
-            @display("p=350,100");
+            @display("p=350,150");
         }
 
     connections:
@@ -60,7 +66,9 @@ network Network2
 
         VOIP1.port <--> C <--> switch1.port++;
         hostC.port <--> C <--> switch1.port++;
+        hostA.port <--> C <--> switch1.port++;
 
         VOIP2.port <--> C <--> switch2.port++;
         hostD.port <--> C <--> switch2.port++;
+        hostB.port <--> C <--> switch2.port++;
 }
