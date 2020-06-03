@@ -25,6 +25,10 @@ Define_Module(StreamFilter);
 void StreamFilter::initialize()
 {
     handleParameterChange(nullptr);
+
+    addBubbleModule("^");
+    addBubbleModule("^.^");
+    addBubbleModule("^.^.^");
 }
 
 void StreamFilter::handleMessage(cMessage *msg)
@@ -87,7 +91,7 @@ void StreamFilter::handleMessage(cMessage *msg)
     }
 
     bubbleText << " PASS";
-    bubble(bubbleText.str().c_str());
+    cSimpleModule::bubble(bubbleText.str().c_str());
 
     send(msg, "out");
 }

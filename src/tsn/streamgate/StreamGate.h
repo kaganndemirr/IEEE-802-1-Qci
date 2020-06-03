@@ -17,6 +17,8 @@
 #define __IEEE_802_1_QCI_STREAMGATE_H_
 
 #include <omnetpp.h>
+
+#include "../../utils/MultiBubbleModule.h"
 #include "GateControlOp.h"
 #include "../Clock.h"
 
@@ -40,7 +42,7 @@ struct StreamGate_s {
     unsigned int opIndex;
 };
 
-class StreamGate : public cSimpleModule, public IScheduled
+class StreamGate : public MultiBubbleModule, public IScheduled
 {
   private:
     StreamGate_s mPar;

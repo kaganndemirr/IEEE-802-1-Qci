@@ -18,6 +18,7 @@
 
 #include <omnetpp.h>
 #include "../../utils/TokenBucket.h"
+#include "../../utils/MultiBubbleModule.h"
 
 using namespace omnetpp;
 
@@ -38,7 +39,7 @@ struct FlowMeter_s {
     bool markAllFramesRedEnable;
 };
 
-class FlowMeter : public cSimpleModule
+class FlowMeter : public MultiBubbleModule
 {
   private:
     FlowMeter_s mPar;

@@ -27,6 +27,10 @@ void StreamGate::initialize()
     mClock = check_and_cast<Clock*> (getParentModule()->getParentModule()->getParentModule()->getSubmodule("clk"));
 
     handleParameterChange(nullptr);
+
+    addBubbleModule("^");
+    addBubbleModule("^.^");
+    addBubbleModule("^.^.^");
 }
 
 void StreamGate::handleMessage(cMessage *msg)
@@ -100,7 +104,7 @@ void StreamGate::handleMessage(cMessage *msg)
     }
 
     bubbleText << " PASS";
-    bubble(bubbleText.str().c_str());
+    cSimpleModule::bubble(bubbleText.str().c_str());
 
     send(msg, "out");
 }

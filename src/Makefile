@@ -54,6 +54,7 @@ OBJS = \
     $O/tsn/streamgate/SGQuery.o \
     $O/tsn/streamgate/StreamGate.o \
     $O/utils/Join.o \
+    $O/utils/MultiBubbleModule.o \
     $O/utils/Table.o \
     $O/utils/TokenBucket.o \
     $O/application/EthernetFrame_m.o \

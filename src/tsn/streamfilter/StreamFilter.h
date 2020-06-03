@@ -17,6 +17,7 @@
 #define __IEEE_802_1_QCI_STREAMFILTER_H_
 
 #include <omnetpp.h>
+#include "../../utils/MultiBubbleModule.h"
 
 using namespace omnetpp;
 
@@ -49,7 +50,7 @@ struct StreamFilter_s {
     bool streamBlockedDueToOversizeFrame;
 };
 
-class StreamFilter : public cSimpleModule
+class StreamFilter : public MultiBubbleModule
 {
   private:
     StreamFilter_s mPar;

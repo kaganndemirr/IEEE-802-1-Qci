@@ -30,6 +30,10 @@ void FlowMeter::initialize()
     WATCH(yellowBucket);
 
     handleParameterChange(nullptr);
+
+    addBubbleModule("^");
+    addBubbleModule("^.^");
+    addBubbleModule("^.^.^");
 }
 
 void FlowMeter::handleMessage(cMessage *msg)
@@ -92,7 +96,7 @@ void FlowMeter::handleMessage(cMessage *msg)
     }
 
     bubbleText << " PASS";
-    bubble(bubbleText.str().c_str());
+    cSimpleModule::bubble(bubbleText.str().c_str());
 
     int meterCount = pkt->getFlowMeterIdsArraySize();
     int meterIdx = pkt->getMeterIdx();
