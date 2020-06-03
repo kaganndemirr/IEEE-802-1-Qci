@@ -19,7 +19,7 @@ simple BufferQueue
 {
     parameters:
         @display("i=block/queue");
-        double interval @unit(s) = default(1us);
+        double interval @unit(s) = default(100us);
     
     gates:
         input in;

@@ -20,7 +20,7 @@ simple PriorityQueue
     parameters:
         @display("i=block/queue");
         int priorityCount = default(8);
-        double interval @unit(s) = default(1us);
+        double interval @unit(s) = default(100us);
     
     gates:
         input in;
