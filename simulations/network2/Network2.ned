@@ -27,7 +27,12 @@ network Network2
     types:
         channel C extends DelayChannel
         {
-            delay = 20ms;
+            delay = 2ms;
+        }
+        channel CS extends DelayChannel
+        {
+			@display("ls=,3");
+            delay = 60ms;
         }
 
     submodules:
@@ -43,13 +48,19 @@ network Network2
         hostD: Host {
             @display("p=500,150");
         }
-        switch: Switch {
-            @display("p=300,100");
+        switch1: Switch {
+            @display("p=250,100");
+        }
+        switch2: Switch {
+            @display("p=350,100");
         }
 
     connections:
-        VOIP1.port <--> C <--> switch.port++;
-        VOIP2.port <--> C <--> switch.port++;
-        hostC.port <--> C <--> switch.port++;
-        hostD.port <--> C <--> switch.port++;
+        switch1.port++ <--> CS <--> switch2.port++;
+
+        VOIP1.port <--> C <--> switch1.port++;
+        hostC.port <--> C <--> switch1.port++;
+
+        VOIP2.port <--> C <--> switch2.port++;
+        hostD.port <--> C <--> switch2.port++;
 }

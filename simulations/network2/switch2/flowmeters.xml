@@ -1,0 +1,25 @@
+<FlowMeters>
+	<!-- 100mbps -->
+	<FlowMeter>
+		<InstanceId>1</InstanceId>
+		<CommittedInformationRate>10000000</CommittedInformationRate>
+		<CommittedBurstSize>50000000</CommittedBurstSize>
+		<ExcessInformationRate>0</ExcessInformationRate>
+		<ExcessBurstSize>0</ExcessBurstSize>
+		<CouplingFlag>false</CouplingFlag>
+		<ColorMode>false</ColorMode>
+		<DropOnYellow>false</DropOnYellow>
+		<MarkAllFramesRedEnable>false</MarkAllFramesRedEnable>
+	</FlowMeter>
+	<FlowMeter>
+		<InstanceId>2</InstanceId>
+		<CommittedInformationRate>90000000</CommittedInformationRate>
+		<CommittedBurstSize>50000000</CommittedBurstSize>
+		<ExcessInformationRate>10000000</ExcessInformationRate>
+		<ExcessBurstSize>50000000</ExcessBurstSize>
+		<CouplingFlag>false</CouplingFlag>
+		<ColorMode>true</ColorMode>
+		<DropOnYellow>false</DropOnYellow>
+		<MarkAllFramesRedEnable>false</MarkAllFramesRedEnable>
+	</FlowMeter>
+</FlowMeters>

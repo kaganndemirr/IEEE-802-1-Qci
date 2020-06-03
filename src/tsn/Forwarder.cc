@@ -73,8 +73,12 @@ void Forwarder::handleMessage(cMessage *msg)
             continue;
         }
 
-        send(msg, "out", port);
+        // Send duplicate message
+        send(msg->dup(), "out", port);
     }
+
+    // Delete original message
+    delete msg;
 }
 
 } //namespace
