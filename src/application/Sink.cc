@@ -39,12 +39,12 @@ void Sink::handleMessage(cMessage *msg)
     EV_INFO << "Packet received src=" << source
             << " streamid=" << streamId
             << " length=" << payloadSize
-            << " delay=" << delay << "ms";
+            << " delay=" << delay << "ms" << endl;
     if (mSource[0] && strcmp(mSource, source)) {
-        EV_ERROR << "Invalid Source";
+        EV_ERROR << "Invalid Source" << endl;
     }
     if (mStreamId != -1 && streamId != mStreamId) {
-        EV_ERROR << "Invalid StreamId";
+        EV_ERROR << "Invalid StreamId" << endl;
     }
 
     std::ostringstream bubbleStr;

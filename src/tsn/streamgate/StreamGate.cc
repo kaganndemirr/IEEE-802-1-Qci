@@ -40,8 +40,6 @@ void StreamGate::handleMessage(cMessage *msg)
 
     std::ostringstream bubbleText;
 
-    bubbleText << "StreamGate[" << mPar.instanceId << "]";
-
     // Drop packets when gate is closed
     if (mPar.closedDueToInvalidRx || mPar.closedDueToOctetsExceeded || !mPar.state) {
         std::string reason = (
@@ -50,15 +48,15 @@ void StreamGate::handleMessage(cMessage *msg)
         );
 
         EV_WARN << "Packet dropped due to arrival at a closed gate (" << reason
-                << ", ID: " << mPar.instanceId << ", GCL OP: " << mPar.opIndex << ")";
+                << ", GCL OP: " << mPar.opIndex << ")" << endl;
 
-        bubbleText << " DROP[" << reason << "]";
+        bubbleText << "DROP[" << reason << "]";
         bubble(bubbleText.str().c_str());
 
         if (!mPar.state && mPar.closedDueToInvalidRxEnable && !mPar.closedDueToInvalidRx) {
             mPar.closedDueToInvalidRx = true;
 
-            EV_WARN << "closedDueToInvalidRx = true";
+            EV_WARN << "closedDueToInvalidRx = true" << endl;
         }
 
         delete msg;
@@ -70,16 +68,16 @@ void StreamGate::handleMessage(cMessage *msg)
 
         // Drop packets when its bigger than allowed octets
         if (pktSize > mPar.intervalOctetLeft.value) {
-            EV_WARN << "Packet dropped due to arrival at a gate that has not enough octet left ("
-                    << "ID: " << mPar.instanceId << ", GCL OP: " << mPar.opIndex << ")";
+            EV_WARN << "Packet dropped due to arrival at a gate that has not enough octet left "
+                    << "(GCL OP: " << mPar.opIndex << ")" << endl;
 
-            bubbleText << " DROP[OctetsExceed]";
+            bubbleText << "DROP[OctetsExceed]";
             bubble(bubbleText.str().c_str());
 
             if (mPar.closedDueToOctetsExceededEnable) {
                 mPar.closedDueToOctetsExceeded = true;
 
-                EV_WARN << "closedDueToOctetsExceeded = true";
+                EV_WARN << "closedDueToOctetsExceeded = true" << endl;
             }
 
             delete msg;
@@ -91,11 +89,9 @@ void StreamGate::handleMessage(cMessage *msg)
 
     if (!mPar.ipv.isNull) {
         pkt->setIpv(mPar.ipv.value);
-        bubbleText << " IPV[" << mPar.ipv.value << "]";
+        bubbleText << "IPV[" << mPar.ipv.value << "]";
+        bubble(bubbleText.str().c_str());
     }
-
-    bubbleText << " PASS";
-    cSimpleModule::bubble(bubbleText.str().c_str());
 
     send(msg, "out");
 }

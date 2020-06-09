@@ -58,7 +58,7 @@ void PriorityQueue::handleMessage(cMessage *msg)
     int ipv = pkt->getIpv();
     int priority = frame->getPriority();
     if (priority < 0 || priority >= mPriorityCount) {
-        EV_WARN << "Invalid priority packet: " << frame->getDisplayString();
+        EV_WARN << "Invalid priority packet: " << frame->getDisplayString() << endl;
         delete msg;
         return;
     }

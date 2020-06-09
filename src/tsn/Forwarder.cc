@@ -41,7 +41,7 @@ void Forwarder::handleMessage(cMessage *msg)
 
     if (port != -1) {
         if (port < 0 || port >= portCount) {
-            EV_ERROR << "Invalid port: " << msg->getDisplayString();
+            EV_ERROR << "Invalid port: " << msg->getDisplayString() << endl;
             delete msg;
             return;
         }
@@ -54,7 +54,7 @@ void Forwarder::handleMessage(cMessage *msg)
     std::list<int> routerPorts = m_fdb->getRouterPorts();
     for (int port : routerPorts) {
         if (port < 0 || port >= portCount) {
-            EV_ERROR << "Invalid port: " << msg->getDisplayString();
+            EV_ERROR << "Invalid port: " << msg->getDisplayString() << endl;
             delete msg;
             return;
         }
