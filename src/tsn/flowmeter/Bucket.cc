@@ -13,58 +13,60 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "FMQuery.h"
+#include "Bucket.h"
 #include "../TSNPacket_m.h"
 #include "../../application/EthernetFrame_m.h"
-#include "FlowMeter.h"
 
 namespace ieee_802_1_qci {
 
-Define_Module(FMQuery);
+Define_Module(Bucket);
 
-void FMQuery::initialize()
+void Bucket::initialize()
 {
+    const char* color = par("color").stringValue();
+    getDisplayString().setTagArg("i", 1, color);
+
+    if (!strcmp(color, "green")) {
+        isGreen = true;
+    }
+    else if (!strcmp(color, "yellow")) {
+        isYellow = true;
+    }
+
+    mLastUpdate = simTime();
+
+    addBubbleModule("^");
+    addBubbleModule("^.^");
+    addBubbleModule("^.^.^");
 }
 
-void FMQuery::handleMessage(cMessage *msg)
+void Bucket::handleMessage(cMessage *msg)
 {
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
+    if (isGreen) {
+        frame->setColor(1);
+    }
+    else if (isYellow) {
+        frame->setColor(2);
+        bubble("Yellow Packet");
+    }
+
     int meterCount = pkt->getFlowMeterIdsArraySize();
     int meterIdx = pkt->getMeterIdx();
 
-    // No flowmeter found
-    if (meterCount < 1 || meterIdx >= meterCount) {
-        send(msg, "out", 0);
+    // This was the last meter
+    if (meterIdx >= meterCount) {
+        send(msg, "out");
         return;
     }
 
-    if (meterIdx < 0) {
-        throw cRuntimeError("Invalid meter index!");
-    }
+    cModule* queryModule = getModuleByPath("^.query");
+    cGate* directIn = queryModule->gate("directIn");
 
-    int meterInstanceId = pkt->getFlowMeterIds(meterIdx);
-
-    cModule* module;
-    FlowMeter* elm;
-
-    int count = gateSize("out");
-    for (int i=1; i<count; i++) {
-        module = getParentModule()->getSubmodule("meter", i-1);
-        if (module == nullptr) {
-            throw cRuntimeError("Size of gate and number of elm don't match!");
-        }
-
-        elm = check_and_cast<FlowMeter*>(module);
-        if (elm->match(meterInstanceId)) {
-            pkt->setMeterIdx(meterIdx + 1);
-            send(msg, "out", i);
-            return;
-        }
-    }
-
-    throw cRuntimeError("Flowmeter not found!");
+    // Forward back to query for remaining meters
+    sendDirect(msg, directIn);
 }
 
 } //namespace

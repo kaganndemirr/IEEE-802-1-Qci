@@ -15,26 +15,14 @@
 
 package ieee_802_1_qci.tsn.flowmeter;
 
-simple FlowMeter
+simple Bucket
 {
     parameters:
         @display("i=block/bucket;p=,,r");
         
-        string instanceId;
-        
-        string committedInformationRate; // green tokens (octets) per second
-        string committedBurstSize; // green bucket size
-        string excessInformationRate; // yellow tokens (octets) per second
-        string excessBurstSize; // yellow bucket size
-        string couplingFlag; // true: use overflowing green tokens as yellow tokens
-    
-        string colorMode; // true: color aware, false: color blind
-        string dropOnYellow;
-        string markAllFramesRed;
-        string markAllFramesRedEnable;
+        string color;
 
     gates:
         input in;
-        output greenOut;
-        output yellowOut;
+        output out;
 }

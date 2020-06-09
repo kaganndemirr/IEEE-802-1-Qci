@@ -34,6 +34,10 @@ void FlowMeter::initialize()
     addBubbleModule("^");
     addBubbleModule("^.^");
     addBubbleModule("^.^.^");
+
+    std::ostringstream text;
+    text << "InstanceId: " << mPar.instanceId;
+    getDisplayString().setTagArg("t", 0, text.str().c_str());
 }
 
 void FlowMeter::handleMessage(cMessage *msg)
@@ -56,60 +60,34 @@ void FlowMeter::handleMessage(cMessage *msg)
     }
 
     unsigned int packetSize = frame->getPayloadSize();
-    bool yellowPacket = false;
 
     if (tryGreenBucket(packetSize) &&
             (frame->getColor() == 0
             || frame->getColor() == 1
             || !mPar.colorMode)) { // color-blind
-        frame->setColor(1);
+        send(msg, "greenOut");
+        return;
     }
     else if (tryYellowBucket(packetSize) && !mPar.dropOnYellow) {
-        frame->setColor(2);
-        bubbleText << " YELLOW";
-        yellowPacket = true;
-    }
-    else {
-        std::string reason = (mPar.dropOnYellow ? "DropOnYellow" : "PacketSize");
-
-        EV_WARN << "Packet dropped because it couldn't pass the meter (" << reason
-                << ", ID: " << mPar.instanceId << ")";
-
-        bubbleText << " DROP[" << reason << "]";
-        bubble(bubbleText.str().c_str());
-
-        if (!mPar.dropOnYellow && mPar.markAllFramesRedEnable) {
-            mPar.markAllFramesRed = true;
-
-            EV_WARN << "markAllFramesRed = true";
-        }
-
-        delete msg;
+        send(msg, "yellowOut");
         return;
     }
 
-    bubbleText << " PASS";
+    std::string reason = (mPar.dropOnYellow ? "DropOnYellow" : "PacketSize");
 
-    if (yellowPacket) {
-        bubble(bubbleText.str().c_str());
-    } else {
-        cSimpleModule::bubble(bubbleText.str().c_str());
+    EV_WARN << "Packet dropped because it couldn't pass the meter (" << reason
+            << ", ID: " << mPar.instanceId << ")";
+
+    bubbleText << " DROP[" << reason << "]";
+    bubble(bubbleText.str().c_str());
+
+    if (!mPar.dropOnYellow && mPar.markAllFramesRedEnable) {
+        mPar.markAllFramesRed = true;
+
+        EV_WARN << "markAllFramesRed = true";
     }
 
-    int meterCount = pkt->getFlowMeterIdsArraySize();
-    int meterIdx = pkt->getMeterIdx();
-
-    // This is the last flowmeter
-    if (meterIdx >= meterCount) {
-        send(msg, "out");
-        return;
-    }
-
-    cModule* queryModule = getModuleByPath("^.query");
-    cGate* directIn = queryModule->gate("directIn");
-
-    // Forward back to query for remaining flowmeters
-    sendDirect(msg, directIn);
+    delete msg;
 }
 
 void FlowMeter::handleParameterChange(const char *parname)

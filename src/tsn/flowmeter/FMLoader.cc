@@ -26,40 +26,70 @@ void FMLoader::initialize()
     if (table->hasChildren()) {
         cXMLElementList children = table->getChildrenByTagName("FlowMeter");
 
-        int count = children.size();
-        int gateIdx = 1;
+        int meterCount = children.size();
+        int meterIdx = 0;
+
+        int bucketCount = meterCount * 2;
+        int bucketIdx = 0;
+
+        int queryOutIdx = 1;
+        int nextInIdx = 1;
 
         cModuleType* moduleType = cModuleType::get("ieee_802_1_qci.tsn.flowmeter.FlowMeter");
+        cModuleType* bucketType = cModuleType::get("ieee_802_1_qci.tsn.flowmeter.Bucket");
         cModule* tableModule = getModuleByPath("^.relay.flowMeter");
         cModule* queryModule = getModuleByPath("^.relay.flowMeter.query");
         cModule* nextModule = getModuleByPath("^.relay.flowMeter.next");
-        cModule* module;
+        cModule* meter;
+        cModule* greenBucket;
+        cModule* yellowBucket;
 
-        queryModule->setGateSize("out", count + 1);
-        nextModule->setGateSize("in", count + 1);
+        queryModule->setGateSize("out", meterCount + 1);
+        nextModule->setGateSize("in", bucketCount + 1);
 
         for (cXMLElement* elm : children) {
-            module = moduleType->create("elm", tableModule, count, gateIdx-1);
+            // Create meter module
+            meter = moduleType->create("meter", tableModule, meterCount, meterIdx++);
+            meter->par("instanceId") = elm->getFirstChildWithTag("InstanceId")->getNodeValue();
+            meter->par("committedInformationRate") = elm->getFirstChildWithTag("CommittedInformationRate")->getNodeValue();
+            meter->par("committedBurstSize") = elm->getFirstChildWithTag("CommittedBurstSize")->getNodeValue();
+            meter->par("excessInformationRate") = elm->getFirstChildWithTag("ExcessInformationRate")->getNodeValue();
+            meter->par("excessBurstSize") = elm->getFirstChildWithTag("ExcessBurstSize")->getNodeValue();
+            meter->par("couplingFlag") = elm->getFirstChildWithTag("CouplingFlag")->getNodeValue();
+            meter->par("colorMode") = elm->getFirstChildWithTag("ColorMode")->getNodeValue();
+            meter->par("dropOnYellow") = elm->getFirstChildWithTag("DropOnYellow")->getNodeValue();
+            meter->par("markAllFramesRedEnable") = elm->getFirstChildWithTag("MarkAllFramesRedEnable")->getNodeValue();
+            meter->par("markAllFramesRed") = "false";
+            meter->finalizeParameters();
 
-            module->par("instanceId") = elm->getFirstChildWithTag("InstanceId")->getNodeValue();
-            module->par("committedInformationRate") = elm->getFirstChildWithTag("CommittedInformationRate")->getNodeValue();
-            module->par("committedBurstSize") = elm->getFirstChildWithTag("CommittedBurstSize")->getNodeValue();
-            module->par("excessInformationRate") = elm->getFirstChildWithTag("ExcessInformationRate")->getNodeValue();
-            module->par("excessBurstSize") = elm->getFirstChildWithTag("ExcessBurstSize")->getNodeValue();
-            module->par("couplingFlag") = elm->getFirstChildWithTag("CouplingFlag")->getNodeValue();
-            module->par("colorMode") = elm->getFirstChildWithTag("ColorMode")->getNodeValue();
-            module->par("dropOnYellow") = elm->getFirstChildWithTag("DropOnYellow")->getNodeValue();
-            module->par("markAllFramesRedEnable") = elm->getFirstChildWithTag("MarkAllFramesRedEnable")->getNodeValue();
-            module->par("markAllFramesRed") = "false";
-            module->finalizeParameters();
+            // Create green bucket module
+            greenBucket = bucketType->create("bucket", tableModule, bucketCount, bucketIdx++);
+            greenBucket->par("color") = "green";
+            greenBucket->finalizeParameters();
 
-            queryModule->gate("out", gateIdx)->connectTo(module->gate("in"));
-            module->gate("out")->connectTo(nextModule->gate("in", gateIdx));
+            // Create yellow bucket module
+            yellowBucket = bucketType->create("bucket", tableModule, bucketCount, bucketIdx++);
+            yellowBucket->par("color") = "yellow";
+            yellowBucket->finalizeParameters();
 
-            module->buildInside();
-            module->scheduleStart(simTime());
+            // Connect modules
+            queryModule->gate("out", queryOutIdx++)->connectTo(meter->gate("in"));
+            meter->gate("greenOut")->connectTo(greenBucket->gate("in"));
+            meter->gate("yellowOut")->connectTo(yellowBucket->gate("in"));
+            greenBucket->gate("out")->connectTo(nextModule->gate("in", nextInIdx++));
+            yellowBucket->gate("out")->connectTo(nextModule->gate("in", nextInIdx++));
 
-            gateIdx++;
+            // Build green bucket module
+            greenBucket->buildInside();
+            greenBucket->scheduleStart(simTime());
+
+            // Build yellow bucket module
+            yellowBucket->buildInside();
+            yellowBucket->scheduleStart(simTime());
+
+            // Build meter module
+            meter->buildInside();
+            meter->scheduleStart(simTime());
         }
     }
 }

@@ -43,6 +43,7 @@ OBJS = \
     $O/tsn/StreamIdentifier.o \
     $O/tsn/TSNDecapsulator.o \
     $O/tsn/TSNEncapsulator.o \
+    $O/tsn/flowmeter/Bucket.o \
     $O/tsn/flowmeter/FlowMeter.o \
     $O/tsn/flowmeter/FMLoader.o \
     $O/tsn/flowmeter/FMQuery.o \
