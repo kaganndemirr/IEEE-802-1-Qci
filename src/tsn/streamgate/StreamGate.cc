@@ -31,6 +31,10 @@ void StreamGate::initialize()
     addBubbleModule("^");
     addBubbleModule("^.^");
     addBubbleModule("^.^.^");
+
+    std::ostringstream text;
+    text << "InstanceId: " << mPar.instanceId;
+    getDisplayString().setTagArg("t", 0, text.str().c_str());
 }
 
 void StreamGate::handleMessage(cMessage *msg)
