@@ -36,10 +36,10 @@ void Sink::handleMessage(cMessage *msg)
     int streamId = pkt->getStreamId();
     int payloadSize = pkt->getPayloadSize();
 
-    EV_INFO << "Packet received src=" << source
+    EV_INFO << "\u001b[32m Packet received src=" << source
             << " streamid=" << streamId
             << " length=" << payloadSize
-            << " delay=" << delay << "ms" << endl;
+            << " delay=" << delay << "ms \u001b[0m" << endl;
     if (mSource[0] && strcmp(mSource, source)) {
         EV_ERROR << "Invalid Source" << endl;
     }

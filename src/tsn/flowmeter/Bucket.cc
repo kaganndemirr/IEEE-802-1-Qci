@@ -51,7 +51,7 @@ void Bucket::handleMessage(cMessage *msg)
     else if (isYellow) {
         // Packet marked red
         if (frame->getColor() == 3) {
-            EV_WARN << "Packet dropped because it couldn't pass the meter (DropOnYellow)" << endl;
+            EV_WARN << "\u001b[31;1m Packet dropped because it couldn't pass the meter (DropOnYellow) \u001b[0m" << endl;
             bubble("DROP[DropOnYellow]");
 
             delete msg;

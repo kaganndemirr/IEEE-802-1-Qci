@@ -44,7 +44,7 @@ void StreamFilter::handleMessage(cMessage *msg)
 
     // Drop packets when stream blocked
     if (mPar.streamBlockedDueToOversizeFrame) {
-        EV_WARN << "Packet dropped because the stream is blocked (OversizeFrame)" << endl;
+        EV_WARN << "\u001b[31;1m Packet dropped because the stream is blocked (OversizeFrame) \u001b[0m" << endl;
         bubbleText << "DROP[streamBlockedDueToOversizeFrame]";
         bubble(bubbleText.str().c_str());
 
@@ -56,8 +56,8 @@ void StreamFilter::handleMessage(cMessage *msg)
     if (mPar.maxSDUSize.isActive) {
         unsigned int pktSize = frame->getPayloadSize();
         if (pktSize > mPar.maxSDUSize.value) {
-            EV_WARN << "Packet dropped because it exceeds MaxSDUSize "
-                    << "(" << pktSize << " > " << mPar.maxSDUSize.value << ")" << endl;
+            EV_WARN << "\u001b[31;1m Packet dropped because it exceeds MaxSDUSize "
+                    << "(" << pktSize << " > " << mPar.maxSDUSize.value << ") \u001b[0m" << endl;
 
             bubbleText << "DROP[MaxSDUSize]";
             bubble(bubbleText.str().c_str());
@@ -65,7 +65,7 @@ void StreamFilter::handleMessage(cMessage *msg)
             if (mPar.streamBlockedDueToOversizeFrameEnable) {
                 mPar.streamBlockedDueToOversizeFrame = true;
 
-                EV_WARN << "streamBlockedDueToOversizeFrame = true" << endl;
+                EV_WARN << "\u001b[31m streamBlockedDueToOversizeFrame = true \u001b[0m" << endl;
             }
 
             delete msg;

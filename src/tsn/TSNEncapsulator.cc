@@ -36,7 +36,7 @@ void TSNEncapsulator::handleMessage(cMessage *msg)
 
         send(tsnPkt, "out");
     } else {
-        EV_WARN << "Unknown message received: " << msg->getDisplayString() << endl;
+        EV_ERROR << "Unknown message received: " << msg->getDisplayString() << endl;
         delete msg;
     }
 }

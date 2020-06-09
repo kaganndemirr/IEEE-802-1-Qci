@@ -46,7 +46,7 @@ void FlowMeter::handleMessage(cMessage *msg)
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
     if (mPar.markAllFramesRed) {
-        EV_WARN << "Packet dropped because it couldn't pass the meter (MarkAllFramesRed)" << endl;
+        EV_WARN << "\u001b[31;1m Packet dropped because it couldn't pass the meter (MarkAllFramesRed) \u001b[0m" << endl;
         bubble("DROP[MarkAllFramesRed]");
 
         delete msg;
@@ -72,12 +72,12 @@ void FlowMeter::handleMessage(cMessage *msg)
         return;
     }
 
-    EV_WARN << "Packet dropped because it couldn't pass the meter (PacketSize)" << endl;
+    EV_WARN << "\u001b[31;1m Packet dropped because it couldn't pass the meter (PacketSize) \u001b[0m" << endl;
     bubble("DROP[PacketSize]");
 
     if (mPar.markAllFramesRedEnable) {
         mPar.markAllFramesRed = true;
-        EV_WARN << "markAllFramesRed = true" << endl;
+        EV_WARN << "\u001b[31m markAllFramesRed = true \u001b[0m" << endl;
     }
 
     delete msg;

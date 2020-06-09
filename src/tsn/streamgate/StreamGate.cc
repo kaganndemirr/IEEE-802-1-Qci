@@ -51,8 +51,8 @@ void StreamGate::handleMessage(cMessage *msg)
             : (mPar.closedDueToOctetsExceeded ? "OctetsExceeded" : "ClosedState")
         );
 
-        EV_WARN << "Packet dropped due to arrival at a closed gate (" << reason
-                << ", GCL OP: " << mPar.opIndex << ")" << endl;
+        EV_WARN << "\u001b[31;1m Packet dropped due to arrival at a closed gate (" << reason
+                << ", GCL OP: " << mPar.opIndex << ") \u001b[0m" << endl;
 
         bubbleText << "DROP[" << reason << "]";
         bubble(bubbleText.str().c_str());
@@ -60,7 +60,7 @@ void StreamGate::handleMessage(cMessage *msg)
         if (!mPar.state && mPar.closedDueToInvalidRxEnable && !mPar.closedDueToInvalidRx) {
             mPar.closedDueToInvalidRx = true;
 
-            EV_WARN << "closedDueToInvalidRx = true" << endl;
+            EV_WARN << "\u001b[31m closedDueToInvalidRx = true \u001b[0m" << endl;
         }
 
         delete msg;
@@ -72,8 +72,8 @@ void StreamGate::handleMessage(cMessage *msg)
 
         // Drop packets when its bigger than allowed octets
         if (pktSize > mPar.intervalOctetLeft.value) {
-            EV_WARN << "Packet dropped due to arrival at a gate that has not enough octet left "
-                    << "(GCL OP: " << mPar.opIndex << ")" << endl;
+            EV_WARN << "\u001b[31;1m Packet dropped due to arrival at a gate that has not enough octet left "
+                    << "(GCL OP: " << mPar.opIndex << ") \u001b[0m" << endl;
 
             bubbleText << "DROP[OctetsExceed]";
             bubble(bubbleText.str().c_str());
@@ -81,7 +81,7 @@ void StreamGate::handleMessage(cMessage *msg)
             if (mPar.closedDueToOctetsExceededEnable) {
                 mPar.closedDueToOctetsExceeded = true;
 
-                EV_WARN << "closedDueToOctetsExceeded = true" << endl;
+                EV_WARN << "\u001b[31m closedDueToOctetsExceeded = true \u001b[0m" << endl;
             }
 
             delete msg;
