@@ -49,8 +49,17 @@ void Bucket::handleMessage(cMessage *msg)
         frame->setColor(1);
     }
     else if (isYellow) {
+        // Packet marked red
+        if (frame->getColor() == 3) {
+            EV_WARN << "Packet dropped because it couldn't pass the meter (DropOnYellow)" << endl;
+            bubble("DROP[DropOnYellow]");
+
+            delete msg;
+            return;
+        }
+
         frame->setColor(2);
-        bubble("Yellow Packet");
+        bubble("MARK[Yellow]");
     }
 
     int meterCount = pkt->getFlowMeterIdsArraySize();

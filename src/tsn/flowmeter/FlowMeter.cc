@@ -45,15 +45,9 @@ void FlowMeter::handleMessage(cMessage *msg)
     TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
     EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
-    std::ostringstream bubbleText;
-    bubbleText << "FlowMeter[" << mPar.instanceId << "]";
-
     if (mPar.markAllFramesRed) {
-        EV_WARN << "Packet dropped because it couldn't pass the meter (MarkAllFramesRed"
-                << ", ID: " << mPar.instanceId << ")";
-
-        bubbleText << " DROP[MarkAllFramesRed]";
-        bubble(bubbleText.str().c_str());
+        EV_WARN << "Packet dropped because it couldn't pass the meter (MarkAllFramesRed)" << endl;
+        bubble("DROP[MarkAllFramesRed]");
 
         delete msg;
         return;
@@ -68,23 +62,22 @@ void FlowMeter::handleMessage(cMessage *msg)
         send(msg, "greenOut");
         return;
     }
-    else if (tryYellowBucket(packetSize) && !mPar.dropOnYellow) {
+    else if (tryYellowBucket(packetSize)) {
+        if (mPar.dropOnYellow) {
+            // Mark red
+            frame->setColor(3);
+        }
+
         send(msg, "yellowOut");
         return;
     }
 
-    std::string reason = (mPar.dropOnYellow ? "DropOnYellow" : "PacketSize");
+    EV_WARN << "Packet dropped because it couldn't pass the meter (PacketSize)" << endl;
+    bubble("DROP[PacketSize]");
 
-    EV_WARN << "Packet dropped because it couldn't pass the meter (" << reason
-            << ", ID: " << mPar.instanceId << ")";
-
-    bubbleText << " DROP[" << reason << "]";
-    bubble(bubbleText.str().c_str());
-
-    if (!mPar.dropOnYellow && mPar.markAllFramesRedEnable) {
+    if (mPar.markAllFramesRedEnable) {
         mPar.markAllFramesRed = true;
-
-        EV_WARN << "markAllFramesRed = true";
+        EV_WARN << "markAllFramesRed = true" << endl;
     }
 
     delete msg;
