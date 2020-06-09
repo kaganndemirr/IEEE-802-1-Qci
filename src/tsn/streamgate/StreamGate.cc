@@ -182,8 +182,6 @@ void StreamGate::initScheduling()
         par("intervalOctetLeft") = std::to_string(gclOp.intervalOctetMax.value).c_str();
     }
 
-    EV_INFO << "timeInterval: " << gclOp.timeInterval << "\n";
-
     mClock->scheduleCall(this, gclOp.timeInterval, 0);
 }
 
