@@ -21,6 +21,8 @@ double TokenBucket::setCapacity(double capacity) {
             pTokens = pCapacity;
             return overflow;
         }
+
+        pTokens = pCapacity;
     }
     return 0;
 }
