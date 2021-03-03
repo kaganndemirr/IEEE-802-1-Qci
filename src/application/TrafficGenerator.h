@@ -27,15 +27,19 @@ class TrafficGenerator : public cSimpleModule, public IScheduled
 {
   private:
     Clock* mClock;
-    const char* mTarget;
+    const char* mDestination;
     int mStreamId;
     int mPriority;
     simtime_t mDelay;
     simtime_t mInterval;
+    const char* mIcon;
+    const char* mColor;
+    const char* mColorPercent;
 
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void handleParameterChange(const char *parname);
 
   public:
     simtime_t tick(int param);

@@ -1,0 +1,58 @@
+<StreamGates>
+	<StreamGate>
+		<InstanceId>1</InstanceId>
+		<State>true</State>
+		<IPV>null</IPV>
+
+		<ClosedDueToInvalidRxEnable>false</ClosedDueToInvalidRxEnable>
+		<ClosedDueToOctetsExceededEnable>false</ClosedDueToOctetsExceededEnable>
+
+		<GateControlList />
+	</StreamGate>
+	<StreamGate>
+		<InstanceId>2</InstanceId>
+		<State>true</State>
+		<IPV>null</IPV>
+
+		<ClosedDueToInvalidRxEnable>false</ClosedDueToInvalidRxEnable>
+		<ClosedDueToOctetsExceededEnable>false</ClosedDueToOctetsExceededEnable>
+
+		<GateControlList>
+			<Operation>
+				<State>true</State>
+				<IPV>null</IPV>
+				<TimeInterval>125ms</TimeInterval>
+				<IntervalOctetMax>6000000</IntervalOctetMax>
+			</Operation>
+			<Operation>
+				<State>false</State>
+				<IPV>null</IPV>
+				<TimeInterval>125ms</TimeInterval>
+				<IntervalOctetMax></IntervalOctetMax>
+			</Operation>
+		</GateControlList>
+	</StreamGate>
+	<StreamGate>
+		<InstanceId>3</InstanceId>
+		<State>true</State>
+		<IPV>null</IPV>
+
+		<ClosedDueToInvalidRxEnable>false</ClosedDueToInvalidRxEnable>
+		<ClosedDueToOctetsExceededEnable>false</ClosedDueToOctetsExceededEnable>
+
+		<GateControlList>
+			<Operation>
+				<State>false</State>
+				<IPV>null</IPV>
+				<TimeInterval>125ms</TimeInterval>
+				<IntervalOctetMax></IntervalOctetMax>
+			</Operation>
+			<Operation>
+				<State>true</State>
+				<IPV>null</IPV>
+				<TimeInterval>125ms</TimeInterval>
+				<IntervalOctetMax>6000000</IntervalOctetMax>
+			</Operation>
+		</GateControlList>
+	</StreamGate>
+</StreamGates>

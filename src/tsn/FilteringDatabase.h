@@ -18,6 +18,7 @@
 
 #include <omnetpp.h>
 #include <unordered_map>
+#include <list>
 
 using namespace omnetpp;
 
@@ -27,6 +28,7 @@ class FilteringDatabase : public cSimpleModule
 {
   private:
     std::unordered_map<std::string, int> m_db;
+    std::list<int> mRouterList;
 
   protected:
     virtual void initialize();
@@ -34,7 +36,10 @@ class FilteringDatabase : public cSimpleModule
 
   public:
     int getPort(std::string mac);
+    std::list<int> getRouterPorts();
+
     void add(std::string mac, int port);
+    void addRouter(int port);
 };
 
 } //namespace

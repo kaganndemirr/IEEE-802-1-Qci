@@ -15,6 +15,8 @@
 
 #include "Forwarder.h"
 #include "../application/EthernetFrame_m.h"
+#include "TSNPacket_m.h"
+#include <list>
 
 namespace ieee_802_1_qci {
 
@@ -27,22 +29,47 @@ void Forwarder::initialize()
 
 void Forwarder::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-    if (pkt) {
-        // Forward packet to matching port
-        const char* dst = pkt->getDst();
-        int port = m_fdb->getPort(std::string(dst));
+    TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
-        if (port != -1) {
-            send(msg, "out", port);
-        } else {
-            EV_WARN << "No matching entry found: " << msg->getDisplayString();
+    int portIn = pkt->getPortIn();
+
+    // Forward packet to matching port
+    const char* dst = frame->getDst();
+    int port = m_fdb->getPort(std::string(dst));
+    int portCount = gateSize("out");
+
+    if (port != -1) {
+        if (port < 0 || port >= portCount) {
+            EV_ERROR << "Invalid port: " << msg->getDisplayString() << endl;
             delete msg;
+            return;
         }
-    } else {
-        EV_WARN << "Unknown message received: " << msg->getDisplayString();
-        delete msg;
+
+        send(msg, "out", port);
+        return;
     }
+
+    // Broadcast message to other routers
+    std::list<int> routerPorts = m_fdb->getRouterPorts();
+    for (int port : routerPorts) {
+        if (port < 0 || port >= portCount) {
+            EV_ERROR << "Invalid port: " << msg->getDisplayString() << endl;
+            delete msg;
+            return;
+        }
+
+        // Skip that the message received from
+        if (port == portIn) {
+            continue;
+        }
+
+        // Send duplicate message
+        send(msg->dup(), "out", port);
+    }
+
+    // Delete original message
+    delete msg;
 }
 
 } //namespace

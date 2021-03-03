@@ -25,6 +25,7 @@ void FilteringDatabase::initialize()
 
     // Read static entries
     if (db->hasChildren()) {
+        const char* isRouter;
         const char* mac;
         const char* attr_port;
         int port;
@@ -35,6 +36,7 @@ void FilteringDatabase::initialize()
                 continue;
 
             mac = elm->getAttribute("mac");
+            isRouter = elm->getAttribute("router");
             attr_port = elm->getAttribute("port");
             port = atoi(attr_port);
 
@@ -43,13 +45,18 @@ void FilteringDatabase::initialize()
                 continue;
 
             add(std::string(mac), port);
+
+            if (isRouter && !strcmp(isRouter, "1")) {
+                addRouter(port);
+            }
         }
     }
+
+    WATCH_LIST(mRouterList);
 }
 
 void FilteringDatabase::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
 }
 
 // Returns matching port number if MAC is on db, otherwise -1
@@ -60,8 +67,16 @@ int FilteringDatabase::getPort(std::string mac) {
     return it->second;
 }
 
+std::list<int> FilteringDatabase::getRouterPorts() {
+    return mRouterList;
+}
+
 void FilteringDatabase::add(std::string mac, int port) {
     m_db[mac] = port;
+}
+
+void FilteringDatabase::addRouter(int port) {
+    mRouterList.push_back(port);
 }
 
 } //namespace

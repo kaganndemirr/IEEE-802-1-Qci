@@ -1,0 +1,19 @@
+<StreamGates>
+	<StreamGate>
+		<InstanceId>1</InstanceId>
+		<State>true</State>
+		<IPV>null</IPV>
+
+		<ClosedDueToInvalidRxEnable>false</ClosedDueToInvalidRxEnable>
+		<ClosedDueToOctetsExceededEnable>false</ClosedDueToOctetsExceededEnable>
+
+		<GateControlList>
+			<Operation>
+				<State>true</State>
+				<IPV>null</IPV>
+				<TimeInterval>1s</TimeInterval>
+				<IntervalOctetMax>50000000</IntervalOctetMax>
+			</Operation>
+		</GateControlList>
+	</StreamGate>
+</StreamGates>

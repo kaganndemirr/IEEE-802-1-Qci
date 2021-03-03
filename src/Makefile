@@ -31,22 +31,40 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
+    $O/application/AppManager.o \
+    $O/application/Sink.o \
     $O/application/TrafficGenerator.o \
     $O/link/NetworkController.o \
+    $O/queue/BufferQueue.o \
+    $O/queue/PriorityQueue.o \
     $O/tsn/Clock.o \
     $O/tsn/FilteringDatabase.o \
-    $O/tsn/FilteringUnit.o \
     $O/tsn/Forwarder.o \
     $O/tsn/StreamIdentifier.o \
-    $O/tsn/table/FlowMeterTable.o \
-    $O/tsn/table/StreamFilterTable.o \
-    $O/tsn/table/StreamGateTable.o \
-    $O/tsn/table/TableUtils.o \
-    $O/application/EthernetFrame_m.o
+    $O/tsn/TSNDecapsulator.o \
+    $O/tsn/TSNEncapsulator.o \
+    $O/tsn/flowmeter/Bucket.o \
+    $O/tsn/flowmeter/FlowMeter.o \
+    $O/tsn/flowmeter/FMLoader.o \
+    $O/tsn/flowmeter/FMQuery.o \
+    $O/tsn/streamfilter/SFLoader.o \
+    $O/tsn/streamfilter/SFQuery.o \
+    $O/tsn/streamfilter/StreamFilter.o \
+    $O/tsn/streamgate/GateControlOp.o \
+    $O/tsn/streamgate/SGLoader.o \
+    $O/tsn/streamgate/SGQuery.o \
+    $O/tsn/streamgate/StreamGate.o \
+    $O/utils/Join.o \
+    $O/utils/MultiBubbleModule.o \
+    $O/utils/Table.o \
+    $O/utils/TokenBucket.o \
+    $O/application/EthernetFrame_m.o \
+    $O/tsn/TSNPacket_m.o
 
 # Message files
 MSGFILES = \
-    application/EthernetFrame.msg
+    application/EthernetFrame.msg \
+    tsn/TSNPacket.msg
 
 # SM files
 SMFILES =

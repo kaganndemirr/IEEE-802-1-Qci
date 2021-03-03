@@ -17,38 +17,50 @@ package ieee_802_1_qci.tsn;
 
 import ieee_802_1_qci.tsn.Forwarder;
 import ieee_802_1_qci.tsn.StreamIdentifier;
-import ieee_802_1_qci.tsn.FilteringUnit;
+import ieee_802_1_qci.tsn.table.Table;
 
 module Relay
 {
     parameters:
-        @display("i=block/dispatch;bgb=240,220,white");
-
-        int portCount;
+        @display("i=block/dispatch;bgb=500,300,white");
 
     gates:
-        input in[portCount];
-        output out[portCount];
+        input in;
+        output out[];
 
     submodules:
-        forwarder: Forwarder {
-            @display("p=70,150");
-            portCount = sizeof(in);
-        }
         identifier: StreamIdentifier {
-            @display("p=120,50");
-            portCount = sizeof(in);
+            @display("p=80,50");
         }
-        filtering: FilteringUnit {
-            @display("p=170,150");
-            portCount = sizeof(in);
+        streamFilter: Table {
+            @display("i=block/filter;p=250,50");
+            queryNode = "ieee_802_1_qci.tsn.streamfilter.SFQuery";
+        }
+        streamGate: Table {
+            @display("i=block/layer;p=450,50");
+            queryNode = "ieee_802_1_qci.tsn.streamgate.SGQuery";
+        }
+        flowMeter: Table {
+            @display("i=block/bucket;p=450,225");
+            queryNode = "ieee_802_1_qci.tsn.flowmeter.FMQuery";
+        }
+        forwarder: Forwarder {
+            @display("p=80,225");
+
+            gates:
+                out[sizeof(out)];
         }
 
     connections:
-        for i=0..portCount-1 {
-            in[i] --> forwarder.in[i];
-            forwarder.out[i] --> identifier.in[i];
-            identifier.out[i] --> filtering.in[i];
-            filtering.out[i] --> out[i];
+        in --> identifier.in;
+        identifier.out --> streamFilter.in;
+
+        streamFilter.out --> streamGate.in;
+        streamGate.out --> flowMeter.in;
+
+        flowMeter.out --> forwarder.in;
+
+        for i=0..sizeof(out)-1 {
+            forwarder.out[i] --> out[i];
         }
 }

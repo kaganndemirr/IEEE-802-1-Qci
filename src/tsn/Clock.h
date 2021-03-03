@@ -41,7 +41,7 @@ class Clock : public cSimpleModule
     simtime_t mTickInterval;
 
     std::unordered_map<std::string, bool> mIsTickScheduled;
-    std::vector<ScheduledCall> mScheduleList;
+    std::list<ScheduledCall> mScheduleList;
 
   protected:
     virtual void initialize();

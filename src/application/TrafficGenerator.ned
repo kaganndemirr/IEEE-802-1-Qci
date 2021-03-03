@@ -15,18 +15,22 @@
 
 package ieee_802_1_qci.application;
 
-simple TrafficGenerator
+simple TrafficGenerator like IApp
 {
     parameters:
-        @display("i=block/app");
+        @display("i=block/source");
+        string clockPath = default("^.clk");
         int streamId;
-        string target;
+        string destination;
         int priority;
+        volatile int payloadSize @unit(byte) = default(100B);
         double startDelay @unit(s) = default(0);
-        double sendInterval @unit(s) = default(1s);
-        // TODO add pktSize
+        volatile double sendInterval @unit(s) = default(1s);
+        string msgIcon = default("");
+        string msgColor = default("");
+        string msgColorPercent = default("100");
 
     gates:
-        input in;
+        input in @loose;
         output out;
 }

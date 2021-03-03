@@ -1,0 +1,12 @@
+<StreamFilters>
+	<StreamFilter>
+		<InstanceId>1</InstanceId>
+		<StreamHandle>*</StreamHandle>
+		<Priority>*</Priority>
+		<StreamGateId>1</StreamGateId>
+		<FilterList>
+			<FlowMeter>1</FlowMeter>
+		</FilterList>
+		<StreamBlockedDueToOversizeFrameEnable>false</StreamBlockedDueToOversizeFrameEnable>
+	</StreamFilter>
+</StreamFilters>

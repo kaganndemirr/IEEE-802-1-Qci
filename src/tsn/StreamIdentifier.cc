@@ -14,6 +14,7 @@
 // 
 
 #include "StreamIdentifier.h"
+#include "TSNPacket_m.h"
 #include "../application/EthernetFrame_m.h"
 
 namespace ieee_802_1_qci {
@@ -22,22 +23,21 @@ Define_Module(StreamIdentifier);
 
 void StreamIdentifier::initialize()
 {
-    // TODO - Generated method body
 }
 
 void StreamIdentifier::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-    if (pkt) {
-        const char* src = pkt->getSrc();
-        const char* dst = pkt->getDst();
-        int streamId = pkt->getStreamId();
+    TSNPacket* pkt = check_and_cast<TSNPacket *>(msg);
+    EthernetFrame* frame = check_and_cast<EthernetFrame *>(pkt->getEncapsulatedPacket());
 
-        // TODO set streamHandle using dst,streamId or src,streamId (see 802.1CB Table-6.1)
-        pkt->setStreamHandle(streamId);
-    }
+    const char* src = frame->getSrc();
+    const char* dst = frame->getDst();
+    int streamId = frame->getStreamId();
 
-    send(msg, "out", msg->getArrivalGate()->getIndex());
+    // TODO set streamHandle using dst,streamId or src,streamId (see 802.1CB Table-6.1)
+    pkt->setStreamHandle(streamId);
+
+    send(pkt, "out");
 }
 
 } //namespace

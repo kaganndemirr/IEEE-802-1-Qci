@@ -1,0 +1,6 @@
+<Database>
+	<Entry mac="00-00-00-00-00-01" port="0" />
+	<Entry mac="00-00-00-00-00-02" port="1" />
+	<Entry mac="00-00-00-00-00-04" port="2" />
+	<Entry mac="00-00-00-00-00-05" port="3" />
+</Database>

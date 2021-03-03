@@ -15,6 +15,7 @@
 
 #include "TrafficGenerator.h"
 #include "EthernetFrame_m.h"
+#include <iomanip>
 
 namespace ieee_802_1_qci {
 
@@ -22,13 +23,10 @@ Define_Module(TrafficGenerator);
 
 void TrafficGenerator::initialize()
 {
-    mClock = check_and_cast<Clock*> (getParentModule()->getSubmodule("clk"));
-
-    mTarget = par("target").stringValue();
-    mStreamId = par("streamId").intValue();
-    mPriority = par("priority").intValue();
+    mClock = check_and_cast<Clock*> (getModuleByPath(par("clockPath")));
     mDelay = par("startDelay");
-    mInterval = par("sendInterval");
+
+    handleParameterChange(nullptr);
 
     if (mDelay.isZero())
         mClock->scheduleCall(this, mInterval, 0);
@@ -38,11 +36,37 @@ void TrafficGenerator::initialize()
 
 void TrafficGenerator::handleMessage(cMessage *msg)
 {
-    EthernetFrame* pkt = check_and_cast<EthernetFrame *>(msg);
-    EV_INFO << "Packet received src=" << pkt->getSrc()
-            << " length=" << strlen(pkt->getPayload())
-            << " payload=" << pkt->getPayload();
-    delete msg;
+}
+
+void TrafficGenerator::handleParameterChange(const char *parname)
+{
+    if (!parname || strcmp(parname, "destination") == 0) {
+        mDestination = par("destination").stringValue();
+    }
+
+    if (!parname || strcmp(parname, "streamId") == 0) {
+        mStreamId = par("streamId").intValue();
+    }
+
+    if (!parname || strcmp(parname, "priority") == 0) {
+        mPriority = par("priority").intValue();
+    }
+
+    if (!parname || strcmp(parname, "sendInterval") == 0) {
+        mInterval = par("sendInterval");
+    }
+
+    if (!parname || strcmp(parname, "msgIcon") == 0) {
+        mIcon = par("msgIcon").stringValue();
+    }
+
+    if (!parname || strcmp(parname, "msgColor") == 0) {
+        mColor = par("msgColor").stringValue();
+    }
+
+    if (!parname || strcmp(parname, "msgColorPercent") == 0) {
+        mColorPercent = par("msgColorPercent").stringValue();
+    }
 }
 
 simtime_t TrafficGenerator::tick(int param)
@@ -57,9 +81,25 @@ simtime_t TrafficGenerator::tick(int param)
 
     EthernetFrame* msg = new EthernetFrame();
     msg->setStreamId(mStreamId);
-    msg->setDst(mTarget);
-    msg->setPayload("demo message");
+    msg->setDst(mDestination);
+    msg->setPayloadSize(par("payloadSize").doubleValueInUnit("byte"));
     msg->setPriority(mPriority);
+    msg->setCreationTime(simTime().dbl());
+
+    if (mIcon[0] || mColor[0]) {
+        cDisplayString dispStr = cDisplayString("");
+
+        if (mIcon[0]) {
+            dispStr.setTagArg("i", 0, mIcon);
+        }
+        if (mColor[0]) {
+            dispStr.setTagArg("i", 1, mColor);
+            dispStr.setTagArg("i", 2, mColorPercent);
+        }
+
+        msg->setDisplayString(dispStr.str());
+    }
+
     send(msg, "out");
 
     return mInterval;
